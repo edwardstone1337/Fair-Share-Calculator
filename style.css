@@ -258,11 +258,6 @@ label, .share-title {
     font-weight: 400;
 }
 
-img {
-    width: 112px;
-    height: 112px;
-}
-
 .footer {
     align-self: stretch;
     text-align: center;
