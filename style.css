@@ -106,7 +106,7 @@ label, .share-title {
     font-weight: 400;
 }
 
-.input-group input[type="number"]::placeholder {
+.input-group input[type="text"]::placeholder {
     color: rgba(0, 0, 0, 0.40);
 }
 
