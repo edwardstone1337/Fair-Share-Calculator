@@ -7,20 +7,31 @@ window.onload = function() {
     }
 }
 
+function formatNumber(num) {
+    return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+function formatNumberWithCommas(input) {
+    // Remove non-numeric characters except for commas and dots
+    var value = input.value.replace(/[^\d.,]/g, '');
+
+    // Remove existing commas, then reformat with commas in the correct positions
+    var formattedValue = value.replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    input.value = formattedValue;
+}
+
 function calculateShares() {
-    var salary1 = parseFloat(document.getElementById('salary1').value);
-    var salary2 = parseFloat(document.getElementById('salary2').value);
-    var expense = parseFloat(document.getElementById('expense').value);
+    var salary1 = parseFloat(document.getElementById('salary1').value.replace(/,/g, ''));
+    var salary2 = parseFloat(document.getElementById('salary2').value.replace(/,/g, ''));
+    var expense = parseFloat(document.getElementById('expense').value.replace(/,/g, ''));
 
     // Check for invalid or empty inputs
     if (isNaN(salary1) || isNaN(salary2) || isNaN(expense) || salary1 <= 0 || salary2 <= 0 || expense <= 0) {
         document.getElementById('results').innerHTML = `
             <div class="error-message" id="error-message">
-                <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares</p>
+                <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares.</p>
             </div>
         `;
-
-        // Scroll to the error message
         document.getElementById('error-message').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
     }
@@ -42,16 +53,15 @@ function calculateShares() {
             <div class="share-container-boxes">
                 <div class="share">
                     <div class="share-title">Your Share</div>
-                    <div class="share-value">${share1.toFixed(2)}</div>
+                    <div class="share-value">${formatNumber(share1)}</div>
                 </div>
                 <div class="share">
                     <div class="share-title">Partner's Share</div>
-                    <div class="share-value">${share2.toFixed(2)}</div>
+                    <div class="share-value">${formatNumber(share2)}</div>
                 </div>
             </div>
         </div>
     `;
-
-    // Scroll to the share container
     document.getElementById('share-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
