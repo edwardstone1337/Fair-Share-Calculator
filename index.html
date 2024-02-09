@@ -48,12 +48,14 @@
   <div class="salaries">
     <div class="input-group">
         <label for="salary1">Your Salary</label>
-        <input type="number" id="salary1" placeholder="0">
+        <input type="text" id="salary1" placeholder="0" oninput="formatNumberWithCommas(this)">
+
       </div>
 
       <div class="input-group">
         <label for="salary2">Partner's Salary</label>
-        <input type="number" id="salary2" placeholder="0">
+        <input type="text" id="salary2" placeholder="0" oninput="formatNumberWithCommas(this)">
+
       </div>
   </div>
   <p class="shy-text">Don't be shy – this helps us do the math fairly!</p>
@@ -62,7 +64,7 @@
 <div class="shared-expense">
     <div class="input-group">
         <label for="expense">Shared Expense Amount</label>
-        <input type="number" id="expense" placeholder="0">
+        <input type="text" id="expense" placeholder="0" oninput="formatNumberWithCommas(this)">
     </div>
 </div>
 
