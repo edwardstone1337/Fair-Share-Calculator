@@ -80,7 +80,7 @@ label, .share-title {
       margin-bottom: 24px;
 }
 
-.input-group input[type="number"] {
+.input-group input[type="text"] {
     padding: 12px 16px;
     border-radius: 8px;
     border: 1px solid #112E2E;
@@ -91,11 +91,11 @@ label, .share-title {
     font-weight: 400;  
 }
 
-.input-group input[type="number"]:hover {
+.input-group input[type="text"]:hover {
     border: 1px solid #0E5252;
 }
 
-.input-group input[type="number"]:focus {
+.input-group input[type="text"]:focus {
     outline: 2px solid #000000;
     outline-offset: 2px;
 }
@@ -288,6 +288,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* For Firefox */
-input[type=number] {
+input[type=text] {
     -moz-appearance: textfield;
 }
