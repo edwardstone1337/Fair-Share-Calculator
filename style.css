@@ -82,6 +82,16 @@ h1 {
     line-height: 1.1;
 }
 
+h2 {
+    color: var(--primary-colour);
+    text-align: center;
+    font-family: "Josefin Sans";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
 p {
     color: var(--primary-colour);
     text-align: center;
@@ -195,6 +205,7 @@ label, .share-title {
 }
 
 #results {
+    display: none;
     width: 100%;
 }
 

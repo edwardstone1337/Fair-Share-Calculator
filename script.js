@@ -1,4 +1,6 @@
-// Loads the previous numbers
+// This section is responsible for loading previously saved salary values from localStorage 
+// when the window is loaded. It checks if the values for 'salary1' and 'salary2' exist in 
+// localStorage and, if so, sets those values in the respective input fields on the web page.
 window.onload = function() {
     if (localStorage.getItem('salary1')) {
         document.getElementById('salary1').value = localStorage.getItem('salary1');
@@ -8,50 +10,77 @@ window.onload = function() {
     }
 }
 
-
+// This function takes a numerical value and formats it as a string with two decimal places,
+// adding commas as thousand separators.
 function formatNumber(num) {
     return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 
-function formatNumberWithCommas(input) {
-    // Remove non-numeric characters except for commas and dots
-    var value = input.value.replace(/[^\d.,]/g, '');
-
-    // Remove existing commas, then reformat with commas in the correct positions
+// This function is triggered when a user inputs a number. It formats the input by removing 
+// non-numeric characters (except commas and dots) and then adds commas in appropriate places 
+// for readability.
+function formatNumberWithCommas(element) {
+    var value = element.value.replace(/[^\d.,]/g, '');
     var formattedValue = value.replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    input.value = formattedValue;
+    element.value = formattedValue;
+
+    // Hide error message if it's displayed
+    var errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
 }
 
+// This function hides the 'results' section of the page. It's typically called to reset the 
+// display when the user starts modifying input values.
+function resetResultsDisplay() {
+    document.getElementById('results').style.display = 'none';
+}
+
+// This function 'calculateShares' calculates each person's share of a given expense based 
+// on their respective salaries. It performs several tasks:
+// 1. Retrieves input values for two salaries and the total expense from the DOM.
+//    - It uses 'parseFloat' to convert the input string values to numbers, removing any 
+//      commas for proper formatting.
+// 2. Validates the input values:
+//    - Checks for 'NaN' (not a number) and ensures all values are greater than zero.
+//    - If any value is invalid, it displays an error message in the 'results' section and 
+//      scrolls smoothly to this message for visibility.
+// 3. If the values are valid:
+//    - Saves the salary inputs to localStorage for potential future use.
+//    - Calculates each person's share of the expense proportionally based on their salary.
+// 4. Displays the calculated shares in the 'results' section and smoothly scrolls to this 
+//    section for improved user experience.
 function calculateShares() {
     var salary1 = parseFloat(document.getElementById('salary1').value.replace(/,/g, ''));
     var salary2 = parseFloat(document.getElementById('salary2').value.replace(/,/g, ''));
     var expense = parseFloat(document.getElementById('expense').value.replace(/,/g, ''));
 
-    // Check for invalid or empty inputs
     if (isNaN(salary1) || isNaN(salary2) || isNaN(expense) || salary1 <= 0 || salary2 <= 0 || expense <= 0) {
         document.getElementById('results').innerHTML = `
             <div class="error-message" id="error-message">
                 <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares.</p>
             </div>
         `;
+        document.getElementById('results').style.display = 'block';
         document.getElementById('error-message').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
     }
+    
+    // Save salaries to localStorage for future use
+    localStorage.setItem('salary1', salary1);
+    localStorage.setItem('salary2', salary2);
 
-// Save salaries to localStorage
-localStorage.setItem('salary1', salary1);
-localStorage.setItem('salary2', salary2);
+    // Calculate each person's share of the expense
+    var totalSalary = salary1 + salary2;
+    var share1 = (salary1 / totalSalary) * expense;
+    var share2 = (salary2 / totalSalary) * expense;
 
-    // The actual calculuation
-var totalSalary = salary1 + salary2;
-var share1 = (salary1 / totalSalary) * expense;
-var share2 = (salary2 / totalSalary) * expense;
-
-    // Results
+    // Display the calculated shares in the 'results' section
     document.getElementById('results').innerHTML = `
         <div class="share-container" id="share-container">
             <div class="share-container-text">
-                <h2>Ta-da!</h2>
+                <h2>Ta-Da!</h2>
                 <p>Here are your fair shares:</p>
             </div>
             <div class="share-container-boxes">
@@ -66,8 +95,8 @@ var share2 = (salary2 / totalSalary) * expense;
             </div>
         </div>
     `;
+    document.getElementById('results').style.display = 'block';
 
-    // Auto Scrolling
+    // Scroll to the results section smoothly for better user experience
     document.getElementById('share-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
-
