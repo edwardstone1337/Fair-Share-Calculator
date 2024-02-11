@@ -20,7 +20,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px;
+    padding: 32px 16px;
     max-width: 400px;
     margin: 0 auto;
     background: #EAFCF8;
@@ -62,7 +62,6 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    margin-bottom: 24px;
 }
 
 .header .emoji, .header h1, .header p {
@@ -74,7 +73,7 @@ body {
     line-height: 1.1;
 }
 
-.header h1 {
+h1 {
     color: var(--primary-colour);
     text-align: center;
     font-family: "Josefin Sans";
@@ -191,7 +190,7 @@ label, .share-title {
 }
 
 .calculate-button:focus {
-    outline: var(--f) solid var(--focus-colour);
+    outline: var(--focus-width) solid var(--focus-colour);
     outline-offset: var(--focus-offset);
 }
 
@@ -203,7 +202,7 @@ label, .share-title {
     border-radius: var(--border-radius-8);
     border: 1px solid var(--primary-colour);
     background: #FFF;
-    padding: 24px 12px;
+    padding: 24px 16px;
 }
 
 /* This is the Ta-Da text container */
@@ -279,8 +278,13 @@ label, .share-title {
 }
 
 .title {
+    color: var(--primary-colour);
+    text-align: center;
+    font-family: "Josefin Sans";
     font-size: 24px;
+    font-style: normal;
     font-weight: 700;
+    line-height: normal;
 }
 
 .text {
@@ -289,6 +293,8 @@ label, .share-title {
 }
 
 .footer {
+    display: flex;
+    flex-direction: column;
     align-self: stretch;
     text-align: center;
     gap: var(--vertical-gap);

@@ -1,3 +1,4 @@
+// Loads the previous numbers
 window.onload = function() {
     if (localStorage.getItem('salary1')) {
         document.getElementById('salary1').value = localStorage.getItem('salary1');
@@ -6,6 +7,7 @@ window.onload = function() {
         document.getElementById('salary2').value = localStorage.getItem('salary2');
     }
 }
+
 
 function formatNumber(num) {
     return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -36,19 +38,21 @@ function calculateShares() {
         return;
     }
 
-    // Save salaries to localStorage
-    localStorage.setItem('salary1', salary1);
-    localStorage.setItem('salary2', salary2);
+// Save salaries to localStorage
+localStorage.setItem('salary1', salary1);
+localStorage.setItem('salary2', salary2);
 
-    var totalSalary = salary1 + salary2;
-    var share1 = (salary1 / totalSalary) * expense;
-    var share2 = (salary2 / totalSalary) * expense;
+    // The actual calculuation
+var totalSalary = salary1 + salary2;
+var share1 = (salary1 / totalSalary) * expense;
+var share2 = (salary2 / totalSalary) * expense;
 
+    // Results
     document.getElementById('results').innerHTML = `
         <div class="share-container" id="share-container">
             <div class="share-container-text">
-                <h2>Ta-da! 🌟</h2>
-                <p>Here are your fair shares.</p>
+                <h2>Ta-da!</h2>
+                <p>Here are your fair shares:</p>
             </div>
             <div class="share-container-boxes">
                 <div class="share">
@@ -62,6 +66,8 @@ function calculateShares() {
             </div>
         </div>
     `;
+
+    // Auto Scrolling
     document.getElementById('share-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
