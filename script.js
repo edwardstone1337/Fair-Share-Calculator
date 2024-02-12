@@ -20,6 +20,9 @@ function formatNumber(num) {
 // non-numeric characters (except commas and dots) and then adds commas in appropriate places 
 // for readability.
 function formatNumberWithCommas(element) {
+    // Remove error class when the user starts typing
+    element.classList.remove('input-error');
+
     var value = element.value.replace(/[^\d.,]/g, '');
     var formattedValue = value.replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     element.value = formattedValue;
@@ -30,6 +33,7 @@ function formatNumberWithCommas(element) {
         errorMessage.style.display = 'none';
     }
 }
+
 
 // This function hides the 'results' section of the page. It's typically called to reset the 
 // display when the user starts modifying input values.
@@ -56,7 +60,30 @@ function calculateShares() {
     var salary2 = parseFloat(document.getElementById('salary2').value.replace(/,/g, ''));
     var expense = parseFloat(document.getElementById('expense').value.replace(/,/g, ''));
 
-    if (isNaN(salary1) || isNaN(salary2) || isNaN(expense) || salary1 <= 0 || salary2 <= 0 || expense <= 0) {
+    var hasError = false;
+
+    if (isNaN(salary1) || salary1 <= 0) {
+        document.getElementById('salary1').classList.add('input-error');
+        hasError = true;
+    } else {
+        document.getElementById('salary1').classList.remove('input-error');
+    }
+
+    if (isNaN(salary2) || salary2 <= 0) {
+        document.getElementById('salary2').classList.add('input-error');
+        hasError = true;
+    } else {
+        document.getElementById('salary2').classList.remove('input-error');
+    }
+
+    if (isNaN(expense) || expense <= 0) {
+        document.getElementById('expense').classList.add('input-error');
+        hasError = true;
+    } else {
+        document.getElementById('expense').classList.remove('input-error');
+    }
+
+    if (hasError) {
         document.getElementById('results').innerHTML = `
             <div class="error-message" id="error-message">
                 <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares.</p>
@@ -100,3 +127,4 @@ function calculateShares() {
     // Scroll to the results section smoothly for better user experience
     document.getElementById('share-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+

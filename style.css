@@ -111,6 +111,13 @@ p {
   line-height: normal;
 }
 
+.required-asterisk {
+    /* Your styles here */
+    color: red; /* Example: making the asterisk red */
+    font-weight: bold; /* Example: making the asterisk bold */
+}
+
+
 label, .share-title {
     color: var(--primary-colour);
     font-family: Assistant;
@@ -138,6 +145,10 @@ label, .share-title {
     font-weight: 400;  
 }
 
+.input-group input[type="text"]::placeholder {
+    color: rgba(0, 0, 0, 0.40);
+}
+
 .input-group input[type="text"]:hover {
     border: 1px solid var(--primary-colour-hover);
 }
@@ -147,22 +158,22 @@ label, .share-title {
     outline-offset: var(--focus-offset);
 }
 
-.share-value {
-    font-family: Assistant, sans-serif; /* Adding a generic sans-serif fallback */
-    font-size: 24px;
-    font-weight: 400;
-}
-
-.input-group input[type="text"]::placeholder {
-    color: rgba(0, 0, 0, 0.40);
-}
-
 .input-group label,
 .input-group input {
     display: block;
     width: 100%;
     margin-bottom: 8px; /* Optional: adds space between the elements */
     box-sizing: border-box;
+}
+
+input.input-error {
+    border: 1px solid red !important;
+}
+
+.share-value {
+    font-family: Assistant, sans-serif; /* Adding a generic sans-serif fallback */
+    font-size: 24px;
+    font-weight: 400;
 }
 
 .shared-expense {
