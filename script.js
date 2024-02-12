@@ -8,7 +8,7 @@ window.onload = function() {
     if (localStorage.getItem('salary2')) {
         document.getElementById('salary2').value = localStorage.getItem('salary2');
     }
-}
+};
 
 // This function takes a numerical value and formats it as a string with two decimal places,
 // adding commas as thousand separators.
@@ -28,17 +28,17 @@ function formatNumberWithCommas(element) {
     element.value = formattedValue;
 
     // Hide error message if it's displayed
-    var errorMessage = document.getElementById('error-message');
+    var errorMessage = document.getElementById('error-display');
     if (errorMessage) {
         errorMessage.style.display = 'none';
     }
 }
 
-
 // This function hides the 'results' section of the page. It's typically called to reset the 
 // display when the user starts modifying input values.
 function resetResultsDisplay() {
     document.getElementById('results').style.display = 'none';
+    document.getElementById('error-display').style.display = 'none';
 }
 
 // This function 'calculateShares' calculates each person's share of a given expense based 
@@ -48,7 +48,7 @@ function resetResultsDisplay() {
 //      commas for proper formatting.
 // 2. Validates the input values:
 //    - Checks for 'NaN' (not a number) and ensures all values are greater than zero.
-//    - If any value is invalid, it displays an error message in the 'results' section and 
+//    - If any value is invalid, it displays an error message in a separate section and 
 //      scrolls smoothly to this message for visibility.
 // 3. If the values are valid:
 //    - Saves the salary inputs to localStorage for potential future use.
@@ -84,12 +84,12 @@ function calculateShares() {
     }
 
     if (hasError) {
-        document.getElementById('results').innerHTML = `
+        document.getElementById('error-display').innerHTML = `
             <div class="error-message" id="error-message">
                 <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares.</p>
             </div>
         `;
-        document.getElementById('results').style.display = 'block';
+        document.getElementById('error-display').style.display = 'block';
         document.getElementById('error-message').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
     }
@@ -127,4 +127,3 @@ function calculateShares() {
     // Scroll to the results section smoothly for better user experience
     document.getElementById('share-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
-
