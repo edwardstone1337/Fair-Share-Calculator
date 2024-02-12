@@ -186,3 +186,43 @@ function calculateShares() {
     .getElementById("share-container")
     .scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the modal
+  var modal = document.getElementById('myModal');
+
+  // Get the button that opens the modal
+  var btn = document.getElementById('howitworksBtn');
+
+  // Get the button that closes the modal
+  var closemodalLarge = document.getElementById('closemodalLarge');
+
+  // Get the span that closes the modal
+  var closeSpan = document.getElementsByClassName('close')[0]; // Assuming it's the first element with class 'close'
+
+  // When the user clicks on the button, open the modal 
+  btn.onclick = function() {
+      modal.style.display = "block";
+      modal.scrollTop = 0;  // Reset scroll position to the top of the modal
+  }
+
+  // Function to close the modal
+  function closeModal() {
+      modal.style.display = "none";
+  }
+
+  // When the user clicks on the close button, close the modal
+  closemodalLarge.onclick = closeModal;
+
+  // When the user clicks on the close span (x), close the modal
+  closeSpan.onclick = closeModal;
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          closeModal();
+      }
+  }
+});
+
+
