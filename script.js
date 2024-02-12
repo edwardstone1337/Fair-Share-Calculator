@@ -156,8 +156,9 @@ function calculateShares() {
   document.getElementById("results").innerHTML = `
   <div class="share-container" id="share-container">
   <div class="share-container-text">
-  <h2>Ta-Da!</h2>
-  <p>Here are your fair shares:</p>
+  <h2>Voilà! ✨</h2>
+  <p>Your fair share breakdown:</p>
+  
 </div>
       <div class="share-container-boxes">
           <div class="share">
@@ -169,7 +170,9 @@ function calculateShares() {
               <div class="share-value" id="share2-placeholder"></div>
           </div>
       </div>
+      <div class="share-container-text"><span class="text">Remember, the Fair Share Calculator is all about making sharing expenses simple, fair, and above all, stress-free.</br>🧘</span></div>
   </div>
+  
 `;
   document.getElementById("results").style.display = "block";
 
@@ -187,28 +190,28 @@ function calculateShares() {
     .scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Get the modal
-  var modal = document.getElementById('myModal');
+  var modal = document.getElementById("myModal");
 
   // Get the button that opens the modal
-  var btn = document.getElementById('howitworksBtn');
+  var btn = document.getElementById("howitworksBtn");
 
   // Get the button that closes the modal
-  var closemodalLarge = document.getElementById('closemodalLarge');
+  var closemodalLarge = document.getElementById("closemodalLarge");
 
   // Get the span that closes the modal
-  var closeSpan = document.getElementsByClassName('close')[0]; // Assuming it's the first element with class 'close'
+  var closeSpan = document.getElementsByClassName("close")[0]; // Assuming it's the first element with class 'close'
 
-  // When the user clicks on the button, open the modal 
-  btn.onclick = function() {
-      modal.style.display = "block";
-      modal.scrollTop = 0;  // Reset scroll position to the top of the modal
-  }
+  // When the user clicks on the button, open the modal
+  btn.onclick = function () {
+    modal.style.display = "block";
+    modal.scrollTop = 0; // Reset scroll position to the top of the modal
+  };
 
   // Function to close the modal
   function closeModal() {
-      modal.style.display = "none";
+    modal.style.display = "none";
   }
 
   // When the user clicks on the close button, close the modal
@@ -218,11 +221,9 @@ document.addEventListener('DOMContentLoaded', function() {
   closeSpan.onclick = closeModal;
 
   // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          closeModal();
-      }
-  }
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      closeModal();
+    }
+  };
 });
-
-

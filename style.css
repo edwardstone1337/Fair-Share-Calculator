@@ -220,10 +220,6 @@ input.input-error {
   font-weight: 400;
 }
 
-.shared-expense {
-  width: 100%;
-}
-
 #error-display {
   display: none;
 }
@@ -394,10 +390,13 @@ input.input-error {
 }
 
 .share-container {
+  display: flex;
+  flex-direction: column;
   border-radius: var(--border-radius-8);
   border: 1px solid var(--primary-colour);
   background: #fff;
   padding: 24px 16px;
+  gap: var(--vertical-gap);
 }
 
 /* This is the Ta-Da text container */
@@ -405,7 +404,6 @@ input.input-error {
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-bottom: var(--vertical-gap);
 }
 
 .share-container-boxes {
@@ -555,3 +553,12 @@ input.input-error {
   font-weight: 700;
 }
 /* End of How To Box */
+
+.third-party {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 24px;
+}
