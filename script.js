@@ -91,6 +91,16 @@ function calculateShares() {
         `;
         document.getElementById('error-display').style.display = 'block';
         document.getElementById('error-message').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                // Add headshake animation
+                var headshakeContainer = document.querySelector('.headshake-container');
+                headshakeContainer.classList.add('headshake');
+        
+                // Remove the animation class after it's done
+                headshakeContainer.addEventListener('animationend', () => {
+                    headshakeContainer.classList.remove('headshake');
+                });
+                
         return;
     }
     
