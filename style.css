@@ -7,6 +7,7 @@
     --focus-colour: #000000;
     --focus-offset: 2px;
     --vertical-gap: 24px;
+    --danger-colour: #A8071A;
 }
 
 * {
@@ -101,19 +102,15 @@ p {
     line-height: normal;
 }
 
-.shy-text{
-    color: var(--primary-colour);
-  text-align: center;
-  font-family: Assistant;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.headshake-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--vertical-gap);
 }
 
 .required-asterisk {
     /* Your styles here */
-    color: red; /* Example: making the asterisk red */
+    color: var(--danger-colour); /* Example: making the asterisk red */
     font-weight: bold; /* Example: making the asterisk bold */
 }
 
@@ -167,7 +164,17 @@ label, .share-title {
 }
 
 input.input-error {
-    border: 1px solid red !important;
+    border: 1px solid var(--danger-colour) !important;
+}
+
+.shy-text{
+    color: var(--primary-colour);
+  text-align: center;
+  font-family: Assistant;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .share-value {
@@ -178,6 +185,20 @@ input.input-error {
 
 .shared-expense {
     width:100%;
+}
+
+#error-display {
+    display: none;
+}
+
+.error-message p {
+    color: var(--danger-colour);
+    text-align: center;
+    font-family: Assistant;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .calculate-button {
