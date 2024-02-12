@@ -16,6 +16,35 @@ function formatNumber(num) {
   return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 }
 
+// Function to animate the counting of numbers
+function animateCounter(elementId, finalNumber, duration = 300) {
+  const counterElement = document.getElementById(elementId);
+  let prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (prefersReducedMotion) {
+    // If reduced motion is preferred, set the final value immediately without animation
+    counterElement.textContent = formatNumber(finalNumber);
+  } else {
+    // Else, proceed with the animation
+    let startNumber = 0;
+    const step = (finalNumber - startNumber) / (duration / 10);
+
+    const timer = setInterval(function () {
+      startNumber += step;
+      if (
+        (step > 0 && startNumber >= finalNumber) ||
+        (step < 0 && startNumber <= finalNumber)
+      ) {
+        startNumber = finalNumber;
+        clearInterval(timer);
+      }
+      counterElement.textContent = formatNumber(startNumber);
+    }, 10);
+  }
+}
+
 // This function is triggered when a user inputs a number. It formats the input by removing
 // non-numeric characters (except commas and dots) and then adds commas in appropriate places
 // for readability.
@@ -93,7 +122,7 @@ function calculateShares() {
 
   if (hasError) {
     document.getElementById("error-display").innerHTML = `
-            <div class="error-message" id="error-message">
+            <div class="error-message" id="error-message" aria-live="assertive">
                 <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares.</p>
             </div>
         `;
@@ -125,24 +154,32 @@ function calculateShares() {
 
   // Display the calculated shares in the 'results' section
   document.getElementById("results").innerHTML = `
-        <div class="share-container" id="share-container">
-            <div class="share-container-text">
-                <h2>Ta-Da!</h2>
-                <p>Here are your fair shares:</p>
-            </div>
-            <div class="share-container-boxes">
-                <div class="share">
-                    <div class="share-title">Your Share</div>
-                    <div class="share-value">${formatNumber(share1)}</div>
-                </div>
-                <div class="share">
-                    <div class="share-title">Partner's Share</div>
-                    <div class="share-value">${formatNumber(share2)}</div>
-                </div>
-            </div>
-        </div>
-    `;
+  <div class="share-container" id="share-container">
+  <div class="share-container-text">
+  <h2>Ta-Da!</h2>
+  <p>Here are your fair shares:</p>
+</div>
+      <div class="share-container-boxes">
+          <div class="share">
+              <div class="share-title">Your Share</div>
+              <div class="share-value" id="share1-placeholder"></div>
+          </div>
+          <div class="share">
+              <div class="share-title">Partner's Share</div>
+              <div class="share-value" id="share2-placeholder"></div>
+          </div>
+      </div>
+  </div>
+`;
   document.getElementById("results").style.display = "block";
+
+  // Animate the shares
+  animateCounter("share1-placeholder", share1, 300);
+  animateCounter("share2-placeholder", share2, 300);
+
+  // Animate the shares
+  animateCounter("share1-placeholder", share1, 300);
+  animateCounter("share2-placeholder", share2, 300);
 
   // Scroll to the results section smoothly for better user experience
   document
