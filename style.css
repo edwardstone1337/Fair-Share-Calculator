@@ -32,6 +32,10 @@ body {
   .headshake {
     animation: none;
   }
+
+  .modal-content {
+    animation: none;
+  }
 }
 
 @media (max-width: 430px) {
@@ -234,6 +238,8 @@ input.input-error {
   line-height: normal;
 }
 
+/* Buttons */
+
 .calculate-button {
   display: flex;
   flex-direction: column;
@@ -269,6 +275,119 @@ input.input-error {
   outline-offset: var(--focus-offset);
 }
 
+/* X Modal Button */
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--primary-colour);
+  border-radius: 5px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 40px; /* Vertically align the 'X' */
+  color: var(--primary-colour);
+}
+
+.close:hover {
+  cursor: pointer;
+  color: var(--primary-colour-hover);
+  border: 1px solid var(--primary-colour-hover); /* Same as above */
+  background-color: rgba(
+    17,
+    46,
+    46,
+    0.05
+  ); /* 50% opacity of the RGB equivalent */
+}
+
+.close:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+/* Close Modal Button */
+#closemodalLarge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  gap: 8px;
+  border: 1px solid var(--primary-colour);
+  border-radius: 8px;
+  color: var(--primary-colour);
+  background-color: transparent;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  width: 100%;
+}
+
+#closemodalLarge:hover {
+  cursor: pointer;
+  color: var(
+    --primary-colour
+  ); /* Assuming var(--primary-colour-hover) is #ff5733 */
+  border: 1px solid var(--primary-colour-hover); /* Same as above */
+  background-color: rgba(
+    17,
+    46,
+    46,
+    0.05
+  ); /* 50% opacity of the RGB equivalent */
+}
+
+#closemodalLarge:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+/* How it Works Button Styles */
+#howitworksBtn {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--border-radius-8);
+  border: 0px solid transparent;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px;
+  background-color: transparent;
+  border: 1px solid var(--primary-colour); /* Same as above */
+}
+
+#howitworksBtn:hover {
+  cursor: pointer;
+  color: var(
+    --primary-colour
+  ); /* Assuming var(--primary-colour-hover) is #ff5733 */
+  border: 1px solid var(--primary-colour-hover); /* Same as above */
+  background-color: rgba(
+    17,
+    46,
+    46,
+    0.05
+  ); /* 50% opacity of the RGB equivalent */
+}
+
+#howitworksBtn:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+/* Results */
 #results {
   display: none;
   width: 100%;
@@ -321,47 +440,88 @@ input.input-error {
   margin-right: 0;
 }
 
-/* How-To-Box */
-.info-container {
-  height: auto;
-  padding: 24px 16px;
-  background: white;
-  border-radius: var(--border-radius-8);
-  border: 1px solid var(--primary-colour);
-  display: inline-flex;
+/* Keyframes for modal animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal Base */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1; /* Sit on top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: 5% auto; /* 15% from the top and centered */
+  padding: 32px 16px 16px 16px;
+  border: none;
+  width: 80%; /* Responsive width */
+  max-width: 360px;
+  border-radius: 8px;
+  box-shadow: 0 4px 4px rgba(22, 34, 51, 0.04),
+    0 4px 24px rgba(22, 34, 51, 0.04), 0 24px 24px rgba(22, 34, 51, 0.04),
+    0 32px 32px rgba(22, 34, 51, 0.04), 0 64px 64px rgba(22, 34, 51, 0.12),
+    0 120px 120px rgba(22, 34, 51, 0.08);
+  animation: modalFadeIn 0.3s ease-out;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: var(--vertical-gap);
 }
 
-.content-box {
-  align-self: stretch;
-  height: 186px;
-  display: flex;
+/* Info Container */
+.info-container {
+  display: inline-flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  padding: 24px 16px;
+  gap: var(--vertical-gap);
+  background-color: white;
+  border: 1px solid var(--primary-colour);
+  border-radius: var(--border-radius-8);
 }
 
+/* Content Box */
+.content-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+/* Title and Text */
 .title,
 .text {
-  align-self: stretch;
   text-align: center;
   color: var(--primary-colour);
   font-family: "Assistant", sans-serif;
   word-wrap: break-word;
+  align-self: stretch;
 }
 
 .title {
-  color: var(--primary-colour);
-  text-align: center;
   font-family: "Josefin Sans";
   font-size: 24px;
-  font-style: normal;
   font-weight: 700;
-  line-height: normal;
 }
 
 .text {
@@ -375,6 +535,7 @@ input.input-error {
   align-self: stretch;
   text-align: center;
   gap: var(--vertical-gap);
+  width: 100%;
 }
 
 .footer-text,
