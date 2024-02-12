@@ -394,15 +394,3 @@ input.input-error {
   font-weight: 700;
 }
 /* End of How To Box */
-
-/* For Chrome, Safari, Edge, and Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* For Firefox */
-input[type="text"] {
-  -moz-appearance: textfield;
-}
