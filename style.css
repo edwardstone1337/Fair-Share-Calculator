@@ -28,6 +28,12 @@ body {
     gap: var(--vertical-gap);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .headshake {
+        animation: none;
+    }
+}
+
 @media (max-width: 430px) {
     .body {
         padding: 16px; /* Reduced padding for small screens */
@@ -100,6 +106,19 @@ p {
     font-size: 18px;
     font-weight: 400;
     line-height: normal;
+}
+
+@keyframes headshake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+.headshake {
+    animation: headshake 0.5s ease-in-out;
 }
 
 .headshake-container{
