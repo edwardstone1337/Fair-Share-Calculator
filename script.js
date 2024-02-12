@@ -156,7 +156,7 @@ function calculateShares() {
   document.getElementById("results").innerHTML = `
   <div class="share-container" id="share-container">
   <div class="share-container-text">
-  <h2>Voilà! ✨</h2>
+  <h2>Voilà!</h2>
   <p>Your fair share breakdown:</p>
   
 </div>
@@ -170,7 +170,9 @@ function calculateShares() {
               <div class="share-value" id="share2-placeholder"></div>
           </div>
       </div>
-      <div class="share-container-text"><span class="text">Remember, the Fair Share Calculator is all about making sharing expenses simple, fair, and above all, stress-free.</br>🧘</span></div>
+      <div class="share-container-text"><span class="text">Remember, the Fair Share Calculator is all about making sharing expenses simple, fair, and above all, stress-free</span>
+      <div class="emoji">🧘</div>
+      </div>
   </div>
   
 `;
