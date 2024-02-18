@@ -229,3 +229,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 });
+
+// Trigger 'calculate-button' click on pressing 'Enter' in any input field
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+          event.preventDefault();
+          calculateShares(); // Call the function directly instead of clicking the button
+      }
+  });
+});

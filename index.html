@@ -40,11 +40,7 @@
     <meta property="og:url" content="https://www.fairsharecalculator.com" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link
-      rel="icon"
-      href="lotus.png"
-      type="image/png"
-    />
+    <link rel="icon" href="lotus.png" type="image/png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,7 +51,6 @@
 
     <link rel="canonical" href="https://www.fairsharecalculator.com" />
     <link rel="stylesheet" type="text/css" href="style.min.css" />
-    <script src="script.min.js"></script>
 
     <!-- A11y -->
     <script type="application/ld+json">
@@ -86,157 +81,179 @@
       })(window, document, "clarity", "script", "kyx62gpbw4");
     </script>
   </head>
-
-  <!-- Fair Share Calculator and Subheading-->
-  <div class="header">
-    <div class="emoji">🪷</div>
-    <h1>Fair Share Calculator</h1>
-    <p>
-      Ensure harmony and equity in money matters, for couples with different
-      incomes.
-    </p>
-  </div>
-
-  <main>
-  <div class="headshake-container">
-    <div class="salaries-container">
-      <div class="salaries">
-        <div class="input-group">
-          <label for="salary1"
-            ><span class="required-asterisk">*</span> Your Salary</label
-          >
-          <input
-            type="text"
-            id="salary1"
-            placeholder="0"
-            inputmode="numeric"
-            oninput="formatNumberWithCommas(this)"
-          />
-        </div>
-
-        <div class="input-group">
-          <label for="salary2"
-            ><span class="required-asterisk">*</span> Partner's Salary</label
-          >
-          <input
-            type="text"
-            id="salary2"
-            placeholder="0"
-            inputmode="numeric"
-            oninput="formatNumberWithCommas(this)"
-          />
-        </div>
-      </div>
-      <p class="shy-text">Don't be shy – this helps us do the math fairly!</p>
-    </div>
-
-    <div class="shared-expense">
-      <div class="input-group">
-        <label for="expense"
-          ><span class="required-asterisk">*</span> Shared Expense Amount</label
-        >
-        <input
-          type="text"
-          id="expense"
-          placeholder="0"
-          inputmode="numeric"
-          oninput="formatNumberWithCommas(this)"
-        />
-      </div>
-      <div id="error-display"></div>
-    </div>
-
-    <div id="error-display"></div>
-
-    <button class="calculate-button" onclick="calculateShares()">
-      Calculate
-    </button>
-  </div>
-</main>
-
-  <div id="results" aria-live="polite" style="display: none">
-    <!-- Results will be displayed here -->
-  </div>
-
-  <button id="howitworksBtn">How It works</button>
-
-  <section><!-- The Modal -->
-  <div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close" aria-label="Close">&times;</span>
-      <div class="title">How it works</div>
-
-      <div class="content-box">
-        <div class="text">
-          <strong>Start by typing in both your incomes.</strong> Don't worry,
-          it's just between the two of you!
-        </div>
-        <div class="icon">
-          <img
-            src="Image01.png"
-            alt="Two hands shaking over a signed document."
-            width="112"
-            height="112"
-          />
-        </div>
-      </div>
-
-      <div class="content-box">
-        <div class="text">
-          <strong>Next, pop in the cost of whatever you're splitting</strong> -
-          maybe it's dinner, rent, or that new sofa!
-        </div>
-        <div class="icon">
-          <img
-            src="Image02.png"
-            alt="Two individuals with a tablet and a smartphone surrounded by various icons."
-            width="112"
-            height="112"
-          />
-        </div>
-      </div>
-
-      <div class="content-box">
-        <div class="text">
-          <strong>Hit the calculate button and let the magic happen.</strong>
-          Our calculator works out a fair split based on what each of you earns.
-        </div>
-        <div class="icon">
-          <img
-            src="Image03.png"
-            alt="Two hands shaking with banknotes flying around."
-            width="112"
-            height="112"
-          />
-        </div>
-      </div>
-
-      <div class="content-box">
-        <div class="text">
-          <strong
-            >Voila! You'll instantly see how much each of you should chip
-            in.</strong
-          >
-          It's all about fairness and keeping things balanced in love and money.
-        </div>
-      </div>
-
-      <button id="closemodalLarge" aria-label="Close Modal">Makes sense!</button>
-    </div>
-  </div>
-</section>
-
-  <div class="footer">    
-    <div class="third-party">
-      <p class="shy-text">
-        <strong>Loving the Fair Share Calculator?</strong> </br> Show your support with a coffee or an upvote on Product Hunt! Thank
-        you for being amazing!
+  <body>
+    <!-- Fair Share Calculator and Subheading-->
+    <div class="header">
+      <div class="emoji">🪷</div>
+      <h1>Fair Share Calculator</h1>
+      <p>
+        Ensure harmony and equity in money matters, for couples with different
+        incomes.
       </p>
+    </div>
+
+    <main>
+      <div class="headshake-container">
+        <div class="salaries-container">
+          <div class="salaries">
+            <div class="input-group">
+              <label for="salary1"
+                ><span class="required-asterisk">*</span> Your Salary</label
+              >
+              <input
+                type="text"
+                id="salary1"
+                placeholder="0"
+                inputmode="numeric"
+                oninput="formatNumberWithCommas(this)"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="salary2"
+                ><span class="required-asterisk">*</span> Partner's
+                Salary</label
+              >
+              <input
+                type="text"
+                id="salary2"
+                placeholder="0"
+                inputmode="numeric"
+                oninput="formatNumberWithCommas(this)"
+              />
+            </div>
+          </div>
+          <p class="shy-text">
+            Don't be shy – this helps us do the math fairly!
+          </p>
+        </div>
+
+        <div class="shared-expense">
+          <div class="input-group">
+            <label for="expense"
+              ><span class="required-asterisk">*</span> Expense to Split</label
+            >
+            <input
+              type="text"
+              id="expense"
+              placeholder="0"
+              inputmode="numeric"
+              oninput="formatNumberWithCommas(this)"
+            />
+          </div>
+          <div id="error-display"></div>
+        </div>
+
+        <div id="error-display"></div>
+
+        <button class="calculate-button" onclick="calculateShares()">
+          Calculate
+        </button>
+      </div>
+    </main>
+
+    <div id="results" aria-live="polite" style="display: none">
+      <!-- Results will be displayed here -->
+    </div>
+
+    <button id="howitworksBtn">How It works</button>
+
+    
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close" aria-label="Close">&times;</span>
+          <div class="title">How it works</div>
+
+          <div class="content-box">
+            <div class="text">
+              <strong>Start by typing in both your incomes.</strong> Don't
+              worry, it's just between the two of you!
+            </div>
+            <div class="icon">
+              <img
+                src="Image01.png"
+                alt="Two hands shaking over a signed document."
+                width="112"
+                height="112"
+              />
+            </div>
+          </div>
+
+          <div class="content-box">
+            <div class="text">
+              <strong
+                >Next, pop in the cost of whatever you're splitting</strong
+              >
+              - maybe it's dinner, rent, or that new sofa!
+            </div>
+            <div class="icon">
+              <img
+                src="Image02.png"
+                alt="Two individuals with a tablet and a smartphone surrounded by various icons."
+                width="112"
+                height="112"
+              />
+            </div>
+          </div>
+
+          <div class="content-box">
+            <div class="text">
+              <strong
+                >Hit the calculate button and let the magic happen.</strong
+              >
+              Our calculator works out a fair split based on what each of you
+              earns.
+            </div>
+            <div class="icon">
+              <img
+                src="Image03.png"
+                alt="Two hands shaking with banknotes flying around."
+                width="112"
+                height="112"
+              />
+            </div>
+          </div>
+
+          <div class="content-box">
+            <div class="text">
+              <strong
+                >Voila! You'll instantly see how much each of you should chip
+                in.</strong
+              >
+              It's all about fairness and keeping things balanced in love and
+              money.
+            </div>
+          </div>
+
+          <button id="closemodalLarge" aria-label="Close Modal">
+            Makes sense!
+          </button>
+        </div>
+      </div>
+
+    <div class="footer">
+      <div class="third-party">
+        <p class="shy-text">
+          <strong>Loving the Fair Share Calculator?</strong> <br />
+          <a href="https://www.buymeacoffee.com/edthedesigner" target="_blank"
+            >Show your support with a coffee</a
+          >
+          or
+          <a
+            href="https://www.producthunt.com/posts/fair-share-calculator?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-fair-share-calculator"
+            target="_blank"
+            >an upvote on Product Hunt</a
+          >! Thank you for being amazing!
+        </p>
+
+        <!--
       <a href="https://www.buymeacoffee.com/edthedesigner"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=edthedesigner&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
       <a href="https://www.producthunt.com/posts/fair-share-calculator?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-fair&#0045;share&#0045;calculator" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=439261&theme=neutral" alt="Fair&#0032;Share&#0032;Calculator - A&#0032;fair&#0044;&#0032;earning&#0045;based&#0044;&#0032;expense&#0032;calculator&#0032;for&#0032;couples | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-    
-    
-  </div>
-  </div>
+    -->
+      </div>
+    </div>
+  </body>
+  <script src="script.min.js"></script>
 </html>
