@@ -16,6 +16,24 @@ function formatNumber(num) {
   return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 }
 
+function togglePassword(element, inputId) {
+  const inputField = document.getElementById(inputId);
+  const type =
+    inputField.getAttribute("type") === "password" ? "text" : "password";
+  inputField.setAttribute("type", type);
+  element.src = type === "password" ? "Hide.svg" : "Show.svg"; // Update the SVG source
+
+  // Add or remove the 'input-error' class based on the input type
+  if (type === "password") {
+    inputField.classList.remove("input-error");
+  } else {
+    const isError = inputField.classList.contains("input-error");
+    if (isError) {
+      inputField.classList.add("input-error");
+    }
+  }
+}
+
 // Function to animate the counting of numbers
 function animateCounter(elementId, finalNumber, duration = 300) {
   const counterElement = document.getElementById(elementId);
@@ -231,11 +249,11 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Trigger 'calculate-button' click on pressing 'Enter' in any input field
-document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-          event.preventDefault();
-          calculateShares(); // Call the function directly instead of clicking the button
-      }
+document.querySelectorAll("input").forEach((input) => {
+  input.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      calculateShares(); // Call the function directly instead of clicking the button
+    }
   });
 });

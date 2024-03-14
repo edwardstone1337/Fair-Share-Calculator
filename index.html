@@ -66,13 +66,20 @@
     </script>
 
     <!-- Microsoft Clarity -->
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "kyx62gpbw4");
-</script>
+    <script type="text/javascript">
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, "clarity", "script", "kyx62gpbw4");
+    </script>
   </head>
   <body>
     <!-- Fair Share Calculator and Subheading-->
@@ -93,13 +100,21 @@
               <label for="salary1"
                 ><span class="required-asterisk">*</span> Your Salary</label
               >
-              <input
-                type="text"
-                id="salary1"
-                placeholder="0"
-                inputmode="numeric"
-                oninput="formatNumberWithCommas(this)"
-              />
+              <div class="input-container">
+                <input
+                  type="text"
+                  id="salary1"
+                  placeholder="0"
+                  inputmode="numeric"
+                  oninput="formatNumberWithCommas(this)"
+                />
+                <img
+                  class="toggle-password"
+                  src="Show.svg"
+                  alt="Show/Hide Password"
+                  onclick="togglePassword(this, 'salary1')"
+                />
+              </div>
             </div>
 
             <div class="input-group">
@@ -107,13 +122,21 @@
                 ><span class="required-asterisk">*</span> Partner's
                 Salary</label
               >
-              <input
-                type="text"
-                id="salary2"
-                placeholder="0"
-                inputmode="numeric"
-                oninput="formatNumberWithCommas(this)"
-              />
+              <div class="input-container">
+                <input
+                  type="text"
+                  id="salary2"
+                  placeholder="0"
+                  inputmode="numeric"
+                  oninput="formatNumberWithCommas(this)"
+                />
+                <img
+                  class="toggle-password"
+                  src="Show.svg"
+                  alt="Show/Hide Password"
+                  onclick="togglePassword(this, 'salary2')"
+                />
+              </div>
             </div>
           </div>
           <p class="shy-text">
@@ -121,26 +144,28 @@
           </p>
         </div>
 
-        <div class="shared-expense">
-          <div class="input-group">
-            <label for="expense"
-              ><span class="required-asterisk">*</span> Expense to Split</label
-            >
-            <input
-              type="text"
-              id="expense"
-              placeholder="0"
-              inputmode="numeric"
-              oninput="formatNumberWithCommas(this)"
-            />
+        <div class="expense-container">
+          <div class="shared-expense-container">
+            <div class="input-group">
+              <label for="expense"
+                ><span class="required-asterisk">*</span> Expense to
+                Split</label
+              >
+              <input
+                type="text"
+                id="expense"
+                placeholder="0"
+                inputmode="numeric"
+                oninput="formatNumberWithCommas(this)"
+              />
+            </div>
           </div>
           <p class="shy-text">
-            Enter the cost of any shared expense – like rent, groceries, or a savings goal.
+            Enter the cost of any shared expense – like rent, groceries, or a
+            savings goal.
           </p>
           <div id="error-display"></div>
         </div>
-
-        <div id="error-display"></div>
 
         <button class="calculate-button" onclick="calculateShares()">
           Calculate
@@ -154,80 +179,75 @@
 
     <button id="howitworksBtn">How It works</button>
 
-    
-      <!-- The Modal -->
-      <div id="myModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close" aria-label="Close">&times;</span>
-          <div class="title">How it works</div>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" aria-label="Close">&times;</span>
+        <div class="title">How it works</div>
 
-          <div class="content-box">
-            <div class="text">
-              <strong>Start by typing in both your incomes.</strong> Don't
-              worry, it's just between the two of you!
-            </div>
-            <div class="icon">
-              <img
-                src="Image01.png"
-                alt="Two hands shaking over a signed document."
-                width="112"
-                height="112"
-              />
-            </div>
+        <div class="content-box">
+          <div class="text">
+            <strong>Start by typing in both your incomes.</strong> Don't worry,
+            it's just between the two of you!
           </div>
-
-          <div class="content-box">
-            <div class="text">
-              <strong
-                >Next, pop in the cost of whatever you're splitting</strong
-              >
-              - maybe it's dinner, rent, or that new sofa!
-            </div>
-            <div class="icon">
-              <img
-                src="Image02.png"
-                alt="Two individuals with a tablet and a smartphone surrounded by various icons."
-                width="112"
-                height="112"
-              />
-            </div>
+          <div class="icon">
+            <img
+              src="Image01.png"
+              alt="Two hands shaking over a signed document."
+              width="112"
+              height="112"
+            />
           </div>
-
-          <div class="content-box">
-            <div class="text">
-              <strong
-                >Hit the calculate button and let the magic happen.</strong
-              >
-              Our calculator works out a fair split based on what each of you
-              earns.
-            </div>
-            <div class="icon">
-              <img
-                src="Image03.png"
-                alt="Two hands shaking with banknotes flying around."
-                width="112"
-                height="112"
-              />
-            </div>
-          </div>
-
-          <div class="content-box">
-            <div class="text">
-              <strong
-                >Voila! You'll instantly see how much each of you should chip
-                in.</strong
-              >
-              It's all about fairness and keeping things balanced in love and
-              money.
-            </div>
-          </div>
-
-          <button id="closemodalLarge" aria-label="Close Modal">
-            Makes sense!
-          </button>
         </div>
+
+        <div class="content-box">
+          <div class="text">
+            <strong>Next, pop in the cost of whatever you're splitting</strong>
+            - maybe it's dinner, rent, or that new sofa!
+          </div>
+          <div class="icon">
+            <img
+              src="Image02.png"
+              alt="Two individuals with a tablet and a smartphone surrounded by various icons."
+              width="112"
+              height="112"
+            />
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="text">
+            <strong>Hit the calculate button and let the magic happen.</strong>
+            Our calculator works out a fair split based on what each of you
+            earns.
+          </div>
+          <div class="icon">
+            <img
+              src="Image03.png"
+              alt="Two hands shaking with banknotes flying around."
+              width="112"
+              height="112"
+            />
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="text">
+            <strong
+              >Voila! You'll instantly see how much each of you should chip
+              in.</strong
+            >
+            It's all about fairness and keeping things balanced in love and
+            money.
+          </div>
+        </div>
+
+        <button id="closemodalLarge" aria-label="Close Modal">
+          Makes sense!
+        </button>
       </div>
+    </div>
 
     <div class="footer">
       <div class="third-party">
