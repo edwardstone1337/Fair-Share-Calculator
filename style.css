@@ -151,6 +151,44 @@ p {
   font-weight: bold; /* Example: making the asterisk bold */
 }
 
+.input-container input {
+  padding: 12px 16px;
+  border-radius: var(--border-radius-8);
+  border: 1px solid var(--primary-colour);
+  background: #fff;
+  color: #000;
+  font-family: Assistant, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-container input:hover {
+  border: 1px solid var(--primary-colour-hover);
+}
+
+.input-container input:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+.input-container input[type="password"] {
+  letter-spacing: 0.1em; /* Add letter spacing for password input */
+}
+
+.input-container {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 label,
 .share-title {
   color: var(--primary-colour);
@@ -387,6 +425,18 @@ input.input-error {
 #results {
   display: none;
   width: 100%;
+}
+
+.shared-expense-container {
+  display: flex;
+  justify-content: center;
+  max-width: 172px;
+  margin: 0 auto;
+}
+
+.shared-expense-container .input-group {
+  width: 100%;
+  margin-bottom: 8px; /* Add this line */
 }
 
 .share-container {
