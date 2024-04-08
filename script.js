@@ -1,12 +1,22 @@
-// This section is responsible for loading previously saved salary values from localStorage
-// when the window is loaded. It checks if the values for 'salary1' and 'salary2' exist in
-// localStorage and, if so, sets those values in the respective input fields on the web page.
 window.onload = function () {
-  if (localStorage.getItem("salary1")) {
-    document.getElementById("salary1").value = localStorage.getItem("salary1");
-  }
-  if (localStorage.getItem("salary2")) {
-    document.getElementById("salary2").value = localStorage.getItem("salary2");
+  const urlParams = new URLSearchParams(window.location.search);
+  const salary1 = urlParams.get("salary1");
+  const salary2 = urlParams.get("salary2");
+  const expense = urlParams.get("expense");
+
+  if (salary1 && salary2 && expense) {
+    document.getElementById("salary1").value = salary1;
+    document.getElementById("salary2").value = salary2;
+    document.getElementById("expense").value = expense;
+    calculateShares();
+  } else {
+    // Existing localStorage code
+    if (localStorage.getItem("salary1")) {
+      document.getElementById("salary1").value = localStorage.getItem("salary1");
+    }
+    if (localStorage.getItem("salary2")) {
+      document.getElementById("salary2").value = localStorage.getItem("salary2");
+    }
   }
 };
 
@@ -187,7 +197,9 @@ function calculateShares() {
               <div class="share-title">Partner's Share</div>
               <div class="share-value" id="share2-placeholder"></div>
           </div>
+          
       </div>
+      <button id="shareBtn" onclick="shareResults()">Share</button>
       <div class="share-container-text"><span class="text">Remember, the Fair Share Calculator is all about making sharing expenses simple, fair, and above all, stress-free</span>
       <div class="emoji">🧘</div>
       </div>
@@ -257,3 +269,34 @@ document.querySelectorAll("input").forEach((input) => {
     }
   });
 });
+
+function shareResults() {
+  const salary1 = document.getElementById("salary1").value;
+  const salary2 = document.getElementById("salary2").value;
+  const expense = document.getElementById("expense").value;
+
+  const queryParams = new URLSearchParams();
+  queryParams.append("salary1", salary1);
+  queryParams.append("salary2", salary2);
+  queryParams.append("expense", expense);
+
+  const shareUrl = `${window.location.origin}${window.location.pathname}?${queryParams.toString()}`;
+
+  if (navigator.share) {
+    // Use Web Share API if available
+    navigator.share({
+      title: 'Fair Share Calculator',
+      text: 'Check out this fair share calculation!',
+      url: shareUrl,
+    })
+    .then(() => console.log('Successful share'))
+    .catch((error) => console.log('Error sharing:', error));
+  } else {
+    // Fallback to copying the URL to clipboard
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      const snackbar = document.getElementById("snackbar");
+      snackbar.className = "show";
+      setTimeout(() => {snackbar.className = snackbar.className.replace("show", "");}, 3000);
+    });
+  }
+}

@@ -309,6 +309,38 @@ input.input-error {
   outline-offset: var(--focus-offset);
 }
 
+#shareBtn {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--border-radius-8);
+  border: 0px solid transparent;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px;
+  background-color: transparent;
+  border: 1px solid var(--primary-colour);
+}
+
+#shareBtn:hover {
+  cursor: pointer;
+  color: var(--primary-colour);
+  border: 1px solid var(--primary-colour-hover);
+  background-color: rgba(17, 46, 46, 0.05);
+}
+
+#shareBtn:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
 /* X Modal Button */
 .close {
   position: absolute;
@@ -611,4 +643,35 @@ input.input-error {
   align-items: center;
   align-content: center;
   gap: 24px;
+}
+
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  border-radius: var(--border-radius-8);
+}
+
+#snackbar.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
 }
