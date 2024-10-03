@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap');
+
 :root {
   --border-radius-8: 8px;
   --primary-colour: #112e2e;
@@ -6,8 +9,11 @@
   --focus-width: 2px;
   --focus-colour: #000000;
   --focus-offset: 2px;
-  --vertical-gap: 24px;
+  --vertical-gap: 20px;
+  --vertical-gap-1: 15px;
   --danger-colour: #a8071a;
+  --h1: 32px;
+  --h2: 24px;
 }
 
 * {
@@ -17,55 +23,21 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Assistant", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 16px;
-  max-width: 400px;
+  padding: 30px 15px;
+  max-width: 410px;
   margin: 0 auto;
-  background: #eafcf8;
+  background: var(--primary-colour);
   gap: var(--vertical-gap);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .headshake {
-    animation: none;
-  }
-
-  .modal-content {
-    animation: none;
-  }
-}
-
-@media (max-width: 430px) {
-  .body {
-    padding: 16px; /* Reduced padding for small screens */
-  }
-}
-
-@media (min-width: 431px) and (max-width: 767px) {
-  .body {
-    padding: 24px; /* Increased padding for medium screens */
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .body {
-    padding: 24px; /* Increased padding for larger screens */
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-  .body {
-    padding: 24px; /* Consistent padding for medium desktops */
-  }
-}
-
-@media (min-width: 1200px) {
-  .body {
-    padding: 24px; /* Consistent padding for large screens */
-  }
+.fairShareWrap {
+  border-radius: 20px;
+  padding: 25px;
+  background: #eafcf8;
 }
 
 .header {
@@ -76,8 +48,7 @@ body {
 }
 
 .header .emoji,
-.header h1,
-.header p {
+.header h1 {
   margin: 0;
 }
 
@@ -90,16 +61,15 @@ h1 {
   color: var(--primary-colour);
   text-align: center;
   font-family: "Josefin Sans";
-  font-size: 40px;
+  font-size: var(--h1);
   font-weight: 700;
   line-height: 1.1;
 }
 
 h2 {
   color: var(--primary-colour);
-  text-align: center;
   font-family: "Josefin Sans";
-  font-size: 24px;
+  font-size: var(--h2);
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -107,29 +77,52 @@ h2 {
 
 p {
   color: var(--primary-colour);
-  text-align: center;
-  font-family: Assistant, sans-serif; /* Adding a generic sans-serif fallback */
+  font-family: Assistant, sans-serif;
+  /* Adding a generic sans-serif fallback */
   font-size: 18px;
   font-weight: 400;
   line-height: normal;
+}
+
+.mb-30 {
+  margin-bottom: 30px !important;
+}
+.mb-15 {
+  margin-bottom: 15px !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+.mt-15 {
+  margin-top: 15px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
 }
 
 @keyframes headshake {
   0% {
     transform: translateX(0);
   }
+
   20% {
     transform: translateX(-10px);
   }
+
   40% {
     transform: translateX(10px);
   }
+
   60% {
     transform: translateX(-10px);
   }
+
   80% {
     transform: translateX(10px);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -142,16 +135,19 @@ p {
 .headshake-container {
   display: flex;
   flex-direction: column;
-  gap: var(--vertical-gap);
+  gap: var(--vertical-gap-1);
 }
 
 .required-asterisk {
   /* Your styles here */
-  color: var(--danger-colour); /* Example: making the asterisk red */
-  font-weight: bold; /* Example: making the asterisk bold */
+  color: var(--danger-colour);
+  /* Example: making the asterisk red */
+  font-weight: bold;
+  /* Example: making the asterisk bold */
+  padding-right: 5px;
 }
 
-.input-container input {
+/* .input-container input {
   padding: 12px 16px;
   border-radius: var(--border-radius-8);
   border: 1px solid var(--primary-colour);
@@ -160,8 +156,27 @@ p {
   font-family: Assistant, sans-serif;
   font-size: 24px;
   font-weight: 400;
-  width: 100%;
+  width: calc(100% - 40px); 
   box-sizing: border-box;
+} */
+
+
+.input-container input[type="password"] {
+  letter-spacing: 0.1em; 
+}
+
+.input-group input[type="text"],
+.input-group input[type="password"] {
+  padding: 12px 16px;
+  border-radius: var(--border-radius-8);
+  border: 1px solid var(--primary-colour);
+  background: #fff;
+  color: #000;
+  font-family: Assistant, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  box-sizing: border-box;
+  margin-bottom: 0px;
 }
 
 .input-container input:hover {
@@ -173,9 +188,7 @@ p {
   outline-offset: var(--focus-offset);
 }
 
-.input-container input[type="password"] {
-  letter-spacing: 0.1em; /* Add letter spacing for password input */
-}
+
 
 .input-container {
   position: relative;
@@ -187,6 +200,9 @@ p {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
 }
 
 label,
@@ -203,24 +219,17 @@ label,
   display: flex;
   justify-content: space-between;
   padding: 0px;
-  gap: 24px;
+  gap: 15px;
 }
 
-.input-group input[type="text"] {
-  padding: 12px 16px;
-  border-radius: var(--border-radius-8);
-  border: 1px solid var(--primary-colour);
-  background: #fff;
-  color: #000;
-  font-family: Assistant, sans-serif; /* Adding a generic sans-serif fallback */
-  font-size: 24px;
-  font-weight: 400;
-}
+
 
 .input-group input[type="text"]::placeholder {
   color: rgba(0, 0, 0, 0.4);
 }
-
+.input-icon span {
+  cursor: pointer; 
+}
 .input-group input[type="text"]:hover {
   border: 1px solid var(--primary-colour-hover);
 }
@@ -234,7 +243,8 @@ label,
 .input-group input {
   display: block;
   width: 100%;
-  margin-bottom: 8px; /* Optional: adds space between the elements */
+  margin-bottom: 8px;
+  /* Optional: adds space between the elements */
   box-sizing: border-box;
 }
 
@@ -244,7 +254,7 @@ input.input-error {
 
 .shy-text {
   color: var(--primary-colour);
-  text-align: center;
+  text-align: left;
   font-family: Assistant;
   font-size: 14px;
   font-style: normal;
@@ -253,7 +263,8 @@ input.input-error {
 }
 
 .share-value {
-  font-family: Assistant, sans-serif; /* Adding a generic sans-serif fallback */
+  font-family: Assistant, sans-serif;
+  /* Adding a generic sans-serif fallback */
   font-size: 24px;
   font-weight: 400;
 }
@@ -264,7 +275,7 @@ input.input-error {
 
 .error-message p {
   color: var(--danger-colour);
-  text-align: center;
+  text-align: left;
   font-family: Assistant;
   font-size: 14px;
   font-style: normal;
@@ -273,6 +284,23 @@ input.input-error {
 }
 
 /* Buttons */
+.add-icon-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #000;
+  font-family: Josefin Sans;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.add-icon-button .material-icons {
+  margin-right: 3px;
+}
 
 .calculate-button {
   display: flex;
@@ -319,14 +347,14 @@ input.input-error {
   box-sizing: border-box;
   padding: 16px;
   border-radius: var(--border-radius-8);
-  border: 0px solid transparent;
   font-family: "Josefin Sans", sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: normal;
   margin: 0px;
-  background-color: transparent;
   border: 1px solid var(--primary-colour);
+  background: var(--primary-colour);
+  color: #fff;
 }
 
 #shareBtn:hover {
@@ -356,20 +384,21 @@ input.input-error {
   justify-content: center;
   cursor: pointer;
   font-size: 24px;
-  line-height: 40px; /* Vertically align the 'X' */
+  line-height: 40px;
+  /* Vertically align the 'X' */
   color: var(--primary-colour);
 }
 
 .close:hover {
   cursor: pointer;
   color: var(--primary-colour-hover);
-  border: 1px solid var(--primary-colour-hover); /* Same as above */
-  background-color: rgba(
-    17,
-    46,
-    46,
-    0.05
-  ); /* 50% opacity of the RGB equivalent */
+  border: 1px solid var(--primary-colour-hover);
+  /* Same as above */
+  background-color: rgba(17,
+      46,
+      46,
+      0.05);
+  /* 50% opacity of the RGB equivalent */
 }
 
 .close:focus {
@@ -396,16 +425,15 @@ input.input-error {
 
 #closemodalLarge:hover {
   cursor: pointer;
-  color: var(
-    --primary-colour
-  ); /* Assuming var(--primary-colour-hover) is #ff5733 */
-  border: 1px solid var(--primary-colour-hover); /* Same as above */
-  background-color: rgba(
-    17,
-    46,
-    46,
-    0.05
-  ); /* 50% opacity of the RGB equivalent */
+  color: var(--primary-colour);
+  /* Assuming var(--primary-colour-hover) is #ff5733 */
+  border: 1px solid var(--primary-colour-hover);
+  /* Same as above */
+  background-color: rgba(17,
+      46,
+      46,
+      0.05);
+  /* 50% opacity of the RGB equivalent */
 }
 
 #closemodalLarge:focus {
@@ -431,21 +459,21 @@ input.input-error {
   line-height: normal;
   margin: 0px;
   background-color: transparent;
-  border: 1px solid var(--primary-colour); /* Same as above */
+  border: 1px solid var(--primary-colour);
+  /* Same as above */
 }
 
 #howitworksBtn:hover {
   cursor: pointer;
-  color: var(
-    --primary-colour
-  ); /* Assuming var(--primary-colour-hover) is #ff5733 */
-  border: 1px solid var(--primary-colour-hover); /* Same as above */
-  background-color: rgba(
-    17,
-    46,
-    46,
-    0.05
-  ); /* 50% opacity of the RGB equivalent */
+  color: var(--primary-colour);
+  /* Assuming var(--primary-colour-hover) is #ff5733 */
+  border: 1px solid var(--primary-colour-hover);
+  /* Same as above */
+  background-color: rgba(17,
+      46,
+      46,
+      0.05);
+  /* 50% opacity of the RGB equivalent */
 }
 
 #howitworksBtn:focus {
@@ -457,27 +485,33 @@ input.input-error {
 #results {
   display: none;
   width: 100%;
+  background: rgba(255, 255, 255, 1);
 }
 
 .shared-expense-container {
   display: flex;
-  justify-content: center;
-  max-width: 172px;
-  margin: 0 auto;
+  justify-content: left;
 }
 
 .shared-expense-container .input-group {
   width: 100%;
-  margin-bottom: 8px; /* Add this line */
+  margin-bottom: 8px;
+  /* Add this line */
+  padding: 0;
+  margin: 0;
+
+}
+
+.shared-expense-container .input-group, .shared-expense-container-loop .input-group{
+  max-width: 157.5px;
 }
 
 .share-container {
   display: flex;
   flex-direction: column;
   border-radius: var(--border-radius-8);
-  border: 1px solid var(--primary-colour);
   background: #fff;
-  padding: 24px 16px;
+  padding: 10px 15px;
   gap: var(--vertical-gap);
 }
 
@@ -485,13 +519,14 @@ input.input-error {
 .share-container-text {
   display: flex;
   flex-direction: column;
-  text-align: center;
 }
 
 .share-container-boxes {
   display: flex;
-  justify-content: space-between; /* This will put space between the two boxes */
-  width: 100%; /* Make the container full width */
+  justify-content: space-between;
+  /* This will put space between the two boxes */
+  width: 100%;
+  /* Make the container full width */
   align-items: center;
   gap: 8px;
   align-self: stretch;
@@ -506,8 +541,10 @@ input.input-error {
   justify-content: center;
   align-items: flex-start;
   gap: 8px;
-  flex: 1; /* This makes each share element take equal space */
-  margin: 0 8px; /* Adds some margin between the elements */
+  flex: 1;
+  /* This makes each share element take equal space */
+  margin: 0 8px;
+  /* Adds some margin between the elements */
   box-sizing: border-box;
 }
 
@@ -526,6 +563,7 @@ input.input-error {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -534,25 +572,33 @@ input.input-error {
 
 /* Modal Base */
 .modal {
-  display: none; /* Hidden by default */
+  display: none;
+  /* Hidden by default */
   position: fixed;
-  z-index: 1; /* Sit on top */
+  z-index: 1;
+  /* Sit on top */
   top: 0;
   left: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
   position: relative;
   background-color: #fefefe;
-  margin: 5% auto; /* 15% from the top and centered */
+  margin: 5% auto;
+  /* 15% from the top and centered */
   padding: 32px 16px 16px 16px;
   border: none;
-  width: 80%; /* Responsive width */
+  width: 80%;
+  /* Responsive width */
   max-width: 360px;
   border-radius: 8px;
   box-shadow: 0 4px 4px rgba(22, 34, 51, 0.04),
@@ -634,6 +680,7 @@ input.input-error {
   font-size: 18px;
   font-weight: 700;
 }
+
 /* End of How To Box */
 
 .third-party {
@@ -667,11 +714,160 @@ input.input-error {
 }
 
 @keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
 }
 
 @keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+/***********/
+.resultTable{
+  text-align: left;
+  border-collapse: separate;
+  border-spacing: 10px;
+}
+
+.resultTable td {
+  padding: 10px 10px 10px 10px !important;
+  border-radius: 8px 8px 8px 8px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.fs-14{
+  font-size: 14px;
+}
+
+.inputText {
+  padding: 10px 10px;
+  border-radius: var(--border-radius-8);
+  border: 1px solid var(--primary-colour);
+  background: #fff;
+  color: #000;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.flex-center{
+  display: flex;  
+}
+
+.shared-expense-container-loop .input-group {
+  width: 100%;
+  margin: 0;
+  margin-right: 15px;
+}
+
+.mtb-15{
+  margin: 15px 0px;
+}
+
+
+
+.share-container-text h2 {
+  width: 100%;
+  max-width: 275px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.space-between{
+  justify-content: space-between;
+}
+
+.resultTable .resultTableHead {
+  margin: 5px;
+  width: 33.33%;
+}
+
+.resultTable  .resultTabledata {
+  padding: 10px 10px 10px 10px !important;
+  border-radius: 8px 8px 8px 8px;
+  background: rgba(0, 0, 0, 0.05);
+  width: 33.33%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.resultTable  .resultTabledata:nth-child(2) {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#calculationResultsModal .modal-content {
+  padding: 16px 16px 16px 16px;
+}
+
+div#expense-container .shared-expense-container-loop .flex-center {
+  margin-bottom: 0;
+}
+/**************Media Queries*****************/
+@media (prefers-reduced-motion: reduce) {
+  .headshake {
+    animation: none;
+  }
+
+  .modal-content {
+    animation: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .body {
+    padding: 15px;
+    /* Reduced padding for small screens */
+  }
+  
+  .shared-expense-container .input-group, .shared-expense-container-loop .input-group {
+    max-width: 140px;
+}
+  .modal-content {
+    width: calc(100% - 20px);
+}
+}
+
+@media (min-width: 431px) and (max-width: 767px) {
+  .body {
+    padding: 24px;
+    /* Increased padding for medium screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .body {
+    padding: 24px;
+    /* Increased padding for larger screens */
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .body {
+    padding: 24px;
+    /* Consistent padding for medium desktops */
+  }
+}
+
+@media (min-width: 1200px) {
+  .body {
+    padding: 24px;
+    /* Consistent padding for large screens */
+  }
 }
