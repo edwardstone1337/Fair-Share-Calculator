@@ -286,15 +286,14 @@ function calculateShares() {
     <div class="share-container" id="share-container">
       <div class="share-container-text">
         <h2 class="mb-15">Here are your fair shares</h2>
-        <p class="fs-14">You earn ${salary1}, and the other person earns ${salary2}.
-You contribute ${sharePercent1}%, and they contribute ${sharePercent2}%.
-These percentages are used to split the expense(s) fairly.</p>
+
       </div>
       <div class="resultTable text-left">
       <div class="d-flex space-between">
            <div class="resultTableHead"><label> Expenses </label></div>
            <div class="resultTableHead"><label> Your Share </label></div>
             <div class="resultTableHead"><label> Their Share </label></div>
+            
       </div>`;
   // Populate the results with calculated shares for each expense
   expenses.forEach((expenseInput, index) => {
@@ -324,6 +323,9 @@ These percentages are used to split the expense(s) fairly.</p>
           <div class="resultTabledata">${totalShare2.toFixed(2)}</div>
           </div>
       </div>
+              <p class="fs-14"><strong>You earn ${salary1}</strong>, and the <strong>other person earns ${salary2}.</strong></br>
+<strong>You contribute ${sharePercent1}%</strong>, and <strong>they contribute ${sharePercent2}%.</strong>
+These percentages are used to split the expense(s) proportionally, ensuring a fair contribution from each person.</p>
       <button id="shareBtn" onclick="shareResults()">Share</button> 
     </div>
   `;
@@ -453,3 +455,23 @@ function shareResults() {
       console.error("Failed to copy: ", err);
     });
 }
+
+// Get the button
+const backToTopButton = document.getElementById("backToTop");
+
+// Show the button when the user scrolls down 100px from the top of the document
+window.onscroll = function () {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        backToTopButton.style.display = "block";
+    } else {
+        backToTopButton.style.display = "none";
+    }
+};
+
+// Scroll back to the top when the button is clicked
+backToTopButton.addEventListener("click", function () {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth" // Smooth scroll effect
+    });
+});

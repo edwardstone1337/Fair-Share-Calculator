@@ -26,17 +26,21 @@ body {
   font-family: "Assistant", sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 30px 15px;
-  max-width: 410px;
   margin: 0 auto;
   background: var(--primary-colour);
-  gap: var(--vertical-gap);
+}
+
+.calcuatlorContainer{
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 410px;
+  align-items: center;
 }
 
 .fairShareWrap {
   border-radius: 20px;
-  padding: 25px;
+  padding: 24px;
   background: #eafcf8;
 }
 
@@ -86,6 +90,7 @@ p {
 
 .mb-30 {
   margin-bottom: 30px !important;
+  text-align: center;
 }
 .mb-15 {
   margin-bottom: 15px !important;
@@ -187,8 +192,6 @@ p {
   outline: var(--focus-width) solid var(--focus-colour);
   outline-offset: var(--focus-offset);
 }
-
-
 
 .input-container {
   position: relative;
@@ -369,6 +372,98 @@ input.input-error {
   outline-offset: var(--focus-offset);
 }
 
+#backToTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--border-radius-8);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px;
+  border: 1px solid var(--primary-colour);
+  background: var(--primary-colour);
+  color: #fff;
+}
+
+#backToTop:hover {
+  cursor: pointer;
+  color: white;
+  border: 1px solid var(--primary-colour-hover);
+  background-color: var(--primary-colour-hover)
+}
+
+#backToTop:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+
+
+/* FAQ Section Styles */
+
+.faq-section {
+  background-color: #eafcf8;
+  color: var(--primary-colour);
+  padding-top: 64px;
+}
+
+.faq-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 600px;
+  align-items: left;
+}
+
+.faq-section h2 {
+  font-size: var(--h2);
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 700;
+  margin-bottom: var(--vertical-gap-1);
+}
+
+.faq-section h3 {
+  color: var(--primary-colour);
+  font-family: Assistant;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: var(--vertical-gap);
+  margin-bottom: var(--vertical-gap-1);
+}
+
+.faq-section p {
+  font-size: 16px;
+  color: var(--primary-colour);
+  font-family: "Assistant", sans-serif;
+  margin-bottom: var(--vertical-gap-1);
+}
+
+.faq-section ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: var(--vertical-gap-1);
+}
+
+.faq-section li {
+  margin-bottom: 8px;
+}
+
+.faq-section hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: var(--vertical-gap) 0;
+}
+
+
 /* X Modal Button */
 .close {
   position: absolute;
@@ -426,7 +521,7 @@ input.input-error {
 #closemodalLarge:hover {
   cursor: pointer;
   color: var(--primary-colour);
-  /* Assuming var(--primary-colour-hover) is #ff5733 */
+  /* Assuming var(--primary-colour-hover) is #ff5733 
   border: 1px solid var(--primary-colour-hover);
   /* Same as above */
   background-color: rgba(17,
@@ -480,6 +575,7 @@ input.input-error {
   outline: var(--focus-width) solid var(--focus-colour);
   outline-offset: var(--focus-offset);
 }
+
 
 /* Results */
 #results {
@@ -831,8 +927,8 @@ div#expense-container .shared-expense-container-loop .flex-center {
 }
 
 @media (max-width: 430px) {
-  .body {
-    padding: 15px;
+  .calcuatlorContainer {
+    padding: 16px;
     /* Reduced padding for small screens */
   }
   
@@ -845,28 +941,28 @@ div#expense-container .shared-expense-container-loop .flex-center {
 }
 
 @media (min-width: 431px) and (max-width: 767px) {
-  .body {
+  .calcuatlorContainer {
     padding: 24px;
     /* Increased padding for medium screens */
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-  .body {
+  .calcuatlorContainer {
     padding: 24px;
     /* Increased padding for larger screens */
   }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-  .body {
+  .calcuatlorContainer {
     padding: 24px;
     /* Consistent padding for medium desktops */
   }
 }
 
 @media (min-width: 1200px) {
-  .body {
+  .calcuatlorContainer {
     padding: 24px;
     /* Consistent padding for large screens */
   }
