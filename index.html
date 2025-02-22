@@ -214,24 +214,35 @@
               </div>
             </div>
             <p class="shy-text mt-15">
-              Don't be shy – this helps us do the math fairly!
+              Don't be shy – entering your after-tax salary helps us do the math more fairly!
             </p>
           </div>
 
           <div id="expense-container" class="expense-container mt-10">
-            <div class="shared-expense-container">
-              <div class="input-group">
-                <label for="expense1">
-                  <span class="required-asterisk">*</span> Expense Amount
-                </label>
-                <input
-                  type="text"
-                  class="expense-input"
-                  id="expense1"
-                  placeholder="0"
-                  inputmode="numeric"
-                  oninput="formatNumberWithCommas(this)"
-                />
+            <div class="shared-expense-container-loop">
+              <div class="expense-row">
+                <div class="input-group">
+                  <label for="expense1">
+                    <span class="required-asterisk">*</span> Expense Amount
+                  </label>
+                  <input
+                    type="text"
+                    class="expense-input"
+                    id="expense1"
+                    placeholder="0"
+                    inputmode="numeric"
+                    oninput="formatNumberWithCommas(this)"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="expenseLabel1">Expense Label</label>
+                  <input
+                    type="text"
+                    class="expense-label"
+                    id="expenseLabel1"
+                    placeholder="e.g. Rent, Groceries"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -264,74 +275,8 @@
           <div id="snackbar">Calculation link copied to clipboard!</div>
         </div>
       </div>
-<!-- <button id="howitworksBtn" class="mt-20">How It works</button> -->
     </div>
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
-      <div class="modal-content">
-        <span class="close" aria-label="Close" onclick="closeModal('myModal')">&times;</span>
-        <div class="title">How it works</div>
-    
-        <div class="content-box">
-          <div class="text">
-            <strong>Start by typing in both your incomes.</strong> Don't worry, it's
-            just between the two of you!
-          </div>
-          <div class="icon">
-            <img
-              src="Image01.png"
-              alt="Two hands shaking over a signed document."
-              width="112"
-              height="112"
-            />
-          </div>
-        </div>
-    
-        <div class="content-box">
-          <div class="text">
-            <strong>Next, pop in the cost of whatever you're splitting</strong> -
-            maybe it's dinner, rent, or that new sofa!
-          </div>
-          <div class="icon">
-            <img
-              src="Image02.png"
-              alt="Two individuals with a tablet and a smartphone surrounded by various icons."
-              width="112"
-              height="112"
-            />
-          </div>
-        </div>
-    
-        <div class="content-box">
-          <div class="text">
-            <strong>Hit the calculate button and let the magic happen.</strong> Our
-            calculator works out a fair split based on what each of you earns.
-          </div>
-          <div class="icon">
-            <img
-              src="Image03.png"
-              alt="Two hands shaking with banknotes flying around."
-              width="112"
-              height="112"
-            />
-          </div>
-        </div>
-    
-        <div class="content-box">
-          <div class="text">
-            <strong
-              >Voila! You'll instantly see how much each of you should chip
-              in.</strong
-            >
-            It's all about fairness and keeping things balanced in love and money.
-          </div>
-        </div>
-    
-        <button id="closemodalLarge" aria-label="Close Modal">Makes sense!</button>
-      </div>
     </div>
-  </div>
 
     <div class="faq-section">
       <div class="faq-container">

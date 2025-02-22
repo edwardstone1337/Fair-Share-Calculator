@@ -18,11 +18,18 @@ window.onload = function () {
 
     // Loop through the expenses and add them to the DOM
     expensesArray.forEach((expense, index) => {
-      // Add each expense field with the value from the URL
       const newExpenseDiv = document.createElement("div");
       newExpenseDiv.classList.add("shared-expense-container-loop");
+      
+      // Only add delete link if it's not the first expense
+      const deleteLink = index === 0 ? '' : `
+        <a href="#" class="delete-expense-link" onclick="deleteExpense(this); return false;">
+          Delete expense
+        </a>
+      `;
+
       newExpenseDiv.innerHTML = `
-        <div class="flex-center mtb-15">
+        <div class="expense-row">
           <div class="input-group">
             <input
               type="text"
@@ -34,12 +41,16 @@ window.onload = function () {
               oninput="formatNumberWithCommas(this)"
             />
           </div>
-          <div class="input-icon">
-            <span class="material-symbols-outlined inputText" onclick="deleteExpense(this)">
-              delete
-            </span>
+          <div class="input-group">
+            <input
+              type="text"
+              class="expense-label"
+              id="expenseLabel${index + 1}"
+              placeholder="e.g. Rent, Groceries"
+            />
           </div>
         </div>
+        ${deleteLink}
       `;
       expenseContainer.appendChild(newExpenseDiv);
     });
@@ -122,7 +133,7 @@ function addExpense() {
   newExpenseDiv.classList.add("shared-expense-container-loop");
 
   newExpenseDiv.innerHTML = `
-    <div class="flex-center mtb-15">
+    <div class="expense-row">
       <div class="input-group">
         <input
           type="text"
@@ -133,22 +144,33 @@ function addExpense() {
           oninput="formatNumberWithCommas(this)"
         />
       </div>
-      <div class="input-icon">
-        <span class="material-symbols-outlined inputText" onclick="deleteExpense(this)">
-          delete
-        </span>
+      <div class="input-group">
+        <input
+          type="text"
+          class="expense-label"
+          id="expenseLabel${expenseCount}"
+          placeholder="e.g. Rent, Groceries"
+        />
       </div>
     </div>
+    <a href="#" class="delete-expense-link" onclick="deleteExpense(this); return false;">
+      Delete expense
+    </a>
   `;
 
   expenseContainer.appendChild(newExpenseDiv);
 }
 
-function deleteExpense(deleteIcon) {
-  // Find the parent container of the delete icon and remove it
-  const expenseDiv = deleteIcon.closest(".shared-expense-container-loop");
-  if (expenseDiv) {
-    expenseDiv.remove();
+function deleteExpense(deleteLink) {
+  const expenseDiv = deleteLink.closest(".shared-expense-container-loop");
+  const expenseContainer = document.getElementById("expense-container");
+  
+  // Check if this isn't the last remaining expense
+  if (expenseContainer.children.length > 1) {
+    // Check if this isn't the first expense
+    if (expenseDiv !== expenseContainer.firstElementChild) {
+      expenseDiv.remove();
+    }
   }
 }
 
@@ -286,71 +308,58 @@ function calculateShares() {
     <div class="share-container" id="share-container">
       <div class="share-container-text">
         <h2 class="mb-15">Here are your fair shares</h2>
-
       </div>
       <div class="resultTable text-left">
-      <div class="d-flex space-between">
-           <div class="resultTableHead"><label> Expenses </label></div>
-           <div class="resultTableHead"><label> Your Share </label></div>
-            <div class="resultTableHead"><label> Their Share </label></div>
-            
-      </div>`;
+        <div class="d-flex space-between">
+          <div class="resultTableHead"><label>Expenses</label></div>
+          <div class="resultTableHead"><label>Your Share</label></div>
+          <div class="resultTableHead"><label>Their Share</label></div>
+        </div>`;
+
   // Populate the results with calculated shares for each expense
   expenses.forEach((expenseInput, index) => {
     var expense = parseFloat(expenseInput.value.replace(/,/g, ""));
     var share1 = (salary1 / (salary1 + salary2)) * expense;
     var share2 = (salary2 / (salary1 + salary2)) * expense;
+    var label = document.getElementById(`expenseLabel${index + 1}`).value || 'Expense';
 
-    resultsHTML += ` <div class="d-flex space-between">
-            <div class="resultTabledata">${expense.toFixed(
-              2
-            )}</div> <!-- Displaying the expense amount -->
-            <div class="resultTabledata">${share1.toFixed(2)}</div>
-            <div class="resultTabledata">${share2.toFixed(2)}</div>
-            </div>`;
+    resultsHTML += `
+      <div class="d-flex space-between">
+        <div class="resultTabledata">
+          <div class="expense-amount">${expense.toFixed(2)}</div>
+          <div class="expense-label-text">${label}</div>
+        </div>
+        <div class="resultTabledata">${share1.toFixed(2)}</div>
+        <div class="resultTabledata">${share2.toFixed(2)}</div>
+      </div>`;
   });
 
-  resultsHTML += ` <div class="d-flex space-between">
-          <div class="resultTableHead"><label> Total </label></div>
-          <div class="resultTableHead"><label> Your Share </label></div>
-          <div class="resultTableHead"><label>Their Share </label></div>
-          </div>
-          <div class="d-flex space-between">
-          <div class="resultTabledata">${(totalShare1 + totalShare2).toFixed(
-            2
-          )}</div>
-          <div class="resultTabledata">${totalShare1.toFixed(2)}</div>
-          <div class="resultTabledata">${totalShare2.toFixed(2)}</div>
-          </div>
+  resultsHTML += `
+      <div class="d-flex space-between">
+        <div class="resultTableHead"><label>Total</label></div>
+        <div class="resultTableHead"><label>Your Share</label></div>
+        <div class="resultTableHead"><label>Their Share</label></div>
       </div>
-              <p class="fs-14"><strong>You earn ${salary1}</strong>, and the <strong>other person earns ${salary2}.</strong></br>
-<strong>You contribute ${sharePercent1}%</strong>, and <strong>they contribute ${sharePercent2}%.</strong>
-These percentages are used to split the expense(s) proportionally, ensuring a fair contribution from each person.</p>
-      <button id="shareBtn" onclick="shareResults()">Share</button> 
+      <div class="d-flex space-between">
+        <div class="resultTabledata">${(totalShare1 + totalShare2).toFixed(2)}</div>
+        <div class="resultTabledata">${totalShare1.toFixed(2)}</div>
+        <div class="resultTabledata">${totalShare2.toFixed(2)}</div>
+      </div>
     </div>
-  `;
-
-  /* <div class="share-container-text">
-    <span class="text">
-      Remember, the Fair Share Calculator is all about making sharing expenses simple, fair, and above all, stress-free
-    </span>
-    <div class="emoji">🧘</div>
-  </div> */
+    <p class="fs-14"><strong>You earn ${salary1}</strong>, and the <strong>other person earns ${salary2}.</strong></br>
+      <strong>You contribute ${sharePercent1}%</strong>, and <strong>they contribute ${sharePercent2}%.</strong>
+      These percentages are used to split the expense(s) proportionally, ensuring a fair contribution from each person.</p>
+    <button id="shareBtn" onclick="shareResults()">Share</button>
+  </div>`;
 
   document.getElementById("resultsContent").innerHTML = resultsHTML;
-  document.getElementById("calculationResultsModal").style.display = "flex";
-  document.getElementById("calculationResultsModal").style.alignItems =
-    "center";
-  document.getElementById("calculationResultsModal").style.justifyContent =
-    "center";
+  const modal = document.getElementById("calculationResultsModal");
+  modal.style.display = "flex";
+  modal.classList.add("active");
 
   document.querySelector(".close").addEventListener("click", function () {
     closeModal("calculationResultsModal");
   });
-
-  // Animate the shares (if needed)
-  animateCounter("share1-placeholder", totalShare1, 300);
-  animateCounter("share2-placeholder", totalShare2, 300);
 
   // Scroll to the results section smoothly for better user experience
   document
@@ -358,44 +367,7 @@ These percentages are used to split the expense(s) proportionally, ensuring a fa
     .scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Get the modal
-  var modal = document.getElementById("myModal");
-
-  // Get the button that opens the modal
-  var btn = document.getElementById("howitworksBtn");
-
-  // Get the button that closes the modal
-  var closemodalLarge = document.getElementById("closemodalLarge");
-
-  // Get the span that closes the modal
-  var closeSpan = document.getElementsByClassName("close")[0]; // Assuming it's the first element with class 'close'
-
-  // When the user clicks on the button, open the modal
-  btn.onclick = function () {
-    modal.style.display = "block";
-    modal.scrollTop = 0; // Reset scroll position to the top of the modal
-  };
-
-  // When the user clicks on the large close button, close the modal
-  closemodalLarge.onclick = function () {
-    closeModal("myModal");
-  };
-
-  // When the user clicks on the close span (X), close the modal
-  closeSpan.onclick = function () {
-    closeModal("myModal");
-  };
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target === modal) {
-      closeModal("myModal");
-    }
-  };
-});
-
-// Handle modal close from other parts of the code (e.g., calculation results modal)
+// Keep this event listener for the calculation results modal
 document.querySelector(".close").addEventListener("click", function () {
   closeModal("calculationResultsModal");
 });
@@ -411,13 +383,10 @@ document.querySelectorAll("input").forEach((input) => {
 });
 
 function closeModal(elementID) {
-  document.getElementById(elementID).style.display = "none";
+  const modal = document.getElementById(elementID);
+  modal.style.display = "none";
+  modal.classList.remove("active");
 }
-
-document.querySelector(".close").addEventListener("click", function () {
-  closeModal("calculationResultsModal");
-  closeModal("myModal");
-});
 
 function shareResults() {
   const salary1 = document.getElementById("salary1").value;

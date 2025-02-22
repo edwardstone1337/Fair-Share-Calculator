@@ -40,7 +40,7 @@ body {
 
 .fairShareWrap {
   border-radius: 20px;
-  padding: 24px;
+  padding: 24px 16px;
   background: #eafcf8;
 }
 
@@ -222,7 +222,7 @@ label,
   display: flex;
   justify-content: space-between;
   padding: 0px;
-  gap: 15px;
+  gap: 16px;
 }
 
 
@@ -364,7 +364,10 @@ input.input-error {
   cursor: pointer;
   color: var(--primary-colour);
   border: 1px solid var(--primary-colour-hover);
-  background-color: rgba(17, 46, 46, 0.05);
+  background-color: rgba(17,
+      46,
+      46,
+      0.05);
 }
 
 #shareBtn:focus {
@@ -668,89 +671,48 @@ input.input-error {
 
 /* Modal Base */
 .modal {
-  display: none;
-  /* Hidden by default */
   position: fixed;
   z-index: 1;
-  /* Sit on top */
   top: 0;
   left: 0;
   width: 100%;
-  /* Full width */
   height: 100%;
-  /* Full height */
   overflow: auto;
-  /* Enable scroll if needed */
   background-color: rgba(0, 0, 0, 0.4);
-  /* Black w/ opacity */
+}
+
+/* Add a new class for when the modal is active */
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Update the default state */
+#calculationResultsModal {
+  display: none;
 }
 
 /* Modal Content */
 .modal-content {
   position: relative;
   background-color: #fefefe;
-  margin: 5% auto;
-  /* 15% from the top and centered */
-  padding: 32px 16px 16px 16px;
+  margin: 20px;
+  padding: 16px 16px 16px 16px;
   border: none;
   width: 80%;
-  /* Responsive width */
   max-width: 360px;
+  max-height: 90vh; /* Limit height to 90% of viewport height */
   border-radius: 8px;
   box-shadow: 0 4px 4px rgba(22, 34, 51, 0.04),
     0 4px 24px rgba(22, 34, 51, 0.04), 0 24px 24px rgba(22, 34, 51, 0.04),
     0 32px 32px rgba(22, 34, 51, 0.04), 0 64px 64px rgba(22, 34, 51, 0.12),
     0 120px 120px rgba(22, 34, 51, 0.08);
   animation: modalFadeIn 0.3s ease-out;
-  display: flex;
-  flex-direction: column;
-  gap: var(--vertical-gap);
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
-/* Info Container */
-.info-container {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-  gap: var(--vertical-gap);
-  background-color: white;
-  border: 1px solid var(--primary-colour);
-  border-radius: var(--border-radius-8);
-}
-
-/* Content Box */
-.content-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  align-self: stretch;
-}
-
-/* Title and Text */
-.title,
-.text {
-  text-align: center;
-  color: var(--primary-colour);
-  font-family: "Assistant", sans-serif;
-  word-wrap: break-word;
-  align-self: stretch;
-}
-
-.title {
-  font-family: "Josefin Sans";
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.text {
-  font-size: 16px;
-  font-weight: 400;
-}
-
+/* Footer */
 .footer {
   display: flex;
   flex-direction: column;
@@ -867,7 +829,6 @@ input.input-error {
 .shared-expense-container-loop .input-group {
   width: 100%;
   margin: 0;
-  margin-right: 15px;
 }
 
 .mtb-15{
@@ -966,4 +927,52 @@ div#expense-container .shared-expense-container-loop .flex-center {
     padding: 24px;
     /* Consistent padding for large screens */
   }
+}
+
+.expense-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.expense-row .input-group {
+  flex: 1;
+}
+
+.delete-expense-link {
+  color: var(--danger-colour);
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.delete-expense-link:hover {
+  text-decoration: underline;
+}
+
+.expense-label-text {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 4px;
+}
+
+.expense-amount {
+  font-weight: 600;
+}
+
+/* Update existing styles */
+.shared-expense-container .input-group,
+.shared-expense-container-loop .input-group {
+  max-width: none;
+}
+
+.resultTable .resultTabledata {
+  padding: 15px !important;
+}
+
+/* Ensure the results content is properly contained */
+#resultsContent {
+  width: 100%;
+  height: 100%;
 }
