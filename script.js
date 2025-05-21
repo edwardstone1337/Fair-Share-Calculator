@@ -279,9 +279,10 @@ function calculateShares() {
     var headshakeContainer = document.querySelector(".headshake-container");
     headshakeContainer.classList.add("headshake");
 
+    // MODIFIED: Added { once: true } to the animationend listener
     headshakeContainer.addEventListener("animationend", () => {
       headshakeContainer.classList.remove("headshake");
-    });
+    }, { once: true });
 
     return;
   }
@@ -358,9 +359,8 @@ function calculateShares() {
   modal.style.display = "flex";
   modal.classList.add("active");
 
-  document.querySelector(".close").addEventListener("click", function () {
-    closeModal("calculationResultsModal");
-  });
+  // REMOVED: The problematic event listener for '.close' that was previously here.
+  // The HTML 'onclick' attribute or the single event listener added on page load will handle it.
 
   // Scroll to the results section smoothly for better user experience
   document
@@ -368,10 +368,13 @@ function calculateShares() {
     .scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-// Keep this event listener for the calculation results modal
-document.querySelector(".close").addEventListener("click", function () {
-  closeModal("calculationResultsModal");
-});
+// REMOVED: The standalone event listener for '.close' is also removed for consistency,
+// relying on the `onclick` attribute in the HTML. If you prefer JS-based event listeners,
+// you could keep one here and remove the `onclick` from the HTML. The key is not to have it
+// inside `calculateShares` or duplicated unnecessarily.
+// For clarity, if your HTML for the close button is:
+// <span class="close" aria-label="Close" onclick="closeModal('calculationResultsModal')">&times;</span>
+// then no additional JavaScript `addEventListener` for this specific click is needed.
 
 // Trigger 'calculate-button' click on pressing 'Enter' in any input field
 document.querySelectorAll("input").forEach((input) => {
