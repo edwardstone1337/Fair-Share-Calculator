@@ -340,6 +340,33 @@ input.input-error {
   outline-offset: var(--focus-offset);
 }
 
+#closeResultsModalBtn {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--border-radius-8);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: transparent;
+  border: 1px solid var(--primary-colour);
+  color: var(--primary-colour);
+  cursor: pointer;
+}
+
+#closeResultsModalBtn:hover {
+  border: 1px solid var(--primary-colour-hover);
+  background-color: rgba(17, 46, 46, 0.05);
+}
+
+#closeResultsModalBtn:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
 #shareBtn {
   display: flex;
   flex-direction: column;
@@ -362,12 +389,8 @@ input.input-error {
 
 #shareBtn:hover {
   cursor: pointer;
-  color: var(--primary-colour);
+  background: var(--primary-colour-hover);
   border: 1px solid var(--primary-colour-hover);
-  background-color: rgba(17,
-      46,
-      46,
-      0.05);
 }
 
 #shareBtn:focus {

@@ -351,6 +351,9 @@ function calculateShares() {
       <strong>You contribute ${sharePercent1}%</strong>, and <strong>they contribute ${sharePercent2}%.</strong>
       These percentages are used to split the expense(s) proportionally, ensuring a fair contribution from each person.</p>
     <button id="shareBtn" onclick="shareResults()">Share</button>
+
+    <button type="button" id="closeResultsModalBtn" onclick="closeModal('calculationResultsModal')">Close</button>
+    
     <a href="https://www.buymeacoffee.com/edthedesigner" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
   </div>`;
 
