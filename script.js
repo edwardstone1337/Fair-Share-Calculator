@@ -1,8 +1,120 @@
-window.onload = function () {
+// ===== Backend share integration (Cloudflare Worker) =====
+const API_BASE = "https://tight-firefly-c0dd.edwardstone1337.workers.dev";
+
+function collectCurrentState() {
+  const salary1 = document.getElementById("salary1").value;
+  const salary2 = document.getElementById("salary2").value;
+  const expenses = Array.from(document.querySelectorAll(".expense-input")).map(
+    (expenseInput) => {
+      const amount = expenseInput.value.replace(/,/g, "");
+      const labelInput = expenseInput
+        .closest(".shared-expense-container-loop")
+        ?.querySelector(".expense-label");
+      const label = labelInput ? labelInput.value : "";
+      return { amount, label };
+    }
+  );
+  return { salary1, salary2, expenses };
+}
+
+function applyState(state) {
+  if (!state) return;
+  if (state.salary1) document.getElementById("salary1").value = state.salary1;
+  if (state.salary2) document.getElementById("salary2").value = state.salary2;
+  if (Array.isArray(state.expenses)) {
+    const expenseContainer = document.getElementById("expense-container");
+    expenseContainer.innerHTML = "";
+    state.expenses.forEach((expense, index) => {
+      const newExpenseDiv = document.createElement("div");
+      newExpenseDiv.classList.add("shared-expense-container-loop");
+      const amountValue = expense?.amount ?? "";
+      const labelValue = expense?.label ?? "";
+      const deleteLink = index === 0 ? '' : `
+        <a href="#" class="delete-expense-link" onclick="deleteExpense(this); return false;">
+          Delete expense
+        </a>
+      `;
+      newExpenseDiv.innerHTML = `
+        <div class="expense-row">
+          <div class="input-group">
+            <input
+              type="text"
+              class="expense-input"
+              id="expense${index + 1}"
+              placeholder="0"
+              inputmode="numeric"
+              value="${amountValue}"
+              oninput="formatNumberWithCommas(this)"
+            />
+          </div>
+          <div class="input-group">
+            <input
+              type="text"
+              class="expense-label"
+              id="expenseLabel${index + 1}"
+              placeholder="e.g. Rent, Groceries"
+              value="${labelValue}"
+            />
+          </div>
+        </div>
+        ${deleteLink}
+      `;
+      expenseContainer.appendChild(newExpenseDiv);
+    });
+    expenseCount = Math.max(state.expenses.length, 1);
+  }
+  calculateShares();
+}
+
+async function shareResultsViaBackend(currentState) {
+  const res = await fetch(`${API_BASE}/share`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(currentState),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || "Share failed");
+  return `${location.origin}${location.pathname}?id=${data.id}`;
+}
+
+async function loadFromIdIfPresent(apply) {
+  const id = new URLSearchParams(location.search).get("id");
+  if (!id) return false;
+  const res = await fetch(`${API_BASE}/share/${encodeURIComponent(id)}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || "Load failed");
+  apply(data);
+  return true;
+}
+
+function buildLegacyShareUrl(state) {
+  const queryString = new URLSearchParams({
+    salary1: state.salary1,
+    salary2: state.salary2,
+    expenses: JSON.stringify(state.expenses),
+  }).toString();
+  return `${window.location.origin}${window.location.pathname}?${queryString}`;
+}
+// ===== End backend integration =====
+window.onload = async function () {
   const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
   const salary1 = urlParams.get("salary1");
   const salary2 = urlParams.get("salary2");
   const expensesParam = urlParams.get("expenses"); // Get the expenses array from URL
+
+  // Try loading from backend short link first
+  if (id) {
+    try {
+      const loaded = await loadFromIdIfPresent(applyState);
+      if (loaded) {
+        return;
+      }
+    } catch (e) {
+      console.error(e);
+      // fall through to legacy handling
+    }
+  }
 
   // If salary1, salary2, and expenses are found in the URL
   if (salary1 && salary2 && expensesParam) {
@@ -406,41 +518,30 @@ function closeModal(elementID) {
 }
 
 function shareResults() {
-  const salary1 = document.getElementById("salary1").value;
-  const salary2 = document.getElementById("salary2").value;
-  const expenses = document.querySelectorAll(".expense-input");
+  const currentState = collectCurrentState();
 
-  // Collect all expense values and labels into an array of objects
-  let expenseValues = [];
-  expenses.forEach((expenseInput) => {
-    const amount = expenseInput.value.replace(/,/g, ""); // Remove commas
-    const labelInput = expenseInput.closest(".shared-expense-container-loop")?.querySelector(".expense-label");
-    const label = labelInput ? labelInput.value : "";
-    expenseValues.push({ amount, label });
-  });
-
-  // Create the URL with all the query parameters
-  const queryString = new URLSearchParams({
-    salary1: salary1,
-    salary2: salary2,
-    expenses: JSON.stringify(expenseValues), // Convert array to a string
-  }).toString();
-
-  // Append the query string to the base URL
-  const shareUrl = `${window.location.origin}${window.location.pathname}?${queryString}`;
-
-  // Copy the generated URL to clipboard
-  navigator.clipboard
-    .writeText(shareUrl)
-    .then(() => {
-      const snackbar = document.getElementById("snackbar");
-      snackbar.className = "show";
-      setTimeout(() => {
-        snackbar.className = snackbar.className.replace("show", "");
-      }, 3000);
+  // Prefer backend short link; fall back to legacy URL if it fails
+  shareResultsViaBackend(currentState)
+    .then((shareUrl) => {
+      return navigator.clipboard.writeText(shareUrl).then(() => {
+        const snackbar = document.getElementById("snackbar");
+        snackbar.className = "show";
+        setTimeout(() => {
+          snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+      });
     })
-    .catch((err) => {
-      console.error("Failed to copy: ", err);
+    .catch(() => {
+      const legacyUrl = buildLegacyShareUrl(currentState);
+      navigator.clipboard.writeText(legacyUrl).then(() => {
+        const snackbar = document.getElementById("snackbar");
+        snackbar.className = "show";
+        setTimeout(() => {
+          snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+      }).catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
     });
 }
 
