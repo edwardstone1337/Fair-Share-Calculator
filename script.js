@@ -368,7 +368,14 @@ function calculateShares() {
 
   // Validate expenses and calculate total expense
   expenses.forEach((expenseInput) => {
-    var expense = parseFloat(expenseInput.value.replace(/,/g, ""));
+    var raw = expenseInput.value.replace(/,/g, "").trim();
+    // Ignore empty expense rows instead of treating them as errors
+    if (raw === "") {
+      expenseInput.classList.remove("input-error");
+      return;
+    }
+
+    var expense = parseFloat(raw);
     if (isNaN(expense) || expense <= 0) {
       expenseInput.classList.add("input-error");
       hasError = true;
@@ -378,7 +385,14 @@ function calculateShares() {
       // Calculate individual shares for this expense
       var share1 = (salary1 / (salary1 + salary2)) * expense;
       var share2 = (salary2 / (salary1 + salary2)) * expense;
+      var labelInput = expenseInput
+        .closest(".shared-expense-container-loop")
+        ?.querySelector(".expense-label");
+      var label = labelInput && labelInput.value ? labelInput.value : "Expense";
+
       individualExpenseResults.push({
+        amount: expense,
+        label: label,
         share1: share1,
         share2: share2,
       });
@@ -386,10 +400,10 @@ function calculateShares() {
   });
 
   // Handle errors
-  if (hasError) {
+  if (hasError || individualExpenseResults.length === 0) {
     document.getElementById("error-display").innerHTML = `
       <div class="error-message" id="error-message" aria-live="assertive">
-          <p>Oops! Looks like some numbers are missing. We need all of them to calculate your fair shares.</p>
+          <p>Oops! Looks like some numbers are missing. Please enter both salaries and at least one expense to calculate your fair shares.</p>
       </div>
     `;
     document.getElementById("error-display").style.display = "block";
@@ -438,22 +452,16 @@ function calculateShares() {
           <div class="resultTableHead"><label>Their Share</label></div>
         </div>`;
 
-  // Populate the results with calculated shares for each expense
-  expenses.forEach((expenseInput, index) => {
-    var expense = parseFloat(expenseInput.value.replace(/,/g, ""));
-    var share1 = (salary1 / (salary1 + salary2)) * expense;
-    var share2 = (salary2 / (salary1 + salary2)) * expense;
-    var labelInput = expenseInput.closest(".shared-expense-container-loop")?.querySelector(".expense-label");
-    var label = (labelInput && labelInput.value) ? labelInput.value : 'Expense';
-
+  // Populate the results with calculated shares for each valid expense only
+  individualExpenseResults.forEach((item) => {
     resultsHTML += `
       <div class="d-flex space-between">
         <div class="resultTabledata">
-          <div class="expense-amount">${expense.toFixed(2)}</div>
-          <div class="expense-label-text">${label}</div>
+          <div class="expense-amount">${item.amount.toFixed(2)}</div>
+          <div class="expense-label-text">${item.label}</div>
         </div>
-        <div class="resultTabledata">${share1.toFixed(2)}</div>
-        <div class="resultTabledata">${share2.toFixed(2)}</div>
+        <div class="resultTabledata">${item.share1.toFixed(2)}</div>
+        <div class="resultTabledata">${item.share2.toFixed(2)}</div>
       </div>`;
   });
 
