@@ -21,6 +21,11 @@ window.onload = function () {
       const newExpenseDiv = document.createElement("div");
       newExpenseDiv.classList.add("shared-expense-container-loop");
       
+      // Support both legacy array-of-amounts and new array-of-objects with labels
+      const isObject = expense !== null && typeof expense === "object";
+      const amountValue = isObject ? expense.amount : expense;
+      const labelValue = isObject && expense.label ? expense.label : "";
+      
       // Only add delete link if it's not the first expense
       const deleteLink = index === 0 ? '' : `
         <a href="#" class="delete-expense-link" onclick="deleteExpense(this); return false;">
@@ -37,7 +42,7 @@ window.onload = function () {
               id="expense${index + 1}"
               placeholder="0"
               inputmode="numeric"
-              value="${expense}" 
+              value="${amountValue}"
               oninput="formatNumberWithCommas(this)"
             />
           </div>
@@ -47,6 +52,7 @@ window.onload = function () {
               class="expense-label"
               id="expenseLabel${index + 1}"
               placeholder="e.g. Rent, Groceries"
+              value="${labelValue}"
             />
           </div>
         </div>
@@ -54,6 +60,9 @@ window.onload = function () {
       `;
       expenseContainer.appendChild(newExpenseDiv);
     });
+
+    // Ensure subsequent added expenses get unique incremental IDs
+    expenseCount = Math.max(expensesArray.length, 1);
 
     // Call the calculateShares function to calculate based on the loaded values
     calculateShares();
@@ -322,7 +331,8 @@ function calculateShares() {
     var expense = parseFloat(expenseInput.value.replace(/,/g, ""));
     var share1 = (salary1 / (salary1 + salary2)) * expense;
     var share2 = (salary2 / (salary1 + salary2)) * expense;
-    var label = document.getElementById(`expenseLabel${index + 1}`).value || 'Expense';
+    var labelInput = expenseInput.closest(".shared-expense-container-loop")?.querySelector(".expense-label");
+    var label = (labelInput && labelInput.value) ? labelInput.value : 'Expense';
 
     resultsHTML += `
       <div class="d-flex space-between">
@@ -355,7 +365,7 @@ function calculateShares() {
     <button type="button" id="closeResultsModalBtn" onclick="closeModal('calculationResultsModal')">Close</button>
     
     <a href="https://www.buymeacoffee.com/edthedesigner" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-  </div>`;
+  `;
 
   document.getElementById("resultsContent").innerHTML = resultsHTML;
   const modal = document.getElementById("calculationResultsModal");
@@ -400,11 +410,13 @@ function shareResults() {
   const salary2 = document.getElementById("salary2").value;
   const expenses = document.querySelectorAll(".expense-input");
 
-  // Collect all expense values into an array
+  // Collect all expense values and labels into an array of objects
   let expenseValues = [];
   expenses.forEach((expenseInput) => {
-    const expense = expenseInput.value.replace(/,/g, ""); // Remove commas
-    expenseValues.push(expense);
+    const amount = expenseInput.value.replace(/,/g, ""); // Remove commas
+    const labelInput = expenseInput.closest(".shared-expense-container-loop")?.querySelector(".expense-label");
+    const label = labelInput ? labelInput.value : "";
+    expenseValues.push({ amount, label });
   });
 
   // Create the URL with all the query parameters
