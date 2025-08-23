@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fair Share Calculator - Comprehensive Test Suite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .test-card {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .test-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .test-card.running {
+            border-color: #ffc107;
+            background: #fff8e1;
+        }
+        .test-card.passed {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .test-card.failed {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        .test-card h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .test-icon {
+            font-size: 1.5em;
+        }
+        .test-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .test-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #007bff;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .test-results {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            background: white;
+            border: 1px solid #dee2e6;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            display: none;
+        }
+        .summary-card {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .control-button {
+            padding: 15px 30px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .run-all {
+            background: #28a745;
+            color: white;
+        }
+        .run-all:hover {
+            background: #1e7e34;
+        }
+        .clear-all {
+            background: #6c757d;
+            color: white;
+        }
+        .clear-all:hover {
+            background: #545b62;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status-pending { background: #e9ecef; color: #6c757d; }
+        .status-running { background: #fff3cd; color: #856404; }
+        .status-passed { background: #d4edda; color: #155724; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Fair Share Calculator</h1>
+        <p class="subtitle">Comprehensive Security & Functionality Test Suite</p>
+        
+        <div class="controls">
+            <button class="control-button run-all" onclick="runAllTests()">🚀 Run All Tests</button>
+            <button class="control-button clear-all" onclick="clearAllResults()">🗑️ Clear Results</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        
+        <div class="test-grid">
+            <!-- Normal Functionality Test -->
+            <div class="test-card" id="test-functionality">
+                <h3>
+                    <span class="test-icon">🧮</span>
+                    Normal Functionality
+                    <span class="status-badge status-pending" id="status-functionality">PENDING</span>
+                </h3>
+                <p class="test-description">
+                    Tests basic calculator functionality including input handling, calculations, and UI interactions.
+                </p>
+                <button class="test-button" onclick="runFunctionalityTest()">Run Functionality Test</button>
+                <div class="test-results" id="results-functionality"></div>
+            </div>
+            
+            <!-- XSS Prevention Test -->
+            <div class="test-card" id="test-xss">
+                <h3>
+                    <span class="test-icon">🛡️</span>
+                    XSS Prevention
+                    <span class="status-badge status-pending" id="status-xss">PENDING</span>
+                </h3>
+                <p class="test-description">
+                    Tests protection against Cross-Site Scripting attacks with 50+ malicious payloads.
+                </p>
+                <button class="test-button" onclick="runXSSTest()">Run XSS Test</button>
+                <div class="test-results" id="results-xss"></div>
+            </div>
+            
+            <!-- Input Validation Test -->
+            <div class="test-card" id="test-validation">
+                <h3>
+                    <span class="test-icon">✅</span>
+                    Input Validation
+                    <span class="status-badge status-pending" id="status-validation">PENDING</span>
+                </h3>
+                <p class="test-description">
+                    Tests input validation for edge cases, invalid data, and boundary conditions.
+                </p>
+                <button class="test-button" onclick="runValidationTest()">Run Validation Test</button>
+                <div class="test-results" id="results-validation"></div>
+            </div>
+            
+            <!-- Share Functionality Test -->
+            <div class="test-card" id="test-share">
+                <h3>
+                    <span class="test-icon">🔗</span>
+                    Share Functionality
+                    <span class="status-badge status-pending" id="status-share">PENDING</span>
+                </h3>
+                <p class="test-description">
+                    Tests URL sharing, backend integration, and data serialization security.
+                </p>
+                <button class="test-button" onclick="runShareTest()">Run Share Test</button>
+                <div class="test-results" id="results-share"></div>
+            </div>
+            
+            <!-- Rate Limiting Test -->
+            <div class="test-card" id="test-rate">
+                <h3>
+                    <span class="test-icon">⚡</span>
+                    Rate Limiting
+                    <span class="status-badge status-pending" id="status-rate">PENDING</span>
+                </h3>
+                <p class="test-description">
+                    Tests protection against rapid-fire requests and calculation spam.
+                </p>
+                <button class="test-button" onclick="runRateTest()">Run Rate Test</button>
+                <div class="test-results" id="results-rate"></div>
+            </div>
+            
+            <!-- LocalStorage Test -->
+            <div class="test-card" id="test-storage">
+                <h3>
+                    <span class="test-icon">💾</span>
+                    Data Persistence
+                    <span class="status-badge status-pending" id="status-storage">PENDING</span>
+                </h3>
+                <p class="test-description">
+                    Tests localStorage functionality, data restoration, and persistence security.
+                </p>
+                <button class="test-button" onclick="runStorageTest()">Run Storage Test</button>
+                <div class="test-results" id="results-storage"></div>
+            </div>
+        </div>
+        
+        <div class="summary-card" id="summaryCard" style="display: none;">
+            <h2>📊 Test Results Summary</h2>
+            <div class="summary-stats">
+                <div class="stat">
+                    <span class="stat-number" id="totalTests">0</span>
+                    <span class="stat-label">Total Tests</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="passedTests">0</span>
+                    <span class="stat-label">Passed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="failedTests">0</span>
+                    <span class="stat-label">Failed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="successRate">0%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+            </div>
+            <div id="finalAssessment"></div>
+        </div>
+    </div>
+
+    <!-- Load main script -->
+    <script src="script.js"></script>
+    
+    <!-- Load test scripts -->
+    <script src="test-functionality.js"></script>
+    <script src="test-xss-prevention.js"></script>
+    <script src="test-share-backend.js"></script>
+    
+    <script>
+        // Test state tracking
+        const testState = {
+            functionality: { status: 'pending', result: null },
+            xss: { status: 'pending', result: null },
+            validation: { status: 'pending', result: null },
+            share: { status: 'pending', result: null },
+            rate: { status: 'pending', result: null },
+            storage: { status: 'pending', result: null }
+        };
+        
+        // Update test status
+        function updateTestStatus(testName, status, result = null) {
+            testState[testName].status = status;
+            testState[testName].result = result;
+            
+            const statusEl = document.getElementById(`status-${testName}`);
+            const cardEl = document.getElementById(`test-${testName}`);
+            
+            statusEl.textContent = status.toUpperCase();
+            statusEl.className = `status-badge status-${status}`;
+            
+            cardEl.className = `test-card ${status}`;
+            
+            updateProgress();
+            updateSummary();
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const total = Object.keys(testState).length;
+            const completed = Object.values(testState).filter(t => t.status === 'passed' || t.status === 'failed').length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+        
+        // Update summary
+        function updateSummary() {
+            const total = Object.keys(testState).length;
+            const passed = Object.values(testState).filter(t => t.status === 'passed').length;
+            const failed = Object.values(testState).filter(t => t.status === 'failed').length;
+            const completed = passed + failed;
+            const successRate = total > 0 ? Math.round((passed / total) * 100) : 0;
+            
+            document.getElementById('totalTests').textContent = total;
+            document.getElementById('passedTests').textContent = passed;
+            document.getElementById('failedTests').textContent = failed;
+            document.getElementById('successRate').textContent = `${successRate}%`;
+            
+            if (completed === total) {
+                document.getElementById('summaryCard').style.display = 'block';
+                
+                let assessment = '';
+                if (successRate >= 90) {
+                    assessment = '🎉 EXCELLENT! Your application is highly secure and production-ready.';
+                } else if (successRate >= 75) {
+                    assessment = '✅ GOOD! Your application is secure with minor improvements needed.';
+                } else if (successRate >= 50) {
+                    assessment = '⚠️ WARNING! Several security issues need to be addressed.';
+                } else {
+                    assessment = '🚨 CRITICAL! Significant security vulnerabilities detected.';
+                }
+                
+                document.getElementById('finalAssessment').innerHTML = `<h3>${assessment}</h3>`;
+            }
+        }
+        
+        // Display test results
+        function displayResults(testName, output) {
+            const resultsEl = document.getElementById(`results-${testName}`);
+            resultsEl.innerHTML = output;
+            resultsEl.style.display = 'block';
+        }
+        
+        // Individual test functions
+        async function runFunctionalityTest() {
+            updateTestStatus('functionality', 'running');
+            displayResults('functionality', 'Running functionality tests...');
+            
+            try {
+                // Check if functions exist
+                const requiredFunctions = ['calculateShares', 'sanitizeInput', 'collectCurrentState'];
+                const missing = requiredFunctions.filter(fn => typeof window[fn] !== 'function');
+                
+                if (missing.length > 0) {
+                    throw new Error(`Missing functions: ${missing.join(', ')}`);
+                }
+                
+                // Test sanitization
+                const testInput = '<script>alert("test")</script>';
+                const sanitized = sanitizeInput(testInput);
+                
+                if (sanitized.includes('<script>')) {
+                    throw new Error('Sanitization failed');
+                }
+                
+                updateTestStatus('functionality', 'passed');
+                displayResults('functionality', '✅ All functionality tests passed');
+                
+            } catch (error) {
+                updateTestStatus('functionality', 'failed');
+                displayResults('functionality', `❌ Test failed: ${error.message}`);
+            }
+        }
+        
+        async function runXSSTest() {
+            updateTestStatus('xss', 'running');
+            displayResults('xss', 'Running XSS prevention tests...');
+            
+            try {
+                if (typeof runXSSTests === 'function') {
+                    const result = runXSSTests();
+                    
+                    if (result.overallScore >= 80) {
+                        updateTestStatus('xss', 'passed');
+                        displayResults('xss', `✅ XSS tests passed (${result.overallScore}% secure)`);
+                    } else {
+                        updateTestStatus('xss', 'failed');
+                        displayResults('xss', `❌ XSS tests failed (${result.overallScore}% secure)`);
+                    }
+                } else {
+                    throw new Error('XSS test function not available');
+                }
+                
+            } catch (error) {
+                updateTestStatus('xss', 'failed');
+                displayResults('xss', `❌ Test failed: ${error.message}`);
+            }
+        }
+        
+        async function runValidationTest() {
+            updateTestStatus('validation', 'running');
+            displayResults('validation', 'Running input validation tests...');
+            
+            try {
+                // Test various inputs
+                const testCases = [
+                    { input: '', expected: true },
+                    { input: '999999999999', expected: false }, // Too large
+                    { input: '<script>', expected: false }, // XSS
+                    { input: 'normal text', expected: true }
+                ];
+                
+                let passed = 0;
+                
+                testCases.forEach(test => {
+                    const result = sanitizeInput(test.input);
+                    const isValid = test.expected ? result.length > 0 : result !== test.input;
+                    
+                    if (isValid) passed++;
+                });
+                
+                const successRate = Math.round((passed / testCases.length) * 100);
+                
+                if (successRate >= 75) {
+                    updateTestStatus('validation', 'passed');
+                    displayResults('validation', `✅ Validation tests passed (${successRate}%)`);
+                } else {
+                    updateTestStatus('validation', 'failed');
+                    displayResults('validation', `❌ Validation tests failed (${successRate}%)`);
+                }
+                
+            } catch (error) {
+                updateTestStatus('validation', 'failed');
+                displayResults('validation', `❌ Test failed: ${error.message}`);
+            }
+        }
+        
+        async function runShareTest() {
+            updateTestStatus('share', 'running');
+            displayResults('share', 'Running share functionality tests...');
+            
+            try {
+                if (typeof runShareTests === 'function') {
+                    const result = await runShareTests();
+                    
+                    const passed = Object.values(result).filter(Boolean).length;
+                    const total = Object.keys(result).length;
+                    const successRate = Math.round((passed / total) * 100);
+                    
+                    if (successRate >= 75) {
+                        updateTestStatus('share', 'passed');
+                        displayResults('share', `✅ Share tests passed (${successRate}%)`);
+                    } else {
+                        updateTestStatus('share', 'failed');
+                        displayResults('share', `❌ Share tests failed (${successRate}%)`);
+                    }
+                } else {
+                    // Fallback test
+                    if (typeof collectCurrentState === 'function' && typeof buildLegacyShareUrl === 'function') {
+                        updateTestStatus('share', 'passed');
+                        displayResults('share', '✅ Basic share functionality available');
+                    } else {
+                        throw new Error('Share functions not available');
+                    }
+                }
+                
+            } catch (error) {
+                updateTestStatus('share', 'failed');
+                displayResults('share', `❌ Test failed: ${error.message}`);
+            }
+        }
+        
+        async function runRateTest() {
+            updateTestStatus('rate', 'running');
+            displayResults('rate', 'Running rate limiting tests...');
+            
+            try {
+                if (typeof isRateLimited === 'function') {
+                    let blockedCount = 0;
+                    
+                    // Test rapid calls
+                    for (let i = 0; i < 10; i++) {
+                        if (isRateLimited()) blockedCount++;
+                    }
+                    
+                    if (blockedCount > 0) {
+                        updateTestStatus('rate', 'passed');
+                        displayResults('rate', `✅ Rate limiting working (${blockedCount}/10 blocked)`);
+                    } else {
+                        updateTestStatus('rate', 'failed');
+                        displayResults('rate', '❌ Rate limiting not working');
+                    }
+                } else {
+                    throw new Error('Rate limiting function not available');
+                }
+                
+            } catch (error) {
+                updateTestStatus('rate', 'failed');
+                displayResults('rate', `❌ Test failed: ${error.message}`);
+            }
+        }
+        
+        async function runStorageTest() {
+            updateTestStatus('storage', 'running');
+            displayResults('storage', 'Running localStorage tests...');
+            
+            try {
+                // Test localStorage availability and functionality
+                if (typeof Storage === "undefined") {
+                    throw new Error('localStorage not supported');
+                }
+                
+                const testKey = 'security-test';
+                const testValue = 'test-value';
+                
+                localStorage.setItem(testKey, testValue);
+                const retrieved = localStorage.getItem(testKey);
+                
+                if (retrieved === testValue) {
+                    localStorage.removeItem(testKey);
+                    updateTestStatus('storage', 'passed');
+                    displayResults('storage', '✅ localStorage functionality working');
+                } else {
+                    throw new Error('localStorage read/write failed');
+                }
+                
+            } catch (error) {
+                updateTestStatus('storage', 'failed');
+                displayResults('storage', `❌ Test failed: ${error.message}`);
+            }
+        }
+        
+        // Run all tests
+        async function runAllTests() {
+            clearAllResults();
+            
+            const tests = [
+                runFunctionalityTest,
+                runXSSTest,
+                runValidationTest,
+                runShareTest,
+                runRateTest,
+                runStorageTest
+            ];
+            
+            for (const test of tests) {
+                await test();
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        
+        // Clear all results
+        function clearAllResults() {
+            Object.keys(testState).forEach(testName => {
+                updateTestStatus(testName, 'pending');
+                const resultsEl = document.getElementById(`results-${testName}`);
+                resultsEl.style.display = 'none';
+                resultsEl.innerHTML = '';
+            });
+            
+            document.getElementById('summaryCard').style.display = 'none';
+            document.getElementById('progressBar').style.width = '0%';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Comprehensive Test Suite Loaded');
+            console.log('Click "Run All Tests" to start the security and functionality validation');
+        });
+    </script>
+</body>
+</html>

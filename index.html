@@ -45,6 +45,7 @@
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.hotjar.com https://www.clarity.ms https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://tight-firefly-c0dd.edwardstone1337.workers.dev https://www.google-analytics.com https://www.clarity.ms;">
     <title>
       Fair Share Calculator - Simplified Equitable Expense Sharing for Couples
       with Different Incomes
@@ -77,10 +78,6 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600&family=Josefin+Sans:wght@500;700&display=swap"
       rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
     <!-- <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -127,20 +124,6 @@
      crossorigin="anonymous"></script>
     
   </head>
-  <!-- Google tag (gtag.js) -->
-  <script
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=G-TQZ0HGB3MT"
-  ></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-TQZ0HGB3MT");
-  </script>
 
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -168,99 +151,121 @@
       </div>
 
       <main>
-        <div class="headshake-container">
-          <div class="salaries-container">
-            <div class="salaries">
-              <div class="input-group">
-                <label for="salary1"
-                  ><span class="required-asterisk">*</span>Your salary</label
-                >
-                <div class="input-container">
-                  <input
-                    type="text"
-                    id="salary1"
-                    placeholder="0"
-                    inputmode="numeric"
-                    oninput="formatNumberWithCommas(this)"
-                  />
-                  <img
-                    class="toggle-password"
-                    src="Show.svg"
-                    alt="Show/Hide Password"
-                    onclick="togglePassword(this, 'salary1')"
-                  />
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label for="salary2"
-                  ><span class="required-asterisk">*</span>Their salary</label
-                >
-                <div class="input-container">
-                  <input
-                    type="text"
-                    id="salary2"
-                    placeholder="0"
-                    inputmode="numeric"
-                    oninput="formatNumberWithCommas(this)"
-                  />
-                  <img
-                    class="toggle-password"
-                    src="Show.svg"
-                    alt="Show/Hide Password"
-                    onclick="togglePassword(this, 'salary2')"
-                  />
-                </div>
+        <section id="step-input">
+          <div class="input-section-card">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Monthly Incomes</h2>
+                <p class="shy-text">
+                  Don't be shy – entering your after-tax salary helps us do the math more fairly!
+                </p>
               </div>
             </div>
-            <p class="shy-text mt-15">
-              Don't be shy – entering your after-tax salary helps us do the math more fairly!
-            </p>
-          </div>
-
-          <div id="expense-container" class="expense-container mt-10">
-            <div class="shared-expense-container-loop">
-              <div class="expense-row">
+            <div class="salaries-container">
+              <div class="salaries">
                 <div class="input-group">
-                  <label for="expense1">
-                    <span class="required-asterisk">*</span> Expense amount
-                  </label>
-                  <input
-                    type="text"
-                    class="expense-input"
-                    id="expense1"
-                    placeholder="0"
-                    inputmode="numeric"
-                    oninput="formatNumberWithCommas(this)"
-                  />
+                  <label for="salary1"
+                    ><span class="required-asterisk">*</span>Your salary</label
+                  >
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="salary1"
+                      placeholder="0"
+                      inputmode="numeric"
+                    />
+                    <img
+                      class="toggle-password"
+                      src="Show.svg"
+                      alt="Show/Hide Password"
+                    />
+                  </div>
                 </div>
+
                 <div class="input-group">
-                  <label for="expenseLabel1">Expense name</label>
-                  <input
-                    type="text"
-                    class="expense-label"
-                    id="expenseLabel1"
-                    placeholder="e.g. Rent, Groceries"
-                  />
+                  <label for="salary2"
+                    ><span class="required-asterisk">*</span>Their salary</label
+                  >
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="salary2"
+                      placeholder="0"
+                      inputmode="numeric"
+                    />
+                    <img
+                      class="toggle-password"
+                      src="Show.svg"
+                      alt="Show/Hide Password"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div id="error-display"></div>
-          <p class="shy-text">
-            Enter the cost of any shared expense – like rent, groceries, or a
-            savings goal.
-          </p>
-         
-          <button class="add-icon-button" onclick="addExpense()">
-            <span class="material-symbols-outlined">add</span> Add another
-            expense
-          </button>
 
-          <button class="calculate-button" onclick="calculateShares()">
-            Calculate
-          </button>
-        </div>
+          <div class="input-section-card">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Shared Expenses</h2>
+                <p class="shy-text">
+                  Enter the cost of any shared expense – like rent, groceries, or a
+                  savings goal.
+                </p>
+              </div>
+              <button class="add-expense-header-button">
+                <span class="material-symbols-outlined">add</span>
+              </button>
+            </div>
+            <div class="headshake-container">
+              <!-- Column headers for shared expenses -->
+              <div class="expense-headers">
+                <div class="expense-header-amount">
+                  <span class="required-asterisk">*</span>Amount
+                </div>
+                <div class="expense-header-label">
+                  Expense
+                </div>
+                <div class="expense-header-action"></div>
+              </div>
+              <div id="expense-container" class="expense-container mt-10">
+                <div class="shared-expense-container-loop">
+                  <div class="expense-row">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="expense-input"
+                        id="expense1"
+                        placeholder="0"
+                        inputmode="numeric"
+                        aria-label="Amount for expense 1"
+                      />
+                    </div>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="expense-label"
+                        id="expenseLabel1"
+                        placeholder="e.g. Rent, Groceries"
+                        aria-label="Name for expense 1"
+                      />
+                    </div>
+                    <div class="delete-button-placeholder"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="error-display"></div>
+             
+              <button class="calculate-button">
+                Calculate
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="step-results" class="hidden" aria-labelledby="resultsHeading">
+          <div id="resultsContent" aria-live="polite"></div>
+        </section>
       </main>
 
       <div id="calculationResultsModal" class="modal">
@@ -268,11 +273,9 @@
           <span
             class="close"
             aria-label="Close"
-            onclick="closeModal('calculationResultsModal')"
             >&times;</span
           >
-          <div id="resultsContent" aria-live="polite"></div>
-          <div id="snackbar">Calculation link copied to clipboard!</div>
+          <!-- Modal content removed - results now shown inline -->
         </div>
       </div>
     </div>
@@ -340,7 +343,7 @@
       <hr>
     
       <p>By keeping things simple and transparent, we hope the Fair Share Calculator helps you and your partner find balance in your shared expenses. Remember, it's all about fairness and keeping things balanced in love and money!</p>
-      <a href="https://www.buymeacoffee.com/edthedesigner" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+      <a href="https://www.buymeacoffee.com/edthedesigner"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=edthedesigner&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
       <hr>
 
 

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test localStorage Functionality</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        .test-panel {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .test-button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #005a87;
+        }
+        .test-result {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007cba;
+        }
+        .test-result.success {
+            border-left-color: #28a745;
+        }
+        .test-result.error {
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="calcuatlorContainer">
+        <div class="fairShareWrap">
+            <h1>localStorage Test Panel</h1>
+            
+            <div class="test-panel">
+                <h3>Test Controls</h3>
+                <button class="test-button" onclick="testSaveData()">Test Save Data</button>
+                <button class="test-button" onclick="testRestoreData()">Test Restore Data</button>
+                <button class="test-button" onclick="testClearData()">Clear All Data</button>
+                <button class="test-button" onclick="testAddExpense()">Add Test Expense</button>
+                <button class="test-button" onclick="testDeleteExpense()">Delete Last Expense</button>
+                <button class="test-button" onclick="testModifyData()">Modify Data</button>
+                <button class="test-button" onclick="showLocalStorageContents()">Show localStorage Contents</button>
+            </div>
+
+            <div class="test-panel">
+                <h3>Form Data</h3>
+                <div class="input-section-card">
+                    <div class="section-header">
+                        <div class="section-header-content">
+                            <h2>Monthly Incomes</h2>
+                        </div>
+                    </div>
+                    <div class="salaries-container">
+                        <div class="salaries">
+                            <div class="input-group">
+                                <label for="salary1">Your salary</label>
+                                <div class="input-container">
+                                    <input type="text" id="salary1" placeholder="0" value="5000" oninput="formatNumberWithCommas(this)" />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="salary2">Their salary</label>
+                                <div class="input-container">
+                                    <input type="text" id="salary2" placeholder="0" value="3000" oninput="formatNumberWithCommas(this)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-section-card">
+                    <div class="section-header">
+                        <div class="section-header-content">
+                            <h2>Shared Expenses</h2>
+                        </div>
+                        <button class="add-expense-header-button" onclick="addExpense()">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
+                    <div id="expense-container" class="expense-container">
+                        <div class="shared-expense-container-loop">
+                            <div class="expense-row">
+                                <div class="input-group">
+                                    <label for="expense1">Amount</label>
+                                    <input type="text" class="expense-input" id="expense1" placeholder="0" value="800" oninput="formatNumberWithCommas(this)" />
+                                </div>
+                                <div class="input-group">
+                                    <label for="expenseLabel1">Name</label>
+                                    <input type="text" class="expense-label" id="expenseLabel1" placeholder="e.g. Rent, Groceries" value="Rent" />
+                                </div>
+                                <div class="delete-button-placeholder"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="calculate-button" onclick="calculateShares()">Calculate</button>
+                </div>
+            </div>
+
+            <div class="test-panel">
+                <h3>Test Results</h3>
+                <div id="testResults"></div>
+            </div>
+
+            <div class="test-panel">
+                <h3>localStorage Contents</h3>
+                <div id="localStorageContents"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock the expenseCount variable
+        let expenseCount = 1;
+        
+        // Mock the formatNumberWithCommas function
+        function formatNumberWithCommas(element) {
+            element.classList.remove("input-error");
+            var value = element.value.replace(/[^\d.,]/g, "");
+            var formattedValue = value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            element.value = formattedValue;
+        }
+        
+        // Mock the addExpense function
+        function addExpense() {
+            expenseCount++;
+            const expenseContainer = document.getElementById("expense-container");
+            const newExpenseDiv = document.createElement("div");
+            newExpenseDiv.classList.add("shared-expense-container-loop");
+
+            newExpenseDiv.innerHTML = `
+                <div class="expense-row">
+                    <div class="input-group">
+                        <input type="text" class="expense-input" id="expense${expenseCount}" placeholder="0" oninput="formatNumberWithCommas(this)" />
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="expense-label" id="expenseLabel${expenseCount}" placeholder="e.g. Rent, Groceries" />
+                    </div>
+                    <button class="delete-expense-button" onclick="deleteExpense(this); return false;" aria-label="Delete expense">
+                        <span class="material-symbols-outlined">remove</span>
+                    </button>
+                </div>
+            `;
+
+            expenseContainer.appendChild(newExpenseDiv);
+            saveFormDataToLocalStorage();
+        }
+        
+        // Mock the deleteExpense function
+        function deleteExpense(deleteButton) {
+            const expenseDiv = deleteButton.closest(".shared-expense-container-loop");
+            const expenseContainer = document.getElementById("expense-container");
+            
+            if (expenseContainer.children.length > 1) {
+                if (expenseDiv !== expenseContainer.firstElementChild) {
+                    expenseDiv.remove();
+                    saveFormDataToLocalStorage();
+                }
+            }
+        }
+        
+        // Mock the calculateShares function
+        function calculateShares() {
+            saveFormDataToLocalStorage();
+            addTestResult("Calculate button clicked - data saved", "success");
+        }
+        
+        // Test functions
+        function testSaveData() {
+            try {
+                saveFormDataToLocalStorage();
+                addTestResult("Data saved successfully to localStorage", "success");
+                showLocalStorageContents();
+            } catch (error) {
+                addTestResult("Error saving data: " + error.message, "error");
+            }
+        }
+        
+        function testRestoreData() {
+            try {
+                restoreFormDataFromLocalStorage();
+                addTestResult("Data restored successfully from localStorage", "success");
+            } catch (error) {
+                addTestResult("Error restoring data: " + error.message, "error");
+            }
+        }
+        
+        function testClearData() {
+            try {
+                localStorage.clear();
+                addTestResult("localStorage cleared successfully", "success");
+                showLocalStorageContents();
+            } catch (error) {
+                addTestResult("Error clearing localStorage: " + error.message, "error");
+            }
+        }
+        
+        function testAddExpense() {
+            try {
+                addExpense();
+                addTestResult("Test expense added successfully", "success");
+                showLocalStorageContents();
+            } catch (error) {
+                addTestResult("Error adding expense: " + error.message, "error");
+            }
+        }
+        
+        function testDeleteExpense() {
+            try {
+                const deleteButtons = document.querySelectorAll(".delete-expense-button");
+                if (deleteButtons.length > 0) {
+                    deleteExpense(deleteButtons[deleteButtons.length - 1]);
+                    addTestResult("Last expense deleted successfully", "success");
+                    showLocalStorageContents();
+                } else {
+                    addTestResult("No expenses to delete", "error");
+                }
+            } catch (error) {
+                addTestResult("Error deleting expense: " + error.message, "error");
+            }
+        }
+        
+        function testModifyData() {
+            try {
+                // Modify some data
+                document.getElementById("salary1").value = "6000";
+                document.getElementById("expense1").value = "900";
+                document.getElementById("expenseLabel1").value = "Modified Rent";
+                
+                // Trigger save
+                saveFormDataToLocalStorage();
+                addTestResult("Data modified and saved successfully", "success");
+                showLocalStorageContents();
+            } catch (error) {
+                addTestResult("Error modifying data: " + error.message, "error");
+            }
+        }
+        
+        function showLocalStorageContents() {
+            const container = document.getElementById("localStorageContents");
+            let html = "<h4>Current localStorage contents:</h4>";
+            
+            try {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    html += `<div><strong>${key}:</strong> ${value}</div>`;
+                }
+                
+                if (localStorage.length === 0) {
+                    html += "<div><em>localStorage is empty</em></div>";
+                }
+            } catch (error) {
+                html += `<div class="test-result error">Error reading localStorage: ${error.message}</div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function addTestResult(message, type = "success") {
+            const container = document.getElementById("testResults");
+            const resultDiv = document.createElement("div");
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            container.appendChild(resultDiv);
+            
+            // Keep only last 10 results
+            if (container.children.length > 10) {
+                container.removeChild(container.firstChild);
+            }
+        }
+        
+        // Initialize test environment
+        window.onload = function() {
+            addTestResult("Test environment initialized", "success");
+            showLocalStorageContents();
+            
+            // Add event listeners for real-time testing
+            addFormDataSaveListeners();
+        };
+    </script>
+</body>
+</html>

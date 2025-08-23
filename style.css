@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap");
 
 :root {
   --border-radius-8: 8px;
@@ -30,7 +30,7 @@ body {
   background: var(--primary-colour);
 }
 
-.calcuatlorContainer{
+.calcuatlorContainer {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -49,11 +49,18 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  margin-bottom: 24px;
+  text-align: center;
 }
 
 .header .emoji,
 .header h1 {
   margin: 0;
+}
+
+.header p {
+  margin: 0;
+  max-width: 400px;
 }
 
 .emoji {
@@ -89,22 +96,18 @@ p {
 }
 
 .mb-30 {
-  margin-bottom: 30px !important;
   text-align: center;
 }
 .mb-15 {
-  margin-bottom: 15px !important;
+  margin-bottom: 16px !important;
 }
 
-.mt-10 {
-  margin-top: 10px !important;
-}
 .mt-15 {
-  margin-top: 15px !important;
+  margin-top: 16px !important;
 }
 
 .mt-20 {
-  margin-top: 20px !important;
+  margin-top: 24px !important;
 }
 
 @keyframes headshake {
@@ -141,6 +144,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--vertical-gap-1);
+  margin-bottom: 0;
 }
 
 .required-asterisk {
@@ -165,9 +169,8 @@ p {
   box-sizing: border-box;
 } */
 
-
 .input-container input[type="password"] {
-  letter-spacing: 0.1em; 
+  letter-spacing: 0.1em;
 }
 
 .input-group input[type="text"],
@@ -225,13 +228,11 @@ label,
   gap: 16px;
 }
 
-
-
 .input-group input[type="text"]::placeholder {
   color: rgba(0, 0, 0, 0.4);
 }
 .input-icon span {
-  cursor: pointer; 
+  cursor: pointer;
 }
 .input-group input[type="text"]:hover {
   border: 1px solid var(--primary-colour-hover);
@@ -287,23 +288,6 @@ input.input-error {
 }
 
 /* Buttons */
-.add-icon-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: #000;
-  font-family: Josefin Sans;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 16px;
-  text-align: left;
-  display: flex;
-  align-items: center;
-}
-
-.add-icon-button .material-icons {
-  margin-right: 3px;
-}
 
 .calculate-button {
   display: flex;
@@ -420,15 +404,13 @@ input.input-error {
   cursor: pointer;
   color: white;
   border: 1px solid var(--primary-colour-hover);
-  background-color: var(--primary-colour-hover)
+  background-color: var(--primary-colour-hover);
 }
 
 #backToTop:focus {
   outline: var(--focus-width) solid var(--focus-colour);
   outline-offset: var(--focus-offset);
 }
-
-
 
 /* FAQ Section Styles */
 
@@ -489,7 +471,6 @@ input.input-error {
   margin: var(--vertical-gap) 0;
 }
 
-
 /* X Modal Button */
 .close {
   position: absolute;
@@ -515,10 +496,7 @@ input.input-error {
   color: var(--primary-colour-hover);
   border: 1px solid var(--primary-colour-hover);
   /* Same as above */
-  background-color: rgba(17,
-      46,
-      46,
-      0.05);
+  background-color: rgba(17, 46, 46, 0.05);
   /* 50% opacity of the RGB equivalent */
 }
 
@@ -550,10 +528,7 @@ input.input-error {
   /* Assuming var(--primary-colour-hover) is #ff5733 
   border: 1px solid var(--primary-colour-hover);
   /* Same as above */
-  background-color: rgba(17,
-      46,
-      46,
-      0.05);
+  background-color: rgba(17, 46, 46, 0.05);
   /* 50% opacity of the RGB equivalent */
 }
 
@@ -590,10 +565,7 @@ input.input-error {
   /* Assuming var(--primary-colour-hover) is #ff5733 */
   border: 1px solid var(--primary-colour-hover);
   /* Same as above */
-  background-color: rgba(17,
-      46,
-      46,
-      0.05);
+  background-color: rgba(17, 46, 46, 0.05);
   /* 50% opacity of the RGB equivalent */
 }
 
@@ -601,7 +573,6 @@ input.input-error {
   outline: var(--focus-width) solid var(--focus-colour);
   outline-offset: var(--focus-offset);
 }
-
 
 /* Results */
 #results {
@@ -621,10 +592,10 @@ input.input-error {
   /* Add this line */
   padding: 0;
   margin: 0;
-
 }
 
-.shared-expense-container .input-group, .shared-expense-container-loop .input-group{
+.shared-expense-container .input-group,
+.shared-expense-container-loop .input-group {
   max-width: 157.5px;
 }
 
@@ -819,7 +790,7 @@ input.input-error {
 }
 
 /***********/
-.resultTable{
+.resultTable {
   text-align: left;
   border-collapse: separate;
   border-spacing: 10px;
@@ -831,7 +802,7 @@ input.input-error {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.fs-14{
+.fs-14 {
   font-size: 14px;
 }
 
@@ -845,8 +816,8 @@ input.input-error {
   font-weight: 400;
 }
 
-.flex-center{
-  display: flex;  
+.flex-center {
+  display: flex;
 }
 
 .shared-expense-container-loop .input-group {
@@ -854,11 +825,9 @@ input.input-error {
   margin: 0;
 }
 
-.mtb-15{
+.mtb-15 {
   margin: 15px 0px;
 }
-
-
 
 .share-container-text h2 {
   width: 100%;
@@ -869,7 +838,7 @@ input.input-error {
   display: flex;
 }
 
-.space-between{
+.space-between {
   justify-content: space-between;
 }
 
@@ -878,7 +847,7 @@ input.input-error {
   width: 33.33%;
 }
 
-.resultTable  .resultTabledata {
+.resultTable .resultTabledata {
   padding: 10px 10px 10px 10px !important;
   border-radius: 8px 8px 8px 8px;
   background: rgba(0, 0, 0, 0.05);
@@ -887,7 +856,7 @@ input.input-error {
   margin-bottom: 5px;
 }
 
-.resultTable  .resultTabledata:nth-child(2) {
+.resultTable .resultTabledata:nth-child(2) {
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -915,63 +884,177 @@ div#expense-container .shared-expense-container-loop .flex-center {
     padding: 16px;
     /* Reduced padding for small screens */
   }
-  
-  .shared-expense-container .input-group, .shared-expense-container-loop .input-group {
+
+
+
+  .shared-expense-container .input-group,
+  .shared-expense-container-loop .input-group {
     max-width: 140px;
-}
+  }
   .modal-content {
     width: calc(100% - 20px);
-}
+  }
 }
 
 @media (min-width: 431px) and (max-width: 767px) {
   .calcuatlorContainer {
-    padding: 24px;
+    padding: 16px;
     /* Increased padding for medium screens */
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .calcuatlorContainer {
-    padding: 24px;
+    padding: 16px;
     /* Increased padding for larger screens */
   }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .calcuatlorContainer {
-    padding: 24px;
+    padding: 16px;
     /* Consistent padding for medium desktops */
   }
 }
 
 @media (min-width: 1200px) {
   .calcuatlorContainer {
-    padding: 24px;
+    padding: 16px;
     /* Consistent padding for large screens */
   }
 }
 
+/* Add expense header button */
+.add-expense-header-button {
+  background: #4caf50;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.add-expense-header-button:hover {
+  background: #45a049;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.add-expense-header-button:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+.add-expense-header-button .material-symbols-outlined {
+  color: white;
+  font-size: 20px;
+}
+
+/* Delete expense button */
+.delete-expense-button {
+  background: #f44336;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Delete button placeholder for consistent alignment */
+.delete-button-placeholder {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.delete-expense-button:hover {
+  background: #d32f2f;
+  transform: scale(1.05);
+}
+
+.delete-expense-button:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+.delete-expense-button .material-symbols-outlined {
+  color: white;
+  font-size: 16px;
+}
+
+/* Update expense row layout to accommodate delete button */
 .expense-row {
   display: flex;
   gap: 16px;
   margin-bottom: 8px;
+  align-items: center;
+  min-height: 60px;
 }
 
 .expense-row .input-group {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.delete-expense-link {
-  color: var(--danger-colour);
-  text-decoration: none;
+.expense-row .input-group label {
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.expense-row .input-group input {
+  margin-bottom: 0;
+  height: 48px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Ensure consistent spacing for delete button area */
+.expense-row .delete-expense-button,
+.expense-row .delete-button-placeholder {
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
+
+/* Section header layout for add button */
+.section-header {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.section-header-content {
+  flex: 1;
+}
+
+.section-header h2 {
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-header .shy-text {
+  margin: 0;
   font-size: 14px;
-  display: inline-block;
-  margin-bottom: 15px;
-}
-
-.delete-expense-link:hover {
-  text-decoration: underline;
+  color: var(--primary-colour);
+  opacity: 0.8;
 }
 
 .expense-label-text {
@@ -998,4 +1081,307 @@ div#expense-container .shared-expense-container-loop .flex-center {
 #resultsContent {
   width: 100%;
   height: 100%;
+}
+
+/* Helper class for hiding steps */
+.hidden {
+  display: none;
+}
+
+/* Results step styling */
+#step-results {
+  width: 100%;
+}
+
+#step-results h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#backToEditBtn {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--border-radius-8);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: transparent;
+  border: 1px solid var(--primary-colour);
+  color: var(--primary-colour);
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#backToEditBtn:hover {
+  border: 1px solid var(--primary-colour-hover);
+  background-color: rgba(17, 46, 46, 0.05);
+}
+
+#backToEditBtn:focus {
+  outline: var(--focus-width) solid var(--focus-colour);
+  outline-offset: var(--focus-offset);
+}
+
+/* New Results Layout Styles */
+.results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Summary Card Styles */
+.summary-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-header h2 {
+  text-align: center;
+  margin: 0 0 24px 0;
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.contribution-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.person-contribution {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.percentage {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+  line-height: 1;
+}
+
+.amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-colour);
+  font-family: "Assistant", sans-serif;
+}
+
+.person-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Assistant", sans-serif;
+  background: rgba(17, 46, 46, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.summary-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.15);
+  margin: 0 0 24px 0;
+}
+
+.total-expenses {
+  text-align: center;
+}
+
+.total-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Assistant", sans-serif;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.total-amount {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+}
+
+/* Breakdown Card Styles */
+.breakdown-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.breakdown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.breakdown-icon {
+  font-size: 24px;
+  color: var(--primary-colour);
+}
+
+.breakdown-header h3 {
+  margin: 0;
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.expense-item {
+  padding: 16px;
+  background: rgba(17, 46, 46, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.expense-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expense-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-colour);
+  font-family: "Assistant", sans-serif;
+}
+
+.expense-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-colour);
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.expense-shares {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.share-amount {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+  font-family: "Assistant", sans-serif;
+}
+
+/* Results Footer Styles */
+.results-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+}
+
+.results-footer p {
+  margin: 0;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.results-footer #shareBtn,
+.results-footer #backToEditBtn {
+  margin: 0;
+  width: 100%;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 430px) {
+  .contribution-summary {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .person-contribution {
+    flex: none;
+  }
+  
+  .expense-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .expense-shares {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* Expense column headers */
+.expense-headers {
+  display: flex;
+  gap: 16px;
+  padding: 0 4px;
+}
+
+.expense-header-amount,
+.expense-header-label {
+  color: var(--primary-colour);
+  font-family: Assistant;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  flex: 1;
+}
+
+.expense-header-action {
+  width: 32px;
+  flex-shrink: 0;
+}
+
+/* Input section cards for visual separation */
+.input-section-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 16px 24px 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.input-section-card:last-child {
+  margin-bottom: 0;
+}
+
+/* Update existing styles to work with new card structure */
+.salaries-container {
+  margin-bottom: 0;
+}
+
+.input-section-card .input-group:last-child {
+  margin-bottom: 0;
 }

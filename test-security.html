@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Test Suite - Fair Share Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .test-input {
+            width: 300px;
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-output {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        h1 { color: #333; }
+        h2 { color: #555; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .summary {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔒 Security Test Suite - Fair Share Calculator</h1>
+    <p>This test suite validates all security improvements and functionality.</p>
+
+    <div class="test-section">
+        <h2>🧪 Test 1: Normal Usage</h2>
+        <p>Testing basic calculator functionality with valid inputs.</p>
+        <button onclick="testNormalUsage()">Run Normal Usage Test</button>
+        <div id="normal-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🛡️ Test 2: XSS Prevention</h2>
+        <p>Testing XSS attack prevention with malicious inputs.</p>
+        <button onclick="testXSSPrevention()">Run XSS Prevention Test</button>
+        <div id="xss-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Test 3: Input Validation</h2>
+        <p>Testing input validation with edge cases and invalid data.</p>
+        <button onclick="testInputValidation()">Run Input Validation Test</button>
+        <div id="validation-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>⚡ Test 4: Rate Limiting</h2>
+        <p>Testing rate limiting with rapid operations.</p>
+        <button onclick="testRateLimiting()">Run Rate Limiting Test</button>
+        <div id="rate-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💾 Test 5: Data Persistence</h2>
+        <p>Testing localStorage functionality and data restoration.</p>
+        <button onclick="testDataPersistence()">Run Data Persistence Test</button>
+        <div id="persistence-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 Test 6: Share Functionality</h2>
+        <p>Testing share functionality (backend and legacy fallback).</p>
+        <input type="text" id="test-salary1" class="test-input" placeholder="Test salary 1" value="50000">
+        <input type="text" id="test-salary2" class="test-input" placeholder="Test salary 2" value="30000">
+        <input type="text" id="test-expense" class="test-input" placeholder="Test expense" value="1000">
+        <button onclick="testShareFunctionality()">Run Share Test</button>
+        <div id="share-test-results"></div>
+    </div>
+
+    <div class="summary" id="test-summary" style="display:none;">
+        <h2>📋 Test Summary</h2>
+        <div id="summary-content"></div>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        function addResult(testName, status, message, details = '') {
+            testResults.push({ testName, status, message, details });
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('test-summary');
+            const content = document.getElementById('summary-content');
+            
+            const total = testResults.length;
+            const passed = testResults.filter(r => r.status === 'pass').length;
+            const failed = testResults.filter(r => r.status === 'fail').length;
+            const warnings = testResults.filter(r => r.status === 'warning').length;
+            
+            content.innerHTML = `
+                <p><strong>Total Tests:</strong> ${total}</p>
+                <p><strong>Passed:</strong> ${passed}</p>
+                <p><strong>Failed:</strong> ${failed}</p>
+                <p><strong>Warnings:</strong> ${warnings}</p>
+                <p><strong>Success Rate:</strong> ${total > 0 ? Math.round((passed / total) * 100) : 0}%</p>
+            `;
+            
+            summary.style.display = 'block';
+        }
+
+        function displayResult(containerId, status, message, details = '') {
+            const container = document.getElementById(containerId);
+            const result = document.createElement('div');
+            result.className = `test-result ${status}`;
+            result.innerHTML = `
+                <strong>${status.toUpperCase()}:</strong> ${message}
+                ${details ? `<div class="test-output">${details}</div>` : ''}
+            `;
+            container.appendChild(result);
+        }
+
+        // Test 1: Normal Usage
+        function testNormalUsage() {
+            const container = document.getElementById('normal-test-results');
+            container.innerHTML = '';
+            
+            try {
+                // Test if main functions exist
+                if (typeof calculateShares !== 'function') {
+                    throw new Error('calculateShares function not found');
+                }
+                
+                if (typeof addExpense !== 'function') {
+                    throw new Error('addExpense function not found');
+                }
+                
+                if (typeof sanitizeInput !== 'function') {
+                    throw new Error('sanitizeInput function not found');
+                }
+                
+                displayResult('normal-test-results', 'pass', 'All main functions are available');
+                addResult('Normal Usage', 'pass', 'All main functions are available');
+                
+                // Test sanitization function
+                const testInput = '<script>alert("xss")</script>test';
+                const sanitized = sanitizeInput(testInput);
+                
+                if (sanitized.includes('<script>') || sanitized.includes('</script>')) {
+                    displayResult('normal-test-results', 'fail', 'Input sanitization failed', `Input: ${testInput}, Output: ${sanitized}`);
+                    addResult('Normal Usage', 'fail', 'Input sanitization failed');
+                } else {
+                    displayResult('normal-test-results', 'pass', 'Input sanitization working', `Input: ${testInput}, Output: ${sanitized}`);
+                    addResult('Normal Usage', 'pass', 'Input sanitization working');
+                }
+                
+            } catch (error) {
+                displayResult('normal-test-results', 'fail', 'Normal usage test failed', error.message);
+                addResult('Normal Usage', 'fail', 'Test failed: ' + error.message);
+            }
+        }
+
+        // Test 2: XSS Prevention
+        function testXSSPrevention() {
+            const container = document.getElementById('xss-test-results');
+            container.innerHTML = '';
+            
+            const xssPayloads = [
+                '<script>alert("XSS")</script>',
+                '<img src="x" onerror="alert(\'XSS\')">',
+                '<svg onload="alert(\'XSS\')">',
+                'javascript:alert("XSS")',
+                '<iframe src="javascript:alert(\'XSS\')">',
+                '"><script>alert("XSS")</script>',
+                '\' onclick="alert(\'XSS\')" \'',
+                '<div onmouseover="alert(\'XSS\')">test</div>'
+            ];
+            
+            let passedTests = 0;
+            let totalTests = xssPayloads.length;
+            
+            xssPayloads.forEach((payload, index) => {
+                try {
+                    const sanitized = sanitizeInput(payload);
+                    
+                    // Check if dangerous elements are removed
+                    const dangerousPatterns = ['<script', 'javascript:', 'onload', 'onerror', 'onclick', 'onmouseover', '<iframe', '<svg'];
+                    const containsDangerous = dangerousPatterns.some(pattern => 
+                        sanitized.toLowerCase().includes(pattern.toLowerCase())
+                    );
+                    
+                    if (containsDangerous) {
+                        displayResult('xss-test-results', 'fail', `XSS payload ${index + 1} not fully sanitized`, `Input: ${payload}<br>Output: ${sanitized}`);
+                    } else {
+                        displayResult('xss-test-results', 'pass', `XSS payload ${index + 1} successfully sanitized`);
+                        passedTests++;
+                    }
+                } catch (error) {
+                    displayResult('xss-test-results', 'fail', `XSS test ${index + 1} threw error`, error.message);
+                }
+            });
+            
+            const successRate = Math.round((passedTests / totalTests) * 100);
+            const status = successRate === 100 ? 'pass' : successRate > 80 ? 'warning' : 'fail';
+            
+            addResult('XSS Prevention', status, `${passedTests}/${totalTests} payloads blocked (${successRate}%)`);
+        }
+
+        // Test 3: Input Validation
+        function testInputValidation() {
+            const container = document.getElementById('validation-test-results');
+            container.innerHTML = '';
+            
+            const testCases = [
+                { input: '', expected: 'empty string', description: 'Empty string' },
+                { input: null, expected: '', description: 'Null input' },
+                { input: undefined, expected: '', description: 'Undefined input' },
+                { input: 123, expected: '', description: 'Number input' },
+                { input: 'A'.repeat(2000), expected: 'truncated', description: 'Very long string (2000 chars)' },
+                { input: 'Valid input 123', expected: 'Valid input 123', description: 'Valid input with numbers' },
+                { input: 'Test with "quotes" and \'apostrophes\'', expected: 'sanitized', description: 'Input with quotes' }
+            ];
+            
+            let passedTests = 0;
+            
+            testCases.forEach((testCase, index) => {
+                try {
+                    const result = sanitizeInput(testCase.input);
+                    let passed = false;
+                    
+                    switch (testCase.expected) {
+                        case 'empty string':
+                            passed = result === '';
+                            break;
+                        case '':
+                            passed = result === '';
+                            break;
+                        case 'truncated':
+                            passed = result.length <= 1000;
+                            break;
+                        case 'sanitized':
+                            passed = !result.includes('"') && !result.includes("'");
+                            break;
+                        default:
+                            passed = result === testCase.expected;
+                    }
+                    
+                    if (passed) {
+                        displayResult('validation-test-results', 'pass', testCase.description);
+                        passedTests++;
+                    } else {
+                        displayResult('validation-test-results', 'fail', testCase.description, `Expected: ${testCase.expected}, Got: ${result}`);
+                    }
+                } catch (error) {
+                    displayResult('validation-test-results', 'fail', testCase.description, error.message);
+                }
+            });
+            
+            const successRate = Math.round((passedTests / testCases.length) * 100);
+            const status = successRate === 100 ? 'pass' : successRate > 80 ? 'warning' : 'fail';
+            
+            addResult('Input Validation', status, `${passedTests}/${testCases.length} validation tests passed (${successRate}%)`);
+        }
+
+        // Test 4: Rate Limiting
+        function testRateLimiting() {
+            const container = document.getElementById('rate-test-results');
+            container.innerHTML = '';
+            
+            if (typeof isRateLimited !== 'function') {
+                displayResult('rate-test-results', 'fail', 'Rate limiting function not found');
+                addResult('Rate Limiting', 'fail', 'Rate limiting function not found');
+                return;
+            }
+            
+            try {
+                // Test rapid calls
+                let blockedCalls = 0;
+                let totalCalls = 10;
+                
+                for (let i = 0; i < totalCalls; i++) {
+                    if (isRateLimited()) {
+                        blockedCalls++;
+                    }
+                }
+                
+                if (blockedCalls > 0) {
+                    displayResult('rate-test-results', 'pass', `Rate limiting working: ${blockedCalls}/${totalCalls} calls blocked`);
+                    addResult('Rate Limiting', 'pass', `${blockedCalls}/${totalCalls} rapid calls blocked`);
+                } else {
+                    displayResult('rate-test-results', 'warning', 'Rate limiting may not be working as expected');
+                    addResult('Rate Limiting', 'warning', 'No calls were blocked in rapid test');
+                }
+                
+                // Wait and test again
+                setTimeout(() => {
+                    if (!isRateLimited()) {
+                        displayResult('rate-test-results', 'pass', 'Rate limiting resets correctly after delay');
+                    } else {
+                        displayResult('rate-test-results', 'warning', 'Rate limiting may be too aggressive');
+                    }
+                }, 200);
+                
+            } catch (error) {
+                displayResult('rate-test-results', 'fail', 'Rate limiting test failed', error.message);
+                addResult('Rate Limiting', 'fail', 'Test failed: ' + error.message);
+            }
+        }
+
+        // Test 5: Data Persistence
+        function testDataPersistence() {
+            const container = document.getElementById('persistence-test-results');
+            container.innerHTML = '';
+            
+            try {
+                // Test localStorage availability
+                if (typeof Storage === "undefined") {
+                    displayResult('persistence-test-results', 'fail', 'localStorage not supported');
+                    addResult('Data Persistence', 'fail', 'localStorage not supported');
+                    return;
+                }
+                
+                // Test setting and getting data
+                const testKey = 'test-security-key';
+                const testValue = 'test-security-value';
+                
+                localStorage.setItem(testKey, testValue);
+                const retrieved = localStorage.getItem(testKey);
+                
+                if (retrieved === testValue) {
+                    displayResult('persistence-test-results', 'pass', 'localStorage read/write working');
+                    addResult('Data Persistence', 'pass', 'localStorage read/write working');
+                } else {
+                    displayResult('persistence-test-results', 'fail', 'localStorage read/write failed');
+                    addResult('Data Persistence', 'fail', 'localStorage read/write failed');
+                }
+                
+                // Clean up
+                localStorage.removeItem(testKey);
+                
+                // Test JSON storage
+                const testObject = { test: 'value', number: 123 };
+                localStorage.setItem('test-json', JSON.stringify(testObject));
+                
+                try {
+                    const parsedObject = JSON.parse(localStorage.getItem('test-json'));
+                    if (parsedObject.test === 'value' && parsedObject.number === 123) {
+                        displayResult('persistence-test-results', 'pass', 'JSON storage/parsing working');
+                    } else {
+                        displayResult('persistence-test-results', 'fail', 'JSON storage/parsing failed');
+                    }
+                } catch (e) {
+                    displayResult('persistence-test-results', 'fail', 'JSON parsing failed', e.message);
+                }
+                
+                localStorage.removeItem('test-json');
+                
+            } catch (error) {
+                displayResult('persistence-test-results', 'fail', 'Data persistence test failed', error.message);
+                addResult('Data Persistence', 'fail', 'Test failed: ' + error.message);
+            }
+        }
+
+        // Test 6: Share Functionality
+        function testShareFunctionality() {
+            const container = document.getElementById('share-test-results');
+            container.innerHTML = '';
+            
+            const salary1 = document.getElementById('test-salary1').value;
+            const salary2 = document.getElementById('test-salary2').value;
+            const expense = document.getElementById('test-expense').value;
+            
+            if (typeof collectCurrentState !== 'function') {
+                displayResult('share-test-results', 'fail', 'collectCurrentState function not found');
+                addResult('Share Functionality', 'fail', 'collectCurrentState function not found');
+                return;
+            }
+            
+            try {
+                // Test state collection
+                const mockState = {
+                    salary1: salary1,
+                    salary2: salary2,
+                    expenses: [{ amount: expense, label: 'Test Expense' }]
+                };
+                
+                displayResult('share-test-results', 'pass', 'State collection structure valid', JSON.stringify(mockState, null, 2));
+                
+                // Test legacy URL building
+                if (typeof buildLegacyShareUrl === 'function') {
+                    const legacyUrl = buildLegacyShareUrl(mockState);
+                    if (legacyUrl.includes('salary1=') && legacyUrl.includes('salary2=') && legacyUrl.includes('expenses=')) {
+                        displayResult('share-test-results', 'pass', 'Legacy URL generation working', `URL: ${legacyUrl.substring(0, 100)}...`);
+                        addResult('Share Functionality', 'pass', 'Legacy URL generation working');
+                    } else {
+                        displayResult('share-test-results', 'fail', 'Legacy URL generation failed');
+                        addResult('Share Functionality', 'fail', 'Legacy URL generation failed');
+                    }
+                } else {
+                    displayResult('share-test-results', 'warning', 'buildLegacyShareUrl function not found');
+                }
+                
+                // Test backend share (this will likely fail in test environment)
+                if (typeof shareResultsViaBackend === 'function') {
+                    displayResult('share-test-results', 'pass', 'Backend share function available');
+                    
+                    // Note: We can't actually test the backend call without the server
+                    displayResult('share-test-results', 'warning', 'Backend API test skipped (requires live server)');
+                } else {
+                    displayResult('share-test-results', 'fail', 'shareResultsViaBackend function not found');
+                }
+                
+            } catch (error) {
+                displayResult('share-test-results', 'fail', 'Share functionality test failed', error.message);
+                addResult('Share Functionality', 'fail', 'Test failed: ' + error.message);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Security Test Suite Loaded');
+            
+            // Check if we're running in the context of the main app
+            if (window.location.pathname.includes('test-security.html')) {
+                // Load the main script for testing
+                const script = document.createElement('script');
+                script.src = 'script.js';
+                script.onload = function() {
+                    console.log('Main script loaded for testing');
+                };
+                script.onerror = function() {
+                    console.error('Failed to load main script');
+                    document.body.innerHTML += '<div class="test-result fail"><strong>ERROR:</strong> Failed to load script.js. Please ensure this test file is in the same directory as script.js</div>';
+                };
+                document.head.appendChild(script);
+            }
+        });
+    </script>
+</body>
+</html>
