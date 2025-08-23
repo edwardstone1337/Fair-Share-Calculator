@@ -91,6 +91,8 @@ function debugError(message, error) {
 // ===== End Debug Configuration =====
 
 function collectCurrentState() {
+  const name1 = document.getElementById("name1").value;
+  const name2 = document.getElementById("name2").value;
   const salary1 = document.getElementById("salary1").value;
   const salary2 = document.getElementById("salary2").value;
   const expenses = Array.from(document.querySelectorAll(".expense-input")).map(
@@ -104,8 +106,10 @@ function collectCurrentState() {
     }
   );
   
-  const state = { salary1, salary2, expenses };
+  const state = { name1, name2, salary1, salary2, expenses };
   debugLog('State collected', { 
+    name1: name1,
+    name2: name2,
     salary1: salary1, 
     salary2: salary2, 
     expenseCount: expenses.length,
@@ -120,6 +124,17 @@ function applyState(state) {
   
   // Validate state structure
   if (typeof state !== 'object') return;
+  
+  // Safely set name values
+  if (state.name1 && typeof state.name1 === 'string') {
+    const name1Input = document.getElementById("name1");
+    if (name1Input) name1Input.value = sanitizeInput(state.name1);
+  }
+  
+  if (state.name2 && typeof state.name2 === 'string') {
+    const name2Input = document.getElementById("name2");
+    if (name2Input) name2Input.value = sanitizeInput(state.name2);
+  }
   
   // Safely set salary values
   if (state.salary1 && typeof state.salary1 === 'string') {
@@ -237,6 +252,8 @@ async function shareResultsViaBackend(currentState) {
     
     // Sanitize the data before sending
     const sanitizedState = {
+      name1: sanitizeInput(currentState.name1?.toString() || ''),
+      name2: sanitizeInput(currentState.name2?.toString() || ''),
       salary1: sanitizeInput(currentState.salary1?.toString() || ''),
       salary2: sanitizeInput(currentState.salary2?.toString() || ''),
       expenses: Array.isArray(currentState.expenses) ? currentState.expenses.map(expense => ({
@@ -306,6 +323,8 @@ async function loadFromIdIfPresent(apply) {
 
 function buildLegacyShareUrl(state) {
   const queryString = new URLSearchParams({
+    name1: state.name1,
+    name2: state.name2,
     salary1: state.salary1,
     salary2: state.salary2,
     expenses: JSON.stringify(state.expenses),
@@ -342,6 +361,10 @@ window.onpopstate = (e) => {
 
 // ===== Form Data Persistence =====
 function saveFormDataToLocalStorage() {
+  // Save name data
+  localStorage.setItem("name1", document.getElementById("name1").value);
+  localStorage.setItem("name2", document.getElementById("name2").value);
+  
   // Save salary data
   localStorage.setItem("salary1", document.getElementById("salary1").value);
   localStorage.setItem("salary2", document.getElementById("salary2").value);
@@ -369,6 +392,14 @@ function saveFormDataToLocalStorage() {
 }
 
 function restoreFormDataFromLocalStorage() {
+  // Restore name data
+  if (localStorage.getItem("name1")) {
+    document.getElementById("name1").value = localStorage.getItem("name1");
+  }
+  if (localStorage.getItem("name2")) {
+    document.getElementById("name2").value = localStorage.getItem("name2");
+  }
+  
   // Restore salary data
   if (localStorage.getItem("salary1")) {
     document.getElementById("salary1").value = localStorage.getItem("salary1");
@@ -491,6 +522,10 @@ function restoreFormDataFromLocalStorage() {
 }
 
 function addFormDataSaveListeners() {
+  // Save data when name inputs change
+  document.getElementById("name1").addEventListener("input", saveFormDataToLocalStorage);
+  document.getElementById("name2").addEventListener("input", saveFormDataToLocalStorage);
+  
   // Save data when salary inputs change
   document.getElementById("salary1").addEventListener("input", saveFormDataToLocalStorage);
   document.getElementById("salary2").addEventListener("input", saveFormDataToLocalStorage);
@@ -499,6 +534,20 @@ function addFormDataSaveListeners() {
   document.addEventListener("input", function(e) {
     if (e.target.classList.contains("expense-input") || e.target.classList.contains("expense-label")) {
       saveFormDataToLocalStorage();
+      
+      // Clear errors when user starts typing
+      if (e.target.classList.contains("expense-label")) {
+        e.target.classList.remove("input-error");
+      }
+      if (e.target.classList.contains("expense-input")) {
+        e.target.classList.remove("input-error");
+      }
+      
+      // Clear the bottom error message when user starts typing
+      const expensesError = document.getElementById("expenses-error");
+      if (expensesError) {
+        expensesError.classList.remove("show");
+      }
     }
   });
   
@@ -542,7 +591,7 @@ function addEventListeners() {
   });
   
   // Add expense button
-  const addExpenseBtn = document.querySelector(".add-expense-header-button");
+  const addExpenseBtn = document.querySelector(".add-expense-button");
   if (addExpenseBtn) {
     addExpenseBtn.addEventListener("click", addExpense);
   }
@@ -641,6 +690,8 @@ window.onload = async function () {
   
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get("id");
+  const name1 = urlParams.get("name1");
+  const name2 = urlParams.get("name2");
   const salary1 = urlParams.get("salary1");
   const salary2 = urlParams.get("salary2");
   const expensesParam = urlParams.get("expenses"); // Get the expenses array from URL
@@ -656,6 +707,8 @@ window.onload = async function () {
           // Try to calculate. If invalid inputs, fall back to input step.
           try {
             // Check if we have valid data to calculate with
+            const name1 = document.getElementById("name1").value.trim();
+            const name2 = document.getElementById("name2").value.trim();
             const salary1 = parseFloat(document.getElementById("salary1").value.replace(/,/g, ""));
             const salary2 = parseFloat(document.getElementById("salary2").value.replace(/,/g, ""));
             const expenses = document.querySelectorAll(".expense-input");
@@ -668,7 +721,7 @@ window.onload = async function () {
               }
             });
             
-            if (!isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
+            if (name1 && name2 && !isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
               calculateShares();
             } else {
               showStep('input', { push: false });
@@ -689,6 +742,14 @@ window.onload = async function () {
 
   // If salary1, salary2, and expenses are found in the URL
   if (salary1 && salary2 && expensesParam) {
+    // Populate name fields if available
+    if (name1) {
+      document.getElementById("name1").value = name1;
+    }
+    if (name2) {
+      document.getElementById("name2").value = name2;
+    }
+    
     document.getElementById("salary1").value = salary1;
     document.getElementById("salary2").value = salary2;
 
@@ -809,29 +870,31 @@ window.onload = async function () {
   // Determine initial step based on URL hash and data validity
   const wantsResults = location.hash === '#results';
   if (wantsResults) {
-    // Try to calculate. If invalid inputs, fall back to input step.
-    try {
-      // Check if we have valid data to calculate with
-      const salary1 = parseFloat(document.getElementById("salary1").value.replace(/,/g, ""));
-      const salary2 = parseFloat(document.getElementById("salary2").value.replace(/,/g, ""));
-      const expenses = document.querySelectorAll(".expense-input");
-      let hasValidExpense = false;
-      
-      expenses.forEach((expenseInput) => {
-        const raw = expenseInput.value.replace(/,/g, "").trim();
-        if (raw !== "" && !isNaN(parseFloat(raw)) && parseFloat(raw) > 0) {
-          hasValidExpense = true;
+            // Try to calculate. If invalid inputs, fall back to input step.
+        try {
+          // Check if we have valid data to calculate with
+          const name1 = document.getElementById("name1").value.trim();
+          const name2 = document.getElementById("name2").value.trim();
+          const salary1 = parseFloat(document.getElementById("salary1").value.replace(/,/g, ""));
+          const salary2 = parseFloat(document.getElementById("salary2").value.replace(/,/g, ""));
+          const expenses = document.querySelectorAll(".expense-input");
+          let hasValidExpense = false;
+          
+          expenses.forEach((expenseInput) => {
+            const raw = expenseInput.value.replace(/,/g, "").trim();
+            if (raw !== "" && !isNaN(parseFloat(raw)) && parseFloat(raw) > 0) {
+              hasValidExpense = true;
+            }
+          });
+          
+          if (name1 && name2 && !isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
+            calculateShares();
+          } else {
+            showStep('input', { push: false });
+          }
+        } catch (e) {
+          showStep('input', { push: false });
         }
-      });
-      
-      if (!isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
-        calculateShares();
-      } else {
-        showStep('input', { push: false });
-      }
-    } catch (e) {
-      showStep('input', { push: false });
-    }
   } else {
     showStep('input', { push: false });
   }
@@ -929,6 +992,8 @@ function addExpense() {
   
   amountGroup.appendChild(amountInput);
   
+  
+  
   // Label input group
   const labelGroup = document.createElement("div");
   labelGroup.classList.add("input-group");
@@ -941,6 +1006,8 @@ function addExpense() {
   });
   
   labelGroup.appendChild(labelInput);
+  
+
   
   // Delete button
   const deleteButton = createSafeElement("button", {
@@ -988,10 +1055,21 @@ function formatNumberWithCommas(element) {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   element.value = formattedValue;
 
-  // Hide error message if it's displayed
-  var errorMessage = document.getElementById("error-display");
-  if (errorMessage) {
-    errorMessage.style.display = "none";
+  // Clear input error styling when user starts typing
+  element.classList.remove("input-error");
+  
+  // Also clear label errors if this is an expense input
+  if (element.classList.contains("expense-input")) {
+    const labelInput = element.closest(".shared-expense-container-loop")?.querySelector(".expense-label");
+    if (labelInput) {
+      labelInput.classList.remove("input-error");
+    }
+    
+    // Clear the bottom error message when user starts typing
+    const expensesError = document.getElementById("expenses-error");
+    if (expensesError) {
+      expensesError.classList.remove("show");
+    }
   }
 }
 
@@ -999,7 +1077,7 @@ function formatNumberWithCommas(element) {
 // display when the user starts modifying input values.
 function resetResultsDisplay() {
   document.getElementById("results").style.display = "none";
-  document.getElementById("error-display").style.display = "none";
+  // Error messages are now handled inline
 }
 
 // This function 'calculateShares' calculates each person's share of a given expense based
@@ -1046,19 +1124,49 @@ function calculateShares() {
 
   var hasError = false;
 
+  // Validate names
+  const name1 = document.getElementById("name1").value.trim();
+  const name2 = document.getElementById("name2").value.trim();
+  
+  if (!name1 || name1.length < 1 || name1.length > 50) {
+    document.getElementById("name1").classList.add("input-error");
+    document.getElementById("name1-error").textContent = "Please enter your name";
+    document.getElementById("name1-error").classList.add("show");
+    hasError = true;
+  } else {
+    document.getElementById("name1").classList.remove("input-error");
+    document.getElementById("name1-error").classList.remove("show");
+  }
+  
+  if (!name2 || name2.length < 1 || name2.length > 50) {
+    document.getElementById("name2").classList.add("input-error");
+    document.getElementById("name2-error").textContent = "Please enter their name";
+    document.getElementById("name2-error").classList.add("show");
+    hasError = true;
+  } else {
+    document.getElementById("name2").classList.remove("input-error");
+    document.getElementById("name2-error").classList.remove("show");
+  }
+
   // Validate salaries
   if (isNaN(salary1) || salary1 <= 0 || salary1 > 999999999) {
     document.getElementById("salary1").classList.add("input-error");
+    document.getElementById("salary1-error").textContent = "Please enter a valid salary amount";
+    document.getElementById("salary1-error").classList.add("show");
     hasError = true;
   } else {
     document.getElementById("salary1").classList.remove("input-error");
+    document.getElementById("salary1-error").classList.remove("show");
   }
 
   if (isNaN(salary2) || salary2 <= 0 || salary2 > 999999999) {
     document.getElementById("salary2").classList.add("input-error");
+    document.getElementById("salary2-error").textContent = "Please enter a valid salary amount";
+    document.getElementById("salary2-error").classList.add("show");
     hasError = true;
   } else {
     document.getElementById("salary2").classList.remove("input-error");
+    document.getElementById("salary2-error").classList.remove("show");
   }
 
   var totalExpense = 0; // Initialize total expense
@@ -1067,68 +1175,95 @@ function calculateShares() {
   // Validate expenses and calculate total expense
   expenses.forEach((expenseInput) => {
     var raw = expenseInput.value.replace(/,/g, "").trim();
-    // Ignore empty expense rows instead of treating them as errors
-    if (raw === "") {
+    var labelInput = expenseInput
+      .closest(".shared-expense-container-loop")
+      ?.querySelector(".expense-label");
+    var label = labelInput ? labelInput.value.trim() : "";
+    
+    // Case 1: Empty amount + empty label = OK (skip this row)
+    if (raw === "" && !label) {
       expenseInput.classList.remove("input-error");
+      labelInput.classList.remove("input-error");
       return;
     }
-
-    var expense = parseFloat(raw);
-    if (isNaN(expense) || expense <= 0) {
+    
+    // Case 2: Amount + empty label = OK (can calculate)
+    if (raw !== "" && !label) {
+      var expense = parseFloat(raw);
+      if (isNaN(expense) || expense <= 0) {
+        expenseInput.classList.add("input-error");
+        hasError = true;
+      } else if (expense > 999999999) {
+        expenseInput.classList.add("input-error");
+        hasError = true;
+      } else {
+        expenseInput.classList.remove("input-error");
+        totalExpense += expense;
+        var share1 = (salary1 / (salary1 + salary2)) * expense;
+        var share2 = (salary2 / (salary1 + salary2)) * expense;
+        
+        individualExpenseResults.push({
+          amount: expense,
+          label: "Expense",
+          share1: share1,
+          share2: share2,
+        });
+      }
+      return;
+    }
+    
+    // Case 3: Empty amount + label = ERROR (needs amount)
+    if (raw === "" && label) {
       expenseInput.classList.add("input-error");
       hasError = true;
-    } else if (expense > 999999999) { // Prevent extremely large numbers
-      expenseInput.classList.add("input-error");
-      hasError = true;
-    } else {
-      expenseInput.classList.remove("input-error");
-      totalExpense += expense; // Sum valid expenses
-      // Calculate individual shares for this expense
-      var share1 = (salary1 / (salary1 + salary2)) * expense;
-      var share2 = (salary2 / (salary1 + salary2)) * expense;
-      var labelInput = expenseInput
-        .closest(".shared-expense-container-loop")
-        ?.querySelector(".expense-label");
-      var label = labelInput && labelInput.value.trim() ? labelInput.value.trim() : "Expense";
-
-      individualExpenseResults.push({
-        amount: expense,
-        label: label,
-        share1: share1,
-        share2: share2,
-      });
+      return;
+    }
+    
+    // Case 4: Amount + label = OK (can calculate)
+    if (raw !== "" && label) {
+      var expense = parseFloat(raw);
+      if (isNaN(expense) || expense <= 0) {
+        expenseInput.classList.add("input-error");
+        hasError = true;
+      } else if (expense > 999999999) {
+        expenseInput.classList.add("input-error");
+        hasError = true;
+      } else {
+        expenseInput.classList.remove("input-error");
+        totalExpense += expense;
+        var share1 = (salary1 / (salary1 + salary2)) * expense;
+        var share2 = (salary2 / (salary1 + salary2)) * expense;
+        
+        individualExpenseResults.push({
+          amount: expense,
+          label: label,
+          share1: share1,
+          share2: share2,
+        });
+      }
     }
   });
 
+  // Check if we have at least one valid expense
+  if (individualExpenseResults.length === 0) {
+    hasError = true;
+  }
+
   // Handle errors
-  if (hasError || individualExpenseResults.length === 0) {
-    const errorDisplay = document.getElementById("error-display");
-    errorDisplay.innerHTML = "";
-    
-    const errorMessage = document.createElement("div");
-    errorMessage.className = "error-message";
-    errorMessage.id = "error-message";
-    errorMessage.setAttribute("aria-live", "assertive");
-    
-    const errorParagraph = document.createElement("p");
-    errorParagraph.textContent = "Oops! Looks like some numbers are missing. Please enter both salaries and at least one expense to calculate your fair shares.";
-    
-    errorMessage.appendChild(errorParagraph);
-    errorDisplay.appendChild(errorMessage);
-    errorDisplay.style.display = "block";
-    
-    document
-      .getElementById("error-message")
-      .scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-    var headshakeContainer = document.querySelector(".headshake-container");
-    headshakeContainer.classList.add("headshake");
-
-    // MODIFIED: Added { once: true } to the animationend listener
-    headshakeContainer.addEventListener("animationend", () => {
-      headshakeContainer.classList.remove("headshake");
-    }, { once: true });
-
+  if (hasError || individualExpenseResults.length === 0 || !name1 || !name2) {
+    // Show bottom error message for expenses
+    const expensesError = document.getElementById("expenses-error");
+    if (expensesError) {
+      if (individualExpenseResults.length === 0) {
+        expensesError.textContent = "Please enter at least one expense amount to calculate";
+        expensesError.classList.add("show");
+      } else if (hasError) {
+        expensesError.textContent = "Please fix the expense errors above to continue";
+        expensesError.classList.add("show");
+      } else {
+        expensesError.classList.remove("show");
+      }
+    }
     return;
   }
 
@@ -1148,6 +1283,10 @@ function calculateShares() {
   var sharePercent1 = Math.round((totalShare1 / totalExpense) * 100);
   var sharePercent2 = Math.round((totalShare2 / totalExpense) * 100);
 
+  // Get names for personalization (use the names already declared above)
+  const displayName1 = name1 || "Yours";
+  const displayName2 = name2 || "Theirs";
+  
   // Display the calculated shares in the 'results' section
   var resultsHTML = `
     <div class="results-container" id="results-container">
@@ -1161,13 +1300,13 @@ function calculateShares() {
           <div class="person-contribution">
             <div class="percentage">${sharePercent1}%</div>
             <div class="amount">$${totalShare1.toFixed(2)}</div>
-            <div class="person-label">Yours</div>
+            <div class="person-label">${displayName1}</div>
           </div>
           
           <div class="person-contribution">
             <div class="percentage">${sharePercent2}%</div>
             <div class="amount">$${totalShare2.toFixed(2)}</div>
-            <div class="person-label">Theirs</div>
+            <div class="person-label">${displayName2}</div>
           </div>
         </div>
         
@@ -1197,8 +1336,8 @@ function calculateShares() {
               <span class="expense-total">$${item.amount.toFixed(2)}</span>
             </div>
             <div class="expense-shares">
-              <span class="share-amount">Yours: $${item.share1.toFixed(2)}</span>
-              <span class="share-amount">Theirs: $${item.share2.toFixed(2)}</span>
+              <span class="share-amount">${displayName1}: $${item.share1.toFixed(2)}</span>
+              <span class="share-amount">${displayName2}: $${item.share2.toFixed(2)}</span>
             </div>
           </div>`;
   });

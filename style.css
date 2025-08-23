@@ -110,41 +110,15 @@ p {
   margin-top: 24px !important;
 }
 
-@keyframes headshake {
-  0% {
-    transform: translateX(0);
-  }
+/* Headshake animation deprecated - errors now shown inline */
 
-  20% {
-    transform: translateX(-10px);
-  }
-
-  40% {
-    transform: translateX(10px);
-  }
-
-  60% {
-    transform: translateX(-10px);
-  }
-
-  80% {
-    transform: translateX(10px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.headshake {
-  animation: headshake 0.5s ease-in-out;
-}
-
-.headshake-container {
+.expenses-container {
   display: flex;
   flex-direction: column;
   gap: var(--vertical-gap-1);
   margin-bottom: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .required-asterisk {
@@ -221,6 +195,13 @@ label,
   line-height: normal;
 }
 
+.names {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px;
+  gap: 16px;
+}
+
 .salaries {
   display: flex;
   justify-content: space-between;
@@ -273,6 +254,30 @@ input.input-error {
   font-weight: 400;
 }
 
+/* Inline error messages */
+.error-message {
+  color: var(--danger-colour);
+  font-family: Assistant;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 4px;
+  height: 16px;
+  min-height: 16px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.error-message.show {
+  opacity: 1;
+}
+
+/* Legacy error display - deprecated */
 #error-display {
   display: none;
 }
@@ -924,35 +929,37 @@ div#expense-container .shared-expense-container-loop .flex-center {
   }
 }
 
-/* Add expense header button */
-.add-expense-header-button {
-  background: #4caf50;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+/* Add expense button */
+.add-expense-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--primary-colour);
+  border-radius: var(--border-radius-8);
+  background: transparent;
+  color: var(--primary-colour);
+  font-family: "Assistant", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 }
 
-.add-expense-header-button:hover {
-  background: #45a049;
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+.add-expense-button:hover {
+  background: rgba(17, 46, 46, 0.05);
+  border-color: var(--primary-colour-hover);
 }
 
-.add-expense-header-button:focus {
+.add-expense-button:focus {
   outline: var(--focus-width) solid var(--focus-colour);
   outline-offset: var(--focus-offset);
 }
 
-.add-expense-header-button .material-symbols-outlined {
-  color: white;
-  font-size: 20px;
+.add-expense-button .material-symbols-outlined {
+  font-size: 18px;
 }
 
 /* Delete expense button */
@@ -997,8 +1004,9 @@ div#expense-container .shared-expense-container-loop .flex-center {
   display: flex;
   gap: 16px;
   margin-bottom: 8px;
-  align-items: center;
-  min-height: 60px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
 }
 
 .expense-row .input-group {
@@ -1006,6 +1014,7 @@ div#expense-container .shared-expense-container-loop .flex-center {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  max-width: 50%; /* Prevent inputs from expanding beyond reasonable width */
 }
 
 .expense-row .input-group label {
@@ -1018,13 +1027,15 @@ div#expense-container .shared-expense-container-loop .flex-center {
   height: 48px;
   box-sizing: border-box;
   flex-shrink: 0;
+  width: 100%;
+  min-width: 0; /* Allow flex items to shrink below content size */
 }
 
 /* Ensure consistent spacing for delete button area */
 .expense-row .delete-expense-button,
 .expense-row .delete-button-placeholder {
-  align-self: flex-end;
-  margin-bottom: 8px;
+  align-self: flex-start;
+  margin-top: 8px;
 }
 
 /* Section header layout for add button */
@@ -1071,6 +1082,38 @@ div#expense-container .shared-expense-container-loop .flex-center {
 .shared-expense-container .input-group,
 .shared-expense-container-loop .input-group {
   max-width: none;
+}
+
+/* Ensure expense inputs maintain consistent width */
+.expense-input {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.expense-label {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Expenses error message at bottom */
+.expenses-error-message {
+  color: var(--danger-colour);
+  font-family: Assistant;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  text-align: center;
+  min-height: 20px;
+  display: none;
+}
+
+.expenses-error-message.show {
+  display: block;
 }
 
 .resultTable .resultTabledata {

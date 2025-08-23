@@ -155,7 +155,51 @@
           <div class="input-section-card">
             <div class="section-header">
               <div class="section-header-content">
-                <h2>Monthly Incomes</h2>
+                <h2>Names</h2>
+                <p class="shy-text">
+                  Enter your names to personalize the results.
+                </p>
+              </div>
+            </div>
+            <div class="names-container">
+              <div class="names">
+                <div class="input-group">
+                  <label for="name1"
+                    ><span class="required-asterisk">*</span>Your name</label
+                  >
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="name1"
+                      placeholder="e.g. Edward"
+                      maxlength="50"
+                    />
+                  </div>
+                  <div class="error-message" id="name1-error"></div>
+                </div>
+
+                <div class="input-group">
+                  <label for="name2"
+                    ><span class="required-asterisk">*</span>Their name</label
+                  >
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="name2"
+                      placeholder="e.g. Sarah"
+                      maxlength="50"
+                    />
+                  </div>
+                  <div class="error-message" id="name2-error"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-section-card">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Salaries</h2>
                 <p class="shy-text">
                   Don't be shy – entering your after-tax salary helps us do the math more fairly!
                 </p>
@@ -180,6 +224,7 @@
                       alt="Show/Hide Password"
                     />
                   </div>
+                  <div class="error-message" id="salary1-error"></div>
                 </div>
 
                 <div class="input-group">
@@ -199,6 +244,7 @@
                       alt="Show/Hide Password"
                     />
                   </div>
+                  <div class="error-message" id="salary2-error"></div>
                 </div>
               </div>
             </div>
@@ -213,11 +259,8 @@
                   savings goal.
                 </p>
               </div>
-              <button class="add-expense-header-button">
-                <span class="material-symbols-outlined">add</span>
-              </button>
             </div>
-            <div class="headshake-container">
+            <div class="expenses-container">
               <!-- Column headers for shared expenses -->
               <div class="expense-headers">
                 <div class="expense-header-amount">
@@ -249,13 +292,20 @@
                         placeholder="e.g. Rent, Groceries"
                         aria-label="Name for expense 1"
                       />
+                      <div class="error-message" id="expenseLabel1-error"></div>
                     </div>
                     <div class="delete-button-placeholder"></div>
                   </div>
                 </div>
               </div>
-              <div id="error-display"></div>
-             
+              <div id="expenses-error" class="expenses-error-message"></div>
+              
+              <!-- Add Expense Button -->
+              <button class="add-expense-button">
+                <span class="material-symbols-outlined">add</span>
+                Add Expense
+              </button>
+              
               <button class="calculate-button">
                 Calculate
               </button>
