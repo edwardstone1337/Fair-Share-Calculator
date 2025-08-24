@@ -349,6 +349,8 @@ function showStep(step, { push = true } = {}) {
     resultsEl.classList.add('hidden');
     inputEl.classList.remove('hidden');
     if (push) history.pushState({ step: 'input' }, '', '#input');
+    // Scroll to top when returning to input step
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
@@ -899,7 +901,7 @@ window.onload = async function () {
     showStep('input', { push: false });
   }
 
-  // Note: Edit button event listener is now handled inline in the results footer
+
   
   // Add event listeners to save data when inputs change
   addFormDataSaveListeners();
@@ -911,8 +913,6 @@ window.onload = async function () {
   window.addEventListener("beforeunload", saveFormDataToLocalStorage);
 };
 
-// This function takes a numerical value and formats it as a string with two decimal places,
-// adding commas as thousand separators.
 function formatNumber(num) {
   return num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 }
@@ -964,7 +964,6 @@ function animateCounter(elementId, finalNumber, duration = 300) {
   }
 }
 
-// This function helps in Multiple expenses handlings
 let expenseCount = 1;
 
 function addExpense() {
@@ -1042,9 +1041,6 @@ function deleteExpense(deleteButton) {
   }
 }
 
-// This function is triggered when a user inputs a number. It formats the input by removing
-// non-numeric characters (except commas and dots) and then adds commas in appropriate places
-// for readability.
 function formatNumberWithCommas(element) {
   // Remove error class when the user starts typing
   element.classList.remove("input-error");
@@ -1073,27 +1069,11 @@ function formatNumberWithCommas(element) {
   }
 }
 
-// This function hides the 'results' section of the page. It's typically called to reset the
-// display when the user starts modifying input values.
 function resetResultsDisplay() {
   document.getElementById("results").style.display = "none";
   // Error messages are now handled inline
 }
 
-// This function 'calculateShares' calculates each person's share of a given expense based
-// on their respective salaries. It performs several tasks:
-// 1. Retrieves input values for two salaries and the total expense from the DOM.
-//    - It uses 'parseFloat' to convert the input string values to numbers, removing any
-//      commas for proper formatting.
-// 2. Validates the input values:
-//    - Checks for 'NaN' (not a number) and ensures all values are greater than zero.
-//    - If any value is invalid, it displays an error message in a separate section and
-//      scrolls smoothly to this message for visibility.
-// 3. If the values are valid:
-//    - Saves the salary inputs to localStorage for potential future use.
-//    - Calculates each person's share of the expense proportionally based on their salary.
-// 4. Displays the calculated shares in the 'results' section and smoothly scrolls to this
-//    section for improved user experience.
 function calculateShares() {
   // Rate limiting check
   if (isRateLimited()) {
@@ -1293,20 +1273,22 @@ function calculateShares() {
       <!-- Section 1: Summary Block -->
       <div class="summary-card">
         <div class="summary-header">
-          <h2>Here are your fair shares</h2>
+          <h2>Your Fair Share Breakdown</h2>
         </div>
         
         <div class="contribution-summary">
-          <div class="person-contribution">
-            <div class="percentage">${sharePercent1}%</div>
-            <div class="amount">$${totalShare1.toFixed(2)}</div>
-            <div class="person-label">${displayName1}</div>
+          <div class="person-contribution primary">
+            <div class="person-name">${displayName1}</div>
+            <div class="amount-primary">$${totalShare1.toFixed(2)}</div>
+            <div class="percentage-subtle">${sharePercent1}% of total</div>
           </div>
           
-          <div class="person-contribution">
-            <div class="percentage">${sharePercent2}%</div>
-            <div class="amount">$${totalShare2.toFixed(2)}</div>
-            <div class="person-label">${displayName2}</div>
+          <div class="contribution-divider"></div>
+          
+          <div class="person-contribution secondary">
+            <div class="person-name">${displayName2}</div>
+            <div class="amount-primary">$${totalShare2.toFixed(2)}</div>
+            <div class="percentage-subtle">${sharePercent2}% of total</div>
           </div>
         </div>
         
@@ -1314,7 +1296,10 @@ function calculateShares() {
         
         <div class="total-expenses">
           <div class="total-label">Total Shared Expenses</div>
-          <div class="total-amount">$${totalExpense.toFixed(2)}</div>
+          <div class="total-amount-subtle">$${totalExpense.toFixed(2)}</div>
+          <div class="total-explanation">
+            ${individualExpenseResults.length} expense${individualExpenseResults.length === 1 ? '' : 's'} combined
+          </div>
         </div>
       </div>
 
@@ -1336,13 +1321,39 @@ function calculateShares() {
               <span class="expense-total">$${item.amount.toFixed(2)}</span>
             </div>
             <div class="expense-shares">
-              <span class="share-amount">${displayName1}: $${item.share1.toFixed(2)}</span>
-              <span class="share-amount">${displayName2}: $${item.share2.toFixed(2)}</span>
+              <span class="share-amount share-left">$${item.share1.toFixed(2)}</span>
+              <span class="share-amount share-right">$${item.share2.toFixed(2)}</span>
+            </div>
+            <div class="expense-names">
+              <span class="person-name name-left">${displayName1}</span>
+              <span class="person-name name-right">${displayName2}</span>
             </div>
           </div>`;
   });
 
   resultsHTML += `
+        </div>
+      </div>
+
+      <!-- Section 3: How It Works Explanation -->
+      <div class="explanation-card">
+        <div class="explanation-header">
+          <span class="material-symbols-outlined explanation-icon">lightbulb</span>
+          <h3>How Fair Share Works</h3>
+        </div>
+        <div class="explanation-content">
+          <p>We look at what each person earns and work out a fair percentage.</p>
+          <div class="calculation-example">
+            <div class="example-row">
+              <span class="example-label">${displayName1} pays:</span>
+              <span class="example-math">${sharePercent1}% of each expense</span>
+            </div>
+            <div class="example-row">
+              <span class="example-label">${displayName2} pays:</span>
+              <span class="example-math">${sharePercent2}% of each expense</span>
+            </div>
+          </div>
+          <p class="explanation-note">We divide costs based on how much each of you contributes to your combined income. ${displayName1} earns $${parseFloat(salary1Input.value.replace(/,/g, "")).toLocaleString()} and ${displayName2} earns $${parseFloat(salary2Input.value.replace(/,/g, "")).toLocaleString()}, which adds up to $${(parseFloat(salary1Input.value.replace(/,/g, "")) + parseFloat(salary2Input.value.replace(/,/g, ""))).toLocaleString()}. That means ${displayName1} earns ${sharePercent1}% of the total and ${displayName2} earns ${sharePercent2}%, so for each expense ${displayName1} pays ${sharePercent1}% and ${displayName2} pays ${sharePercent2}%.</p>
         </div>
       </div>
 
@@ -1380,23 +1391,11 @@ function calculateShares() {
     timestamp: new Date().toISOString()
   });
 
-  // Scroll to the results section smoothly for better user experience
-  document
-    .getElementById("results-container")
-    .scrollIntoView({ behavior: "smooth", block: "nearest" });
+  // Scroll to top of page when showing results
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// REMOVED: The standalone event listener for '.close' is also removed for consistency,
-// relying on the `onclick` attribute in the HTML. If you prefer JS-based event listeners,
-// you could keep one here and remove the `onclick` from the HTML. The key is not to have it
-// inside `calculateShares` or duplicated unnecessarily.
-// For clarity, if your HTML for the close button is:
-// <span class="close" aria-label="Close" onclick="closeModal('calculationResultsModal')">&times;</span>
-// then no additional JavaScript `addEventListener` for this specific click is needed.
 
-// Note: Event listeners are now handled in the addEventListeners() function
-
-// Back button event listener will be added in window.onload
 
 function closeModal(elementID) {
   const modal = document.getElementById(elementID);
