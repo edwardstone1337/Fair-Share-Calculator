@@ -8,26 +8,25 @@
     
     <!-- 2. Title and SEO Meta Tags -->
     <title>
-      Fair Share Calculator - Simplified Equitable Expense Sharing for Couples
-      with Different Incomes
+      Income-Based Bill Split Calculator - Fair Share Calculator for Bills, Rent & Expenses
     </title>
     <meta
       name="description"
-      content="Simplify expense management with the Fair Share Calculator – the ideal tool for couples with differing incomes. Enter salaries, calculate proportional expense contributions, and maintain financial fairness with ease. Perfect for equitable budgeting and stress-free financial planning in relationships."
+      content="Split bills based on income with our Fair Share Calculator. Calculate proportional rent, utilities, and expense splitting for roommates, couples, or any shared living situation. Free income-based bill splitting tool with instant results."
     />
     <meta
       name="keywords"
-      content="fair share calculator, proportional expense splitting, equitable expense sharing, different income couples, budgeting tool, financial fairness, relationship financial planning, income-based expense management, couple budgeting, equitable bill payment, salary-based contribution calculation, joint financial decision making, financial harmony in relationships, cohabiting couples finance tool, income disparity solutions in budgeting"
+      content="bill split calculator, split bills based on income, income based bill splitting, rent split calculator, splitting bills based on income calculator, fair share calculator, bill split calculator based on income, how to split bills based on income, split bills calculator, fair bill split calculator, rent split based on income, salary split calculator, bills split calculator, split bills by income calculator, fair split calculator, income based percentage split, proportional expense splitting, roommates bill splitting, shared expense calculator"
     />
     
     <!-- 3. Social Media Meta Tags -->
     <meta
       property="og:title"
-      content="Fair Share Calculator - Proportional Expense Sharing Made Easy"
+      content="Income-Based Bill Split Calculator - Fair Share Calculator"
     />
     <meta
       property="og:description"
-      content="Effortlessly manage shared expenses in relationships with the Fair Share Calculator. Designed for couples with different incomes, our tool ensures equitable financial contributions for a harmonious partnership."
+      content="Split bills based on income with our free calculator. Perfect for roommates, couples, or any shared living situation. Calculate proportional rent, utilities, and expense splitting instantly."
     />
     <meta property="og:image" content="Metadata-Image.jpg" />
     <meta property="og:url" content="https://www.fairsharecalculator.com" />
@@ -57,11 +56,25 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Fair Share Calculator",
-        "description": "An interactive tool for couples to split expenses fairly based on their individual incomes.",
+        "name": "Income-Based Bill Split Calculator",
+        "alternateName": "Fair Share Calculator",
+        "description": "Free online calculator to split bills, rent, and shared expenses based on income. Perfect for roommates, couples, and shared living situations.",
         "applicationCategory": "FinanceApplication",
         "browserRequirements": "Requires JavaScript enabled",
-        "operatingSystem": "All"
+        "operatingSystem": "All",
+        "keywords": "bill split calculator, income based splitting, rent split calculator, fair share calculator, split bills based on income",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Split bills based on income",
+          "Calculate proportional rent splitting",
+          "Shared expense calculator",
+          "Income-based bill splitting",
+          "Free bill split calculator"
+        ]
       }
     </script>
     
@@ -148,10 +161,9 @@
         <div class="emoji">
           <img src="/images/logoIcon.png" alt="emoji" />
         </div>
-        <h1>Fair Share Calculator</h1>
+        <h1>Income-Based Bill Split Calculator</h1>
         <p class="mb-30">
-          Ensure harmony and equity in money matters, for couples with different
-          incomes.
+          Split bills, rent, and shared expenses fairly based on income. Perfect for roommates, couples, or any shared living situation.
         </p>
       </div>
 
@@ -160,53 +172,9 @@
           <div class="input-section-card">
             <div class="section-header">
               <div class="section-header-content">
-                <h2>Names</h2>
+                <h2>Income for Bill Splitting</h2>
                 <p class="shy-text">
-                  Enter your names to personalize the results.
-                </p>
-              </div>
-            </div>
-            <div class="names-container">
-              <div class="names">
-                <div class="input-group">
-                  <label for="name1"
-                    ><span class="required-asterisk">*</span>Your name</label
-                  >
-                  <div class="input-container">
-                    <input
-                      type="text"
-                      id="name1"
-                      placeholder="e.g. Edward"
-                      maxlength="50"
-                    />
-                  </div>
-                  <div class="error-message" id="name1-error"></div>
-                </div>
-
-                <div class="input-group">
-                  <label for="name2"
-                    ><span class="required-asterisk">*</span>Their name</label
-                  >
-                  <div class="input-container">
-                    <input
-                      type="text"
-                      id="name2"
-                      placeholder="e.g. Sarah"
-                      maxlength="50"
-                    />
-                  </div>
-                  <div class="error-message" id="name2-error"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="input-section-card">
-            <div class="section-header">
-              <div class="section-header-content">
-                <h2>Salaries</h2>
-                <p class="shy-text">
-                  Don't be shy – entering your after-tax salary helps us do the math more fairly!
+                  Enter your after-tax income to calculate proportional bill splitting based on income.
                 </p>
               </div>
             </div>
@@ -258,10 +226,9 @@
           <div class="input-section-card">
             <div class="section-header">
               <div class="section-header-content">
-                <h2>Shared Expenses</h2>
+                <h2>Shared Bills & Expenses</h2>
                 <p class="shy-text">
-                  Enter the cost of any shared expense – like rent, groceries, or a
-                  savings goal.
+                  Enter rent, utilities, groceries, or any shared bills to split based on income.
                 </p>
               </div>
             </div>
@@ -310,6 +277,46 @@
                 <span class="material-symbols-outlined">add</span>
                 Add Expense
               </button>
+            </div>
+          </div>
+
+          <div class="input-section-card">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Names (Optional)</h2>
+                <p class="shy-text">
+                  Add names to personalize your results, or leave blank to use "Person 1" and "Person 2".
+                </p>
+              </div>
+            </div>
+            <div class="names-container">
+              <div class="names">
+                <div class="input-group">
+                  <label for="name1">Your name</label>
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="name1"
+                      placeholder="e.g. Alex (optional)"
+                      maxlength="50"
+                    />
+                  </div>
+                  <div class="error-message" id="name1-error"></div>
+                </div>
+
+                <div class="input-group">
+                  <label for="name2">Their name</label>
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="name2"
+                      placeholder="e.g. Jordan (optional)"
+                      maxlength="50"
+                    />
+                  </div>
+                  <div class="error-message" id="name2-error"></div>
+                </div>
+              </div>
               
               <button class="calculate-button">
                 Calculate
@@ -339,67 +346,85 @@
     <div class="faq-section">
       <div class="faq-container">
 
+      <h2>How to Split Bills Based on Income</h2>
+      <p>Our income-based bill split calculator helps you divide shared expenses fairly. Whether you're splitting rent with roommates, sharing bills with a partner, or managing shared living costs, our tool ensures everyone pays their fair share based on what they earn.</p>
+      
+      <h3>Common Use Cases for Income-Based Bill Splitting:</h3>
+      <ul>
+        <li><strong>Rent Split Calculator:</strong> Split rent based on income when roommates have different salaries</li>
+        <li><strong>Utility Bill Splitting:</strong> Divide electricity, water, and internet bills proportionally</li>
+        <li><strong>Shared Grocery Costs:</strong> Split food expenses based on income levels</li>
+        <li><strong>Joint Savings Goals:</strong> Calculate proportional contributions to shared savings</li>
+        <li><strong>Couples Budgeting:</strong> Fair expense sharing for partners with different incomes</li>
+        <li><strong>Roommate Expenses:</strong> Split household costs fairly among roommates</li>
+      </ul>
+
+      <h3>Why Split Bills Based on Income?</h3>
+      <p>Income-based bill splitting ensures financial fairness. Instead of splitting everything 50/50, each person contributes based on their ability to pay. This approach reduces financial stress and creates more equitable living arrangements.</p>
+
+      <hr>
+
       <h2>Frequently Asked Questions</h2>
     
       <hr>
     
-      <h3>How Do I Use the Fair Share Calculator?</h3>
+      <h3>How Do I Use the Income-Based Bill Split Calculator?</h3>
       <ul>
-        <li><strong>Enter Your Names:</strong> Add both your names to personalize the results and make them easier to understand.</li>
-        <li><strong>Enter Both Incomes:</strong> Type in your after-tax salaries. Don't be shy it stays between the two of you!</li>
-        <li><strong>Add Shared Expenses:</strong> Pop in the cost of whatever you're splitting maybe it's rent, groceries, or that new sofa!</li>
-        <li><strong>Hit Calculate:</strong> Let the magic happen. Our calculator works out a fair split based on what each of you earns.</li>
-        <li><strong>See Your Results:</strong> Get a clear breakdown of who pays what, with an explanation of how the calculation works.</li>
-        <li><strong>Share With Your Partner:</strong> Use the share button to send a link to your partner so they can see the same results!</li>
+        <li><strong>Enter Your Names:</strong> Add both names to personalize the bill splitting results.</li>
+        <li><strong>Enter Both Incomes:</strong> Type in your after-tax salaries for accurate income-based calculations.</li>
+        <li><strong>Add Shared Bills:</strong> Enter rent, utilities, groceries, or any shared expenses you need to split.</li>
+        <li><strong>Hit Calculate:</strong> Our calculator automatically determines fair splits based on income percentages.</li>
+        <li><strong>See Your Results:</strong> Get a clear breakdown showing exactly how much each person should pay.</li>
+        <li><strong>Share Results:</strong> Send the calculation link to roommates or partners for transparency.</li>
       </ul>
     
       <hr>
     
-      <h3>How Is the Fair Share Calculated?</h3>
-      <p>We aim to ensure harmony and equity in money matters, especially for couples with different incomes. Here's how the magic works:</p>
+      <h3>How Is Income-Based Bill Splitting Calculated?</h3>
+      <p>Our calculator ensures fair bill splitting based on income. Here's how the calculation works:</p>
       <ul>
         <li><strong>Calculate Income Percentages:</strong>
           <ul>
-            <li>Your Income ÷ (Your Income + Partner's Income) = Your Contribution Percentage</li>
+            <li>Your Income ÷ (Your Income + Roommate's/Partner's Income) = Your Contribution Percentage</li>
           </ul>
         </li>
-        <li><strong>Apply to Expenses:</strong>
+        <li><strong>Apply to Bills:</strong>
           <ul>
-            <li>Multiply each expense by your percentage to find out your fair share.</li>
+            <li>Multiply each bill by your percentage to find your fair share.</li>
           </ul>
         </li>
       </ul>
-      <p><strong>Example:</strong></p>
+      <p><strong>Rent Split Example:</strong></p>
       <ul>
-        <li>You earn <strong>$60,000</strong>, and your partner earns <strong>$40,000</strong>.</li>
+        <li>You earn <strong>$60,000</strong>, roommate earns <strong>$40,000</strong>.</li>
         <li><strong>Your Percentage:</strong> 60%</li>
-        <li><strong>Partner's Percentage:</strong> 40%</li>
-        <li>For a <strong>$1,000</strong> expense:
+        <li><strong>Roommate's Percentage:</strong> 40%</li>
+        <li>For <strong>$2,000</strong> monthly rent:
           <ul>
-            <li><strong>You Pay:</strong> $600</li>
-            <li><strong>Your Partner Pays:</strong> $400</li>
+            <li><strong>You Pay:</strong> $1,200</li>
+            <li><strong>Roommate Pays:</strong> $800</li>
           </ul>
         </li>
       </ul>
     
       <hr>
     
-      <h3>Why Is Proportional Splitting Fair?</h3>
-      <p>Because it adjusts what each person contributes based on their income. It's all about keeping things balanced in love and money. But remember, "fair" is different for everyone. Feel free to split your expenses in a way that works best for both of you.</p>
+      <h3>Why Is Income-Based Bill Splitting Fair?</h3>
+      <p>Income-based splitting ensures everyone contributes according to their financial ability. This approach is fairer than 50/50 splits when people have different incomes, reducing financial stress for lower earners while maintaining equity. Perfect for roommates, couples, or any shared living situation.</p>
     
       <hr>
     
-      <h3>Does the Calculator Account for Deductions Like Insurance or Savings?</h3>
-      <p>Currently, we use <strong>gross incomes</strong> for calculations. We know life can be a bit more complex with things like insurance deductions or savings. We're working on ways to include these in future updates to make the calculator even more helpful.</p>
+      <h3>Does the Bill Split Calculator Account for Deductions Like Insurance or Savings?</h3>
+      <p>Currently, we use <strong>after-tax incomes</strong> for the most accurate bill splitting calculations. For even more precise results, you can enter your net income after insurance, retirement contributions, and other deductions. This ensures your bill split reflects your actual available income.</p>
     
       <hr>
     
       <h3>How Can I Provide Feedback or Suggest Features?</h3>
-      <p>We'd love to hear from you! Give us a rating and share your feedback via the widget somewhere on the screen. Your insights help us make the Fair Share Calculator even better.</p>
+      <p>We'd love to hear from you! Give us a rating and share your feedback via the widget somewhere on the screen. Your insights help us make the income-based bill split calculator even better.</p>
     
       <hr>
     
-      <p>By keeping things simple and transparent, we hope the Fair Share Calculator helps you and your partner find balance in your shared expenses. Remember, it's all about fairness and keeping things balanced in love and money!</p>
+      <p>By keeping things simple and transparent, we hope our bill split calculator helps you and your roommates or partners find balance in shared expenses. Whether you're splitting rent, utilities, or groceries, income-based splitting ensures everyone pays their fair share!</p>
       <a href="https://www.buymeacoffee.com/edthedesigner"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=edthedesigner&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
             <hr>
 

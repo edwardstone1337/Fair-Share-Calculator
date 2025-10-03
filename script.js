@@ -723,7 +723,7 @@ window.onload = async function () {
               }
             });
             
-            if (name1 && name2 && !isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
+            if (!isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
               calculateShares();
             } else {
               showStep('input', { push: false });
@@ -889,7 +889,7 @@ window.onload = async function () {
             }
           });
           
-          if (name1 && name2 && !isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
+          if (!isNaN(salary1) && salary1 > 0 && !isNaN(salary2) && salary2 > 0 && hasValidExpense) {
             calculateShares();
           } else {
             showStep('input', { push: false });
@@ -1104,28 +1104,29 @@ function calculateShares() {
 
   var hasError = false;
 
-  // Validate names
+  // Validate names (optional - no validation errors, just length limits)
   const name1 = document.getElementById("name1").value.trim();
   const name2 = document.getElementById("name2").value.trim();
   
-  if (!name1 || name1.length < 1 || name1.length > 50) {
+  // Clear any existing errors for names since they're optional
+  document.getElementById("name1").classList.remove("input-error");
+  document.getElementById("name1-error").classList.remove("show");
+  document.getElementById("name2").classList.remove("input-error");
+  document.getElementById("name2-error").classList.remove("show");
+  
+  // Only validate length if names are provided (optional)
+  if (name1 && name1.length > 50) {
     document.getElementById("name1").classList.add("input-error");
-    document.getElementById("name1-error").textContent = "Please enter your name";
+    document.getElementById("name1-error").textContent = "Name must be 50 characters or less";
     document.getElementById("name1-error").classList.add("show");
     hasError = true;
-  } else {
-    document.getElementById("name1").classList.remove("input-error");
-    document.getElementById("name1-error").classList.remove("show");
   }
   
-  if (!name2 || name2.length < 1 || name2.length > 50) {
+  if (name2 && name2.length > 50) {
     document.getElementById("name2").classList.add("input-error");
-    document.getElementById("name2-error").textContent = "Please enter their name";
+    document.getElementById("name2-error").textContent = "Name must be 50 characters or less";
     document.getElementById("name2-error").classList.add("show");
     hasError = true;
-  } else {
-    document.getElementById("name2").classList.remove("input-error");
-    document.getElementById("name2-error").classList.remove("show");
   }
 
   // Validate salaries
@@ -1230,7 +1231,7 @@ function calculateShares() {
   }
 
   // Handle errors
-  if (hasError || individualExpenseResults.length === 0 || !name1 || !name2) {
+  if (hasError || individualExpenseResults.length === 0) {
     // Show bottom error message for expenses
     const expensesError = document.getElementById("expenses-error");
     if (expensesError) {
@@ -1264,8 +1265,8 @@ function calculateShares() {
   var sharePercent2 = Math.round((totalShare2 / totalExpense) * 100);
 
   // Get names for personalization (use the names already declared above)
-  const displayName1 = name1 || "Yours";
-  const displayName2 = name2 || "Theirs";
+  const displayName1 = name1 || "Person 1";
+  const displayName2 = name2 || "Person 2";
   
   // Display the calculated shares in the 'results' section
   var resultsHTML = `
