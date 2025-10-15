@@ -4,7 +4,7 @@
     <!-- 1. Essential Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.hotjar.com https://script.hotjar.com https://www.clarity.ms https://scripts.clarity.ms https://pagead2.googlesyndication.com https://www.gstatic.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.hotjar.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: https://*.hotjar.com; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.googletagmanager.com; connect-src 'self' https://tight-firefly-c0dd.edwardstone1337.workers.dev https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://www.clarity.ms https://*.hotjar.com https://vars.hotjar.com https://script.hotjar.com https://surveystatic.hotjar.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://www.gstatic.com https://ssl.google-analytics.com https://stats.g.doubleclick.net https://www.google.com https://googleads.g.doubleclick.net wss://*.hotjar.com; worker-src 'self' blob:; child-src 'self' blob:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.hotjar.com https://script.hotjar.com https://www.clarity.ms https://scripts.clarity.ms https://pagead2.googlesyndication.com https://www.gstatic.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.hotjar.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: https://*.hotjar.com; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.googletagmanager.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://www.google.com; connect-src 'self' https://tight-firefly-c0dd.edwardstone1337.workers.dev https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://www.clarity.ms https://j.clarity.ms https://*.hotjar.com https://metrics.hotjar.io https://vars.hotjar.com https://script.hotjar.com https://surveystatic.hotjar.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://www.gstatic.com https://ssl.google-analytics.com https://stats.g.doubleclick.net https://www.google.com https://googleads.g.doubleclick.net wss://*.hotjar.com; worker-src 'self' blob:; child-src 'self' blob:;">
     
     <!-- 2. Title and SEO Meta Tags -->
     <title>
@@ -108,15 +108,14 @@
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
 
-    <!-- Google Analytics -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQZ0HGB3MT"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-      gtag("config", "G-TQZ0HGB3MT");
+      gtag('config', 'G-TQZ0HGB3MT');
     </script>
 
     <!-- Microsoft Clarity -->
