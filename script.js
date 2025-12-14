@@ -90,6 +90,178 @@ function debugError(message, error) {
 
 // ===== End Debug Configuration =====
 
+// ===== Google Analytics Tracking =====
+
+// Track page load time for performance metrics
+let pageLoadTime = Date.now();
+
+// Track if user is returning (data restored from localStorage)
+let returningUser = false;
+
+// Tracking helper function
+function trackEvent(eventName, params = {}) {
+  try {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', eventName, params);
+      debugLog('Event tracked', { eventName, params });
+    }
+  } catch (error) {
+    debugError('Failed to track event', error);
+    // Don't let tracking failures break the app
+  }
+}
+
+// Bucketing functions for privacy and low cardinality
+function bucketExpenseAmount(total) {
+  if (total < 100) return '0-100';
+  if (total < 250) return '100-250';
+  if (total < 500) return '250-500';
+  if (total < 1000) return '500-1000';
+  return '1000+';
+}
+
+function bucketSplitRatio(salary1, salary2) {
+  const ratio = salary1 / (salary1 + salary2);
+  if (ratio >= 0.45 && ratio < 0.55) return '50-50';
+  if (ratio >= 0.55 && ratio < 0.65) return '60-40';
+  if (ratio >= 0.65 && ratio < 0.75) return '70-30';
+  if (ratio >= 0.75 && ratio < 0.85) return '80-20';
+  return 'other';
+}
+
+// Input tracking flags (per page load)
+const inputTrackingFlags = {
+  name1: { started: false, focusValue: '' },
+  name2: { started: false, focusValue: '' },
+  salary1: { started: false, focusValue: '' },
+  salary2: { started: false, focusValue: '' }
+};
+
+// Expense input tracking (dynamic, keyed by expense ID)
+const expenseInputTracking = {};
+
+// Helper to get field type from field ID
+function getFieldType(fieldId) {
+  if (fieldId.startsWith('name')) return 'name';
+  if (fieldId.startsWith('salary')) return 'salary';
+  if (fieldId.startsWith('expense') && fieldId.includes('Label')) return 'expense_label';
+  if (fieldId.startsWith('expense')) return 'expense_amount';
+  return 'unknown';
+}
+
+// Helper to setup input tracking for a field
+function setupInputTracking(inputElement, fieldId) {
+  if (!inputElement) return;
+  
+  // Check if tracking is already set up for this element (prevent duplicate listeners)
+  if (inputElement.dataset.trackingSetup === 'true') {
+    return;
+  }
+  
+  const fieldType = getFieldType(fieldId);
+  let trackingData = inputTrackingFlags[fieldId];
+  
+  // For expense fields, use dynamic tracking
+  if (fieldType === 'expense_amount' || fieldType === 'expense_label') {
+    if (!expenseInputTracking[fieldId]) {
+      expenseInputTracking[fieldId] = { started: false, focusValue: '' };
+    }
+    trackingData = expenseInputTracking[fieldId];
+  }
+  
+  if (!trackingData) return;
+  
+  // Check if field already has a value (pre-filled from localStorage)
+  // If so, mark as started so input_started never fires
+  const initialValue = inputElement.value.trim();
+  if (initialValue !== '') {
+    trackingData.started = true; // Skip input_started for pre-filled fields
+  }
+  
+  // Mark that tracking is set up to prevent duplicate listeners
+  inputElement.dataset.trackingSetup = 'true';
+  
+  // Focus event - store initial value
+  inputElement.addEventListener('focus', function() {
+    trackingData.focusValue = this.value.trim();
+  });
+  
+  // Input event - track when user starts typing (first non-empty)
+  inputElement.addEventListener('input', function() {
+    const currentValue = this.value.trim();
+    
+    // Fire input_started once when field becomes non-empty
+    // Only if field was empty when tracking was set up (not pre-filled)
+    if (!trackingData.started && currentValue !== '') {
+      trackingData.started = true;
+      trackEvent('input_started', {
+        field_id: fieldId,
+        field_type: fieldType
+      });
+    }
+  });
+  
+  // Blur event - track completion and validation
+  inputElement.addEventListener('blur', function() {
+    const currentValue = this.value.trim();
+    const hasValue = currentValue !== '';
+    const valueChanged = currentValue !== trackingData.focusValue;
+    
+    // Fire input_completed if value is non-empty and changed
+    if (hasValue && valueChanged) {
+      trackEvent('input_completed', {
+        field_id: fieldId,
+        field_type: fieldType,
+        has_value: true
+      });
+    }
+    
+    // Fire validation_error if field is invalid
+    if (fieldType === 'salary' || fieldType === 'expense_amount') {
+      const rawValue = currentValue.replace(/,/g, '').trim();
+      let errorType = null;
+      
+      if (fieldType === 'salary') {
+        if (rawValue === '') {
+          errorType = 'missing';
+        } else {
+          const numValue = parseFloat(rawValue);
+          if (isNaN(numValue) || numValue <= 0) {
+            errorType = 'invalid_format';
+          } else if (numValue > 999999999) {
+            errorType = 'too_large';
+          }
+        }
+      } else if (fieldType === 'expense_amount') {
+        // For expense amounts, check if label exists but amount is empty
+        const expenseRow = this.closest('.shared-expense-container-loop');
+        const labelInput = expenseRow?.querySelector('.expense-label');
+        const labelValue = labelInput ? labelInput.value.trim() : '';
+        
+        if (rawValue === '' && labelValue !== '') {
+          errorType = 'empty_expense_with_label';
+        } else if (rawValue !== '') {
+          const numValue = parseFloat(rawValue);
+          if (isNaN(numValue) || numValue <= 0) {
+            errorType = 'invalid_format';
+          } else if (numValue > 999999999) {
+            errorType = 'too_large';
+          }
+        }
+      }
+      
+      if (errorType) {
+        trackEvent('validation_error', {
+          field_id: fieldId,
+          error_type: errorType
+        });
+      }
+    }
+  });
+}
+
+// ===== End Google Analytics Tracking =====
+
 function collectCurrentState() {
   const name1 = document.getElementById("name1").value;
   const name2 = document.getElementById("name2").value;
@@ -181,6 +353,9 @@ function applyState(state) {
       amountInput.value = amountValue;
       amountInput.addEventListener("input", function() { formatNumberWithCommas(this); });
       
+      // Setup tracking for expense amount input
+      setupInputTracking(amountInput, `expense${index + 1}`);
+      
       amountGroup.appendChild(amountInput);
       
       // Label input group
@@ -194,6 +369,9 @@ function applyState(state) {
         placeholder: "e.g. Rent, Groceries"
       });
       labelInput.value = labelValue;
+      
+      // Setup tracking for expense label input
+      setupInputTracking(labelInput, `expenseLabel${index + 1}`);
       
       labelGroup.appendChild(labelInput);
       
@@ -345,6 +523,44 @@ function showStep(step, { push = true } = {}) {
     // Move focus to results heading for a11y
     const heading = document.getElementById('resultsHeading');
     if (heading) heading.focus?.();
+    
+    // Track results_viewed event
+    try {
+      const name1 = document.getElementById("name1").value.trim();
+      const name2 = document.getElementById("name2").value.trim();
+      const salary1Input = document.getElementById("salary1");
+      const salary2Input = document.getElementById("salary2");
+      const salary1 = parseFloat(salary1Input.value.replace(/,/g, ""));
+      const salary2 = parseFloat(salary2Input.value.replace(/,/g, ""));
+      const expenseInputs = document.querySelectorAll(".expense-input");
+      const expenseLabels = document.querySelectorAll(".expense-label");
+      
+      let expenseCount = 0;
+      let totalExpense = 0;
+      let hasLabels = false;
+      
+      expenseInputs.forEach((expenseInput, index) => {
+        const raw = expenseInput.value.replace(/,/g, "").trim();
+        if (raw !== "" && !isNaN(parseFloat(raw)) && parseFloat(raw) > 0) {
+          expenseCount++;
+          totalExpense += parseFloat(raw);
+          if (expenseLabels[index] && expenseLabels[index].value.trim() !== '') {
+            hasLabels = true;
+          }
+        }
+      });
+      
+      trackEvent('results_viewed', {
+        expense_count: expenseCount,
+        has_names: (name1 !== '' || name2 !== ''),
+        has_labels: hasLabels,
+        total_expense_bucket: bucketExpenseAmount(totalExpense),
+        split_ratio_bucket: bucketSplitRatio(salary1, salary2),
+        returning_user: returningUser
+      });
+    } catch (error) {
+      debugError('Failed to track results_viewed', error);
+    }
   } else {
     resultsEl.classList.add('hidden');
     inputEl.classList.remove('hidden');
@@ -394,20 +610,29 @@ function saveFormDataToLocalStorage() {
 }
 
 function restoreFormDataFromLocalStorage() {
+  let hasNames = false;
+  let hasSalaries = false;
+  let hasExpenses = false;
+  let expenseCount = 0;
+  
   // Restore name data
   if (localStorage.getItem("name1")) {
     document.getElementById("name1").value = localStorage.getItem("name1");
+    hasNames = true;
   }
   if (localStorage.getItem("name2")) {
     document.getElementById("name2").value = localStorage.getItem("name2");
+    hasNames = true;
   }
   
   // Restore salary data
   if (localStorage.getItem("salary1")) {
     document.getElementById("salary1").value = localStorage.getItem("salary1");
+    hasSalaries = true;
   }
   if (localStorage.getItem("salary2")) {
     document.getElementById("salary2").value = localStorage.getItem("salary2");
+    hasSalaries = true;
   }
   
   // Restore expense data
@@ -468,6 +693,9 @@ function restoreFormDataFromLocalStorage() {
         amountInput.value = expense.amount ? sanitizeInput(expense.amount.toString()) : "";
         amountInput.addEventListener("input", function() { formatNumberWithCommas(this); });
         
+        // Setup tracking for restored expense amount input
+        setupInputTracking(amountInput, `expense${index + 1}`);
+        
         amountGroup.appendChild(amountInput);
         
         // Label input group
@@ -481,6 +709,9 @@ function restoreFormDataFromLocalStorage() {
           placeholder: "e.g. Rent, Groceries"
         });
         labelInput.value = expense.label ? sanitizeInput(expense.label.toString()) : "";
+        
+        // Setup tracking for restored expense label input
+        setupInputTracking(labelInput, `expenseLabel${index + 1}`);
         
         labelGroup.appendChild(labelInput);
         
@@ -512,6 +743,7 @@ function restoreFormDataFromLocalStorage() {
       
       // Update expense count
       expenseCount = Math.max(expenses.length, 1);
+      hasExpenses = true;
     } catch (e) {
       console.error("Error restoring expenses from localStorage:", e);
       // If restoration fails, ensure at least one expense row exists
@@ -520,6 +752,17 @@ function restoreFormDataFromLocalStorage() {
   } else {
     // No saved expenses, ensure default row exists
     ensureDefaultExpenseRow();
+  }
+  
+  // Track data_restored event if any data was restored
+  if (hasNames || hasSalaries || hasExpenses) {
+    returningUser = true;
+    trackEvent('data_restored', {
+      has_names: hasNames,
+      has_salaries: hasSalaries,
+      has_expenses: hasExpenses,
+      expense_count: hasExpenses ? expenseCount : 0
+    });
   }
 }
 
@@ -571,16 +814,24 @@ function addFormDataSaveListeners() {
 
 // ===== Event Listeners =====
 function addEventListeners() {
-  // Salary input formatting
+  // Setup input tracking for name fields
+  const name1Input = document.getElementById("name1");
+  const name2Input = document.getElementById("name2");
+  if (name1Input) setupInputTracking(name1Input, "name1");
+  if (name2Input) setupInputTracking(name2Input, "name2");
+  
+  // Salary input formatting and tracking
   const salary1Input = document.getElementById("salary1");
   const salary2Input = document.getElementById("salary2");
   
   if (salary1Input) {
     salary1Input.addEventListener("input", function() { formatNumberWithCommas(this); });
+    setupInputTracking(salary1Input, "salary1");
   }
   
   if (salary2Input) {
     salary2Input.addEventListener("input", function() { formatNumberWithCommas(this); });
+    setupInputTracking(salary2Input, "salary2");
   }
   
   // Toggle password visibility
@@ -595,7 +846,10 @@ function addEventListeners() {
   // Add expense button
   const addExpenseBtn = document.querySelector(".add-expense-button");
   if (addExpenseBtn) {
-    addExpenseBtn.addEventListener("click", addExpense);
+    addExpenseBtn.addEventListener("click", function() {
+      trackEvent('add_expense_clicked');
+      addExpense();
+    });
   }
   
   // Calculate button
@@ -603,6 +857,13 @@ function addEventListeners() {
   if (calculateBtn) {
     calculateBtn.addEventListener("click", calculateShares);
   }
+  
+  // Back to edit button (will be set up after results are shown)
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'backToEditBtn') {
+      trackEvent('back_to_edit_clicked');
+    }
+  });
   
   // Modal close button
   const closeBtn = document.querySelector(".close");
@@ -620,6 +881,21 @@ function addEventListeners() {
         calculateShares();
       }
     });
+  });
+  
+  // Setup tracking for existing expense inputs (for dynamically added or restored expenses)
+  document.querySelectorAll(".expense-input").forEach((input) => {
+    const fieldId = input.id;
+    if (fieldId) {
+      setupInputTracking(input, fieldId);
+    }
+  });
+  
+  document.querySelectorAll(".expense-label").forEach((input) => {
+    const fieldId = input.id;
+    if (fieldId) {
+      setupInputTracking(input, fieldId);
+    }
   });
 }
 
@@ -652,6 +928,9 @@ function ensureDefaultExpenseRow() {
     });
     amountInput.addEventListener("input", function() { formatNumberWithCommas(this); });
     
+    // Setup tracking for default expense amount input
+    setupInputTracking(amountInput, "expense1");
+    
     amountGroup.appendChild(amountInput);
     
     // Label input group
@@ -665,6 +944,9 @@ function ensureDefaultExpenseRow() {
       placeholder: "e.g. Rent, Groceries",
       "aria-label": "Name for expense 1"
     });
+    
+    // Setup tracking for default expense label input
+    setupInputTracking(labelInput, "expenseLabel1");
     
     labelGroup.appendChild(labelInput);
     
@@ -814,6 +1096,9 @@ window.onload = async function () {
       amountInput.value = amountValue ? sanitizeInput(amountValue.toString()) : "";
       amountInput.addEventListener("input", function() { formatNumberWithCommas(this); });
       
+      // Setup tracking for expense amount input
+      setupInputTracking(amountInput, `expense${index + 1}`);
+      
       amountGroup.appendChild(amountInput);
       
       // Label input group
@@ -827,6 +1112,9 @@ window.onload = async function () {
         placeholder: "e.g. Rent, Groceries"
       });
       labelInput.value = labelValue ? sanitizeInput(labelValue.toString()) : "";
+      
+      // Setup tracking for expense label input
+      setupInputTracking(labelInput, `expenseLabel${index + 1}`);
       
       labelGroup.appendChild(labelInput);
       
@@ -933,6 +1221,12 @@ function togglePassword(element, inputId) {
       inputField.classList.add("input-error");
     }
   }
+  
+  // Track salary_toggle event
+  trackEvent('salary_toggle', {
+    field_id: inputId,
+    visibility_state: type === "password" ? "hidden" : "visible"
+  });
 }
 
 // Function to animate the counting of numbers
@@ -989,6 +1283,9 @@ function addExpense() {
   });
   amountInput.addEventListener("input", function() { formatNumberWithCommas(this); });
   
+  // Setup tracking for expense amount input
+  setupInputTracking(amountInput, `expense${expenseCount}`);
+  
   amountGroup.appendChild(amountInput);
   
   
@@ -1003,6 +1300,9 @@ function addExpense() {
     id: `expenseLabel${expenseCount}`,
     placeholder: "e.g. Rent, Groceries"
   });
+  
+  // Setup tracking for expense label input
+  setupInputTracking(labelInput, `expenseLabel${expenseCount}`);
   
   labelGroup.appendChild(labelInput);
   
@@ -1026,9 +1326,20 @@ function addExpense() {
   
   newExpenseDiv.appendChild(expenseRow);
   expenseContainer.appendChild(newExpenseDiv);
+  
+  // Track expense_added event
+  const expenseCountAfter = expenseContainer.children.length;
+  const expenseRowIndex = expenseCountAfter - 1; // 0-based index
+  trackEvent('expense_added', {
+    expense_count_after: expenseCountAfter,
+    expense_row_index: expenseRowIndex
+  });
 }
 
 function deleteExpense(deleteButton) {
+  // Track delete_expense_clicked event
+  trackEvent('delete_expense_clicked');
+  
   const expenseDiv = deleteButton.closest(".shared-expense-container-loop");
   const expenseContainer = document.getElementById("expense-container");
   
@@ -1036,7 +1347,18 @@ function deleteExpense(deleteButton) {
   if (expenseContainer.children.length > 1) {
     // Check if this isn't the first expense
     if (expenseDiv !== expenseContainer.firstElementChild) {
+      // Get row index before deletion
+      const expenseRows = Array.from(expenseContainer.children);
+      const expenseRowIndex = expenseRows.indexOf(expenseDiv);
+      
       expenseDiv.remove();
+      
+      // Track expense_deleted event
+      const expenseCountAfter = expenseContainer.children.length;
+      trackEvent('expense_deleted', {
+        expense_count_after: expenseCountAfter,
+        expense_row_index: expenseRowIndex
+      });
     }
   }
 }
@@ -1075,9 +1397,17 @@ function resetResultsDisplay() {
 }
 
 function calculateShares() {
+  // Track calculate_clicked immediately
+  trackEvent('calculate_clicked');
+  
   // Rate limiting check
   if (isRateLimited()) {
     debugLog('Calculation rate limited', { timestamp: new Date().toISOString() });
+    trackEvent('calculate_attempt', {
+      status: 'error',
+      error_type: 'rate_limited',
+      returning_user: returningUser
+    });
     return;
   }
   
@@ -1245,6 +1575,21 @@ function calculateShares() {
         expensesError.classList.remove("show");
       }
     }
+    
+    // Track calculate_attempt with error status
+    let errorType = 'validation_error';
+    if (individualExpenseResults.length === 0) {
+      errorType = 'missing_expense';
+    } else if (isNaN(salary1) || salary1 <= 0 || isNaN(salary2) || salary2 <= 0) {
+      errorType = 'missing_salary';
+    }
+    
+    trackEvent('calculate_attempt', {
+      status: 'error',
+      error_type: errorType,
+      returning_user: returningUser
+    });
+    
     return;
   }
 
@@ -1391,6 +1736,18 @@ function calculateShares() {
     totalExpense: totalExpense,
     timestamp: new Date().toISOString()
   });
+  
+  // Track calculate_attempt with success status
+  const timeToCalculate = Date.now() - pageLoadTime;
+  trackEvent('calculate_attempt', {
+    status: 'success',
+    expense_count: individualExpenseResults.length,
+    has_names: (name1 !== '' || name2 !== ''),
+    has_labels: individualExpenseResults.some(exp => exp.label && exp.label !== 'Expense'),
+    total_expense_bucket: bucketExpenseAmount(totalExpense),
+    time_to_calculate_ms: timeToCalculate,
+    returning_user: returningUser
+  });
 
   // Scroll to top of page when showing results
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1422,6 +1779,11 @@ function shareResults() {
         setTimeout(() => {
           snackbar.className = snackbar.className.replace("show", "");
         }, 3000);
+        
+        // Track share_results event
+        trackEvent('share_results', {
+          method: 'copy_link'
+        });
       });
     })
     .catch((error) => {
@@ -1434,6 +1796,11 @@ function shareResults() {
         setTimeout(() => {
           snackbar.className = snackbar.className.replace("show", "");
         }, 3000);
+        
+        // Track share_results event
+        trackEvent('share_results', {
+          method: 'copy_link'
+        });
       }).catch((err) => {
         debugError('Failed to copy to clipboard', err);
         console.error("Failed to copy: ", err);
